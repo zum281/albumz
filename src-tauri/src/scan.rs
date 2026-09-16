@@ -2,7 +2,7 @@ use lofty::{
     self, config::ParseOptions, file::AudioFile, file::TaggedFileExt, picture::Picture,
     probe::Probe, tag::Accessor,
 };
-use std::{env, fs, path};
+use std::{collections::HashMap, env, fs, path};
 
 const IGNORED_ARTISTS: &[&str] = &["Various Artists"];
 const TRACK_COUNT_THRESHOLD: usize = 3;
@@ -119,7 +119,10 @@ fn get_album_duration(tracks: &Vec<fs::DirEntry>) -> Result<u16, String> {
 fn scan_album_metadata(
     album_path: &path::Path,
     artist_name: &str,
+    existing_map: &HashMap<(String, String), ExistingAlbum>,
 ) -> Result<Option<ScanResult>, String> {
+    let album_name = get_album_name(&album_path).unwrap_or_default();
+
     let tracks: Vec<_> = fs::read_dir(album_path)
         .map_err(|e| e.to_string())?
         .filter_map(|e| e.ok())
@@ -131,7 +134,15 @@ fn scan_album_metadata(
                 .unwrap_or(false)
         })
         .collect();
+
     let track_count = tracks.len();
+
+    if let Some(existing) = existing_map.get(&(artist_name.to_string(), album_name.clone())) {
+        let should_resurface = existing.ignored && track_count > existing.track_count;
+        if !should_resurface {
+            return Ok(None);
+        }
+    }
 
     if track_count < TRACK_COUNT_THRESHOLD {
         return Ok(None);
@@ -140,7 +151,6 @@ fn scan_album_metadata(
     let (album_year, album_cover) = get_album_cover_and_year(first_track)?;
     let album_has_cover = album_cover.is_some();
     let album_duration = get_album_duration(&tracks)?;
-    let album_name = get_album_name(&album_path).unwrap_or_default();
 
     let entry = ScanResult {
         artist: artist_name.to_string(),
@@ -162,11 +172,16 @@ fn scan_album_metadata(
 /// Returns `Err` if the library root or any artist/album directory inside it can't be
 /// read, or if a track file can't be parsed.
 #[tauri::command]
-pub fn scan_library() -> Result<Vec<ScanResult>, String> {
+pub fn scan_library(existing: Vec<ExistingAlbum>) -> Result<Vec<ScanResult>, String> {
     let home = env::var("HOME").expect("HOME environment variable must be set");
     let music_path = path::Path::new(&home).join("Music").join("mp3");
 
     let mut result = vec![];
+
+    let existing_map: HashMap<(String, String), ExistingAlbum> = existing
+        .into_iter()
+        .map(|e| ((e.artist.clone(), e.album.clone()), e))
+        .collect();
 
     let artists = scan_artists(&music_path)?;
 
@@ -178,7 +193,7 @@ pub fn scan_library() -> Result<Vec<ScanResult>, String> {
 
         let albums = scan_albums(&artist_path)?;
         for album_path in albums {
-            let album_metadata = scan_album_metadata(&album_path, &artist_name)?;
+            let album_metadata = scan_album_metadata(&album_path, &artist_name, &existing_map)?;
 
             if let Some(entry) = album_metadata {
                 result.push(entry);
@@ -198,4 +213,14 @@ pub struct ScanResult {
     duration_seconds: u16,
     year: u16,
     has_cover: bool,
+}
+
+/// One album already in the `albums` table, as passed in from TypeScript to let
+/// [`scan_library`] skip re-parsing tags for albums that haven't changed.
+#[derive(serde::Deserialize)]
+pub struct ExistingAlbum {
+    artist: String,
+    album: String,
+    track_count: usize,
+    ignored: bool,
 }

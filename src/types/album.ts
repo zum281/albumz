@@ -8,4 +8,10 @@ export type Album = {
   track_count: number;
   listened: boolean;
   rating: number | null;
+  ignored: boolean;
 };
+
+export type ExistingAlbum = Pick<
+  Album,
+  "album" | "artist" | "track_count" | "ignored"
+>;

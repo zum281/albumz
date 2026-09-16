@@ -1,12 +1,14 @@
 import { invoke } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import { useEffect, useState } from "react";
+import { getExistingAlbums } from "./db/albums";
 import { secondsToMinutes } from "./utils/time";
 export const ScanResultsDemo: FC = () => {
   const [scanResult, setScanResult] = useState<ScanResult[] | null>(null);
 
   useEffect(() => {
-    invoke<ScanResult[]>("scan_library")
+    getExistingAlbums()
+      .then((existing) => invoke<ScanResult[]>("scan_library", { existing }))
       .then((res) => setScanResult([...res]))
       .catch((e) => console.error(e));
   }, []);
