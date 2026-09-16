@@ -201,6 +201,11 @@ pub fn scan_library(existing: Vec<ExistingAlbum>) -> Result<Vec<ScanResult>, Str
         }
     }
 
+    result.sort_by(|a, b| {
+        (a.artist.to_lowercase(), a.album.to_lowercase())
+            .cmp(&(b.artist.to_lowercase(), b.album.to_lowercase()))
+    });
+
     Ok(result)
 }
 

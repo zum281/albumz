@@ -1,52 +1,46 @@
+import { useQuery } from "@tanstack/react-query";
 import { invoke } from "@tauri-apps/api/core";
 import type { FC } from "react";
-import { useEffect, useState } from "react";
+import { ScanForm } from "./components/scan/ScanForm";
 import { getExistingAlbums } from "./db/albums";
-import { secondsToMinutes } from "./utils/time";
+import { ScanResultSchema } from "./types/scan";
 export const ScanResultsDemo: FC = () => {
-  const [scanResult, setScanResult] = useState<ScanResult[] | null>(null);
+  const {
+    data: existingAlbums,
+    isLoading: existingAlbumsLoading,
+    isError: existingAlbumsError,
+    error: existingAlbumsErrorObj,
+  } = useQuery({
+    queryKey: ["albums"],
+    queryFn: getExistingAlbums,
+  });
 
-  useEffect(() => {
-    getExistingAlbums()
-      .then((existing) => invoke<ScanResult[]>("scan_library", { existing }))
-      .then((res) => setScanResult([...res]))
-      .catch((e) => console.error(e));
-  }, []);
+  const {
+    data: scanResults,
+    isLoading: scanResultsLoading,
+    isError: scanResultsError,
+    error: scanResultsErrorObj,
+  } = useQuery({
+    queryKey: ["scan"],
+    queryFn: async () => {
+      const res = await invoke("scan_library", { existing: existingAlbums });
+      return ScanResultSchema.array().parse(res);
+    },
+    enabled: !!existingAlbums,
+  });
 
-  if (!scanResult) return null;
+  const isLoading = existingAlbumsLoading || scanResultsLoading;
+  const isError = existingAlbumsError || scanResultsError;
+  const error = existingAlbumsErrorObj ?? scanResultsErrorObj;
+
+  if (isLoading) return <p>Loading…</p>;
+  if (isError) return <pre>{String(error)}</pre>;
+  if (!scanResults) return null;
 
   return (
     <div>
-      Total albums found: {scanResult.length}
-      {scanResult.length > 0 && (
-        <ul>
-          {scanResult.map(
-            ({
-              artist,
-              album,
-              track_count,
-              year,
-              has_cover,
-              duration_seconds,
-            }) => (
-              <li key={`${artist}-${album}`}>
-                {artist} - {album} - {track_count} songs, {year},{" "}
-                {has_cover ? "Cover" : "Cover Missing"}, duration{" "}
-                {secondsToMinutes(duration_seconds)}mins
-              </li>
-            ),
-          )}
-        </ul>
-      )}
+      Total albums found: {scanResults.length}
+      <ScanForm scanResults={scanResults} />
     </div>
   );
-};
-
-type ScanResult = {
-  artist: string;
-  album: string;
-  track_count: number;
-  duration_seconds: number;
-  year: number;
-  has_cover: boolean;
 };
