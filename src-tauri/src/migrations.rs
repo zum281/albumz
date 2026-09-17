@@ -1,10 +1,11 @@
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 pub fn get_migrations() -> Vec<Migration> {
-    vec![Migration {
-        version: 1,
-        description: "create_initial_tables",
-        sql: "CREATE TABLE albums (
+    vec![
+        Migration {
+            version: 1,
+            description: "create_initial_tables",
+            sql: "CREATE TABLE albums (
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                   artist TEXT NOT NULL,
                   album TEXT NOT NULL,
@@ -21,6 +22,21 @@ pub fn get_migrations() -> Vec<Migration> {
                   updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
                   UNIQUE(artist, album)
               ) STRICT;",
-        kind: MigrationKind::Up,
-    }]
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 2,
+            description: "set_listened_on_rating",
+            sql: "CREATE TRIGGER set_listened_on_rating
+                      AFTER UPDATE OF rating ON albums
+                      WHEN NEW.rating IS NOT NULL AND OLD.listened = 0
+                      BEGIN
+                        UPDATE albums SET listened = 1
+                        WHERE id = NEW.id;
+                      END;
+
+                ",
+            kind: MigrationKind::Up,
+        },
+    ]
 }
