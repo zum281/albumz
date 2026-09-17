@@ -58,8 +58,31 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
 
   return (
     <>
+      <h2
+        style={{
+          margin: "0 0 1rem",
+          fontFamily: "var(--font-display)",
+          fontWeight: 500,
+          fontSize: "1.25rem",
+          letterSpacing: "var(--track-display)",
+        }}
+      >
+        Found {scanResults.length} album{scanResults.length === 1 ? "" : "s"}
+      </h2>
+
       {failed.length > 0 && (
-        <ul>
+        <ul
+          style={{
+            listStyle: "none",
+            margin: "0 0 1rem",
+            padding: "0.75rem 1rem",
+            borderRadius: "var(--radius)",
+            border: "1px solid var(--clr-border)",
+            background: "var(--clr-surface)",
+            color: "var(--clr-text-muted)",
+            fontSize: "0.875rem",
+          }}
+        >
           {failed.map(({ album, reason }) => (
             <li key={`${album.artist}-${album.album}`}>
               {album.artist} - {album.album}: {String(reason)}
@@ -67,34 +90,83 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
           ))}
         </ul>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form id="scan-results-form" onSubmit={handleSubmit(onSubmit)}>
         {scanResults.length > 0 && (
-          <ul>
+          <ul
+            style={{
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
+              maxHeight: "50vh",
+              overflowY: "auto",
+            }}
+          >
             {fields.map((field, index) => (
-              <li key={field.id}>
+              <li
+                key={field.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0.5rem 0.75rem",
+                  borderRadius: "var(--radius)",
+                  border: "1px solid var(--clr-border)",
+                  background: "var(--clr-surface)",
+                }}
+              >
                 <input
                   type="checkbox"
+                  id={`accept-${field.id}`}
                   {...register(`albums.${index}.accepted`)}
+                  style={{ width: "1.125rem", height: "1.125rem" }}
                 />
-                {field.artist} - {field.album} - {field.track_count} songs,{" "}
-                {field.year}
                 {field.cover_path ? (
                   <img
                     src={convertFileSrc(field.cover_path)}
                     alt={`${field.album} cover`}
-                    width="64"
-                    height="64"
+                    width="48"
+                    height="48"
+                    style={{ borderRadius: "4px", flexShrink: 0 }}
                   />
                 ) : (
-                  " Cover Missing"
+                  <span
+                    style={{
+                      width: "48px",
+                      height: "48px",
+                      flexShrink: 0,
+                      borderRadius: "4px",
+                      background: "var(--clr-bg)",
+                      border: "1px dashed var(--clr-border)",
+                    }}
+                    aria-hidden="true"
+                  />
                 )}
-                {field.duration_seconds > 0 &&
-                  `, duration ${secondsToMinutes(field.duration_seconds)}mins`}
+                <label
+                  htmlFor={`accept-${field.id}`}
+                  style={{ display: "flex", flexDirection: "column", gap: "0.125rem" }}
+                >
+                  <span style={{ fontSize: "0.9375rem" }}>
+                    {field.artist} - {field.album}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "0.8125rem",
+                      color: "var(--clr-text-muted)",
+                    }}
+                  >
+                    {field.year ?? "-"} · {field.track_count} tracks
+                    {field.duration_seconds > 0 &&
+                      ` · ${secondsToMinutes(field.duration_seconds)} min`}
+                  </span>
+                </label>
               </li>
             ))}
           </ul>
         )}
-        <button type="submit">Save</button>
       </form>
     </>
   );

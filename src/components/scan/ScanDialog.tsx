@@ -37,16 +37,105 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
 
   return (
     <>
-      {isLoading && <p>progress bar</p>}
-      {isError && <pre>{String(error)}</pre>}
+      {isLoading && (
+        <p
+          style={{
+            fontFamily: "var(--font-mono)",
+            color: "var(--clr-text-muted)",
+          }}
+        >
+          Scanning…
+        </p>
+      )}
+      {isError && (
+        <pre
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.875rem",
+            color: "var(--clr-text-muted)",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          {String(error)}
+        </pre>
+      )}
 
-      <dialog ref={ref}>
+      <dialog
+        ref={ref}
+        style={{
+          position: "fixed",
+          inset: "0",
+          margin: "auto",
+          border: "1px solid var(--clr-border)",
+          borderRadius: "var(--radius)",
+          background: "var(--clr-bg)",
+          color: "var(--clr-text)",
+          fontFamily: "var(--font-body)",
+          padding: "1.5rem",
+          width: "min(640px, 90vw)",
+          maxHeight: "80vh",
+        }}
+      >
         {scanResults && <ScanForm scanResults={scanResults} />}
         {!scanResults && <p>Impossible state?</p>}
-        <button onClick={() => ref.current?.close()}>Close</button>
+        <div
+          style={{
+            marginTop: "1rem",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            gap: "0.75rem",
+          }}
+        >
+          <button
+            onClick={() => ref.current?.close()}
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "var(--radius)",
+              border: "1px solid var(--clr-border)",
+              background: "var(--clr-surface)",
+              color: "var(--clr-text)",
+              fontFamily: "var(--font-body)",
+              fontSize: "0.9375rem",
+              cursor: "pointer",
+            }}
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            form="scan-results-form"
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "var(--radius)",
+              border: "1px solid var(--clr-accent)",
+              background: "var(--clr-accent)",
+              color: "var(--clr-bg)",
+              fontFamily: "var(--font-body)",
+              fontSize: "0.9375rem",
+              cursor: "pointer",
+            }}
+          >
+            Save
+          </button>
+        </div>
       </dialog>
 
-      <button onClick={handleLaunchScan}>Scan</button>
+      <button
+        onClick={handleLaunchScan}
+        style={{
+          padding: "0.5rem 1rem",
+          borderRadius: "var(--radius)",
+          border: "1px solid var(--clr-accent)",
+          background: "var(--clr-accent)",
+          color: "var(--clr-bg)",
+          fontFamily: "var(--font-body)",
+          fontSize: "0.9375rem",
+          cursor: "pointer",
+        }}
+      >
+        Scan
+      </button>
     </>
   );
 };
