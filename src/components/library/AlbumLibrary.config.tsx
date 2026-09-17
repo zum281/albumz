@@ -67,6 +67,10 @@ export const albumLibraryColumns: Array<
   {
     accessorKey: "media_type",
     header: () => "Type",
+    cell: (props) => {
+      const type = props.getValue<string>();
+      return <span style={{ textTransform: "capitalize" }}>{type}</span>;
+    },
   },
   {
     accessorKey: "rating",
@@ -89,5 +93,9 @@ export const albumLibraryColumns: Array<
   {
     accessorKey: "source",
     header: () => "Source",
+    cell: (props) => {
+      const source = props.getValue<string>();
+      return <span style={{ textTransform: "capitalize" }}>{source}</span>;
+    },
   },
 ];
