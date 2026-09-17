@@ -8,16 +8,18 @@ const sqliteBool = z
   .max(1)
   .transform((v) => v === 1);
 
+const positiveInteger = z.number().int().nonnegative();
+
 export const AlbumSchema = z.object({
-  id: z.number(),
+  id: positiveInteger,
   cover_path: z.string().nullable(),
   artist: z.string().min(1),
   album: z.string().min(1),
-  year: z.number(),
-  duration_seconds: z.number(),
-  track_count: z.number(),
+  year: positiveInteger,
+  duration_seconds: positiveInteger,
+  track_count: positiveInteger,
   listened: sqliteBool,
-  rating: z.number().nullable(),
+  rating: positiveInteger.gte(1).lte(5).nullable(),
   ignored: sqliteBool,
   media_type: z.enum(MediaType),
   source: z.enum(Source),
