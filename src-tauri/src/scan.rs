@@ -119,7 +119,7 @@ fn get_album_duration(tracks: &Vec<fs::DirEntry>) -> Result<u16, String> {
 fn scan_album_metadata(
     album_path: &path::Path,
     artist_name: &str,
-    existing_map: &HashMap<(String, String), ExistingAlbum>,
+    existing_map: &HashMap<(String, String), AlbumExisting>,
 ) -> Result<Option<ScanResult>, String> {
     let album_name = get_album_name(&album_path).unwrap_or_default();
 
@@ -172,13 +172,13 @@ fn scan_album_metadata(
 /// Returns `Err` if the library root or any artist/album directory inside it can't be
 /// read, or if a track file can't be parsed.
 #[tauri::command]
-pub fn scan_library(existing: Vec<ExistingAlbum>) -> Result<Vec<ScanResult>, String> {
+pub fn scan_library(existing: Vec<AlbumExisting>) -> Result<Vec<ScanResult>, String> {
     let home = env::var("HOME").expect("HOME environment variable must be set");
     let music_path = path::Path::new(&home).join("Music").join("mp3");
 
     let mut result = vec![];
 
-    let existing_map: HashMap<(String, String), ExistingAlbum> = existing
+    let existing_map: HashMap<(String, String), AlbumExisting> = existing
         .into_iter()
         .map(|e| ((e.artist.clone(), e.album.clone()), e))
         .collect();
@@ -223,7 +223,7 @@ pub struct ScanResult {
 /// One album already in the `albums` table, as passed in from TypeScript to let
 /// [`scan_library`] skip re-parsing tags for albums that haven't changed.
 #[derive(serde::Deserialize)]
-pub struct ExistingAlbum {
+pub struct AlbumExisting {
     artist: String,
     album: String,
     track_count: usize,

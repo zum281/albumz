@@ -18,7 +18,8 @@ pub fn get_migrations() -> Vec<Migration> {
                   media_type TEXT NOT NULL DEFAULT 'digital',
                   source TEXT NOT NULL DEFAULT 'scan',
                   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-                  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+                  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                  UNIQUE(artist, album)
               );",
         kind: MigrationKind::Up,
     }]
