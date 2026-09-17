@@ -14,7 +14,11 @@ pub fn get_migrations() -> Vec<Migration> {
                   cover_path TEXT,
                   rating REAL,
                   listened INTEGER NOT NULL DEFAULT 0,
-                  ignored INTEGER NOT NULL DEFAULT 0
+                  ignored INTEGER NOT NULL DEFAULT 0,
+                  media_type TEXT NOT NULL DEFAULT 'digital',
+                  source TEXT NOT NULL DEFAULT 'scan',
+                  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
               );",
         kind: MigrationKind::Up,
     }]

@@ -7,6 +7,10 @@ export const ScanResultSchema = AlbumSchema.omit({
   rating: true,
   listened: true,
   ignored: true,
+  created_at: true,
+  updated_at: true,
+  source: true,
+  media_type: true,
 }).extend({ has_cover: z.boolean() });
 
 export type ScanResult = z.infer<typeof ScanResultSchema>;

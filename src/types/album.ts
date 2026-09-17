@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MediaType, Source } from "./enums";
 
 export const AlbumSchema = z.object({
   id: z.number(),
@@ -11,6 +12,10 @@ export const AlbumSchema = z.object({
   listened: z.boolean(),
   rating: z.number().nullable(),
   ignored: z.boolean(),
+  media_type: z.enum(MediaType),
+  source: z.enum(Source),
+  created_at: z.iso.datetime(),
+  updated_at: z.iso.datetime(),
 });
 
 export const AlbumsSchema = z.array(AlbumSchema);
