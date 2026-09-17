@@ -1,17 +1,20 @@
 import type { QueryResult } from "@tauri-apps/plugin-sql";
-import type { AlbumExisting, AlbumInsert } from "../types/album";
+import { AlbumsSchema } from "../types/album";
+import type { Album, AlbumInsert } from "../types/album";
 import { getDb } from "./db";
-import { sql } from "./sql";
+import { sql, toSqliteBool } from "./sql";
 
-export const getExistingAlbums = async (): Promise<AlbumExisting[]> => {
+export const getAlbums = async (): Promise<Album[]> => {
   const db = await getDb();
   const query = sql`
-      SELECT artist, album, track_count, ignored
+      SELECT *
       FROM albums
+      WHERE ignored = 0
+      ORDER BY artist COLLATE NOCASE, album COLLATE NOCASE
     `;
-  const rows = await db.select<AlbumExisting[]>(query);
+  const rows = await db.select(query);
 
-  return rows.map((r) => ({ ...r, ignored: Boolean(r.ignored) }));
+  return AlbumsSchema.parse(rows);
 };
 
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
@@ -32,6 +35,6 @@ export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
     album.year,
     album.duration_seconds,
     album.track_count,
-    album.ignored,
+    toSqliteBool(album.ignored),
   ]);
 };

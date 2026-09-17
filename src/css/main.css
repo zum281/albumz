@@ -5,4 +5,5 @@
 main {
   display: grid;
   place-content: center;
+  padding: 2rem;
 }

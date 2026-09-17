@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { MediaType, Source } from "./enums";
 
+const sqliteBool = z
+  .number()
+  .int()
+  .min(0)
+  .max(1)
+  .transform((v) => v === 1);
+
 export const AlbumSchema = z.object({
   id: z.number(),
   cover_path: z.string().nullable(),
@@ -9,9 +16,9 @@ export const AlbumSchema = z.object({
   year: z.number(),
   duration_seconds: z.number(),
   track_count: z.number(),
-  listened: z.boolean(),
+  listened: sqliteBool,
   rating: z.number().nullable(),
-  ignored: z.boolean(),
+  ignored: sqliteBool,
   media_type: z.enum(MediaType),
   source: z.enum(Source),
   created_at: z.iso.datetime(),

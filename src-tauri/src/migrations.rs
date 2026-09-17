@@ -13,14 +13,14 @@ pub fn get_migrations() -> Vec<Migration> {
                   track_count INTEGER NOT NULL,
                   cover_path TEXT,
                   rating REAL,
-                  listened INTEGER NOT NULL DEFAULT 0,
-                  ignored INTEGER NOT NULL DEFAULT 0,
+                  listened INTEGER NOT NULL DEFAULT 0 CHECK(listened IN (0, 1)),
+                  ignored INTEGER NOT NULL DEFAULT 0 CHECK(ignored IN (0, 1)),
                   media_type TEXT NOT NULL DEFAULT 'digital',
                   source TEXT NOT NULL DEFAULT 'scan',
                   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
                   updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
                   UNIQUE(artist, album)
-              );",
+              ) STRICT;",
         kind: MigrationKind::Up,
     }]
 }
