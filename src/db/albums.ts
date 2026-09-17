@@ -40,3 +40,17 @@ export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
     album.cover_path,
   ]);
 };
+
+export const updateAlbumListen = async (
+  id: Album["id"],
+  listened: Album["listened"],
+): Promise<QueryResult> => {
+  const db = await getDb();
+  const query = sql`
+        UPDATE albums
+        SET listened = $2
+        WHERE id = $1
+      `;
+
+  return db.execute(query, [id, toSqliteBool(listened)]);
+};

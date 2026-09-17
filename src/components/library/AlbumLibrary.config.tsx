@@ -8,6 +8,7 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 import type { Album } from "../../types/album";
 import { secondsToMinutes } from "../../utils/time";
 import { CoverPlaceholder } from "../CoverPlaceholder";
+import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
 
 export const albumLibraryFeatures = tableFeatures({
   columnSizingFeature,
@@ -74,6 +75,16 @@ export const albumLibraryColumns: Array<
   {
     accessorKey: "listened",
     header: () => "Listened?",
+    cell: (props) => {
+      const album = props.row.original;
+      return (
+        <AlbumLibraryListenedCell
+          id={album.id}
+          album={album.album}
+          listened={album.listened}
+        />
+      );
+    },
   },
   {
     accessorKey: "source",
