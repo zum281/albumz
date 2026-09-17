@@ -1,3 +1,4 @@
+import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import type { Album } from "../../types/album";
 import { secondsToMinutes } from "../../utils/time";
@@ -16,6 +17,14 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
               borderBottom: "1px solid var(--clr-border)",
             }}
           >
+            {!!album.cover_path && (
+              <img
+                src={convertFileSrc(album.cover_path)}
+                alt={`${album.album} cover`}
+                width="64"
+                height="64"
+              />
+            )}
             {album.artist} | {album.album} | {album.track_count} songs |{" "}
             {secondsToMinutes(album.duration_seconds)}mins | {album.media_type}{" "}
             | {album.source} | {album.year} |{" "}

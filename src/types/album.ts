@@ -29,12 +29,15 @@ export const AlbumSchema = z.object({
 
 export const AlbumsSchema = z.array(AlbumSchema);
 export type Album = z.infer<typeof AlbumSchema>;
-export type AlbumExisting = Pick<
-  Album,
-  "album" | "artist" | "track_count" | "ignored"
->;
+export type AlbumExisting = Pick<Album, "album" | "artist" | "track_count">;
 
 export type AlbumInsert = Pick<
   Album,
-  "artist" | "album" | "year" | "duration_seconds" | "track_count" | "ignored"
+  | "artist"
+  | "album"
+  | "year"
+  | "duration_seconds"
+  | "track_count"
+  | "ignored"
+  | "cover_path"
 >;

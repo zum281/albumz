@@ -1,6 +1,6 @@
 import type { QueryResult } from "@tauri-apps/plugin-sql";
-import { AlbumsSchema } from "../types/album";
 import type { Album, AlbumInsert } from "../types/album";
+import { AlbumsSchema } from "../types/album";
 import { getDb } from "./db";
 import { sql, toSqliteBool } from "./sql";
 
@@ -20,11 +20,12 @@ export const getAlbums = async (): Promise<Album[]> => {
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
   const db = await getDb();
   const query = sql`
-        INSERT INTO albums (artist, album, year, duration_seconds, track_count, ignored)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO albums (artist, album, year, duration_seconds, track_count, ignored, cover_path)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         ON CONFLICT(artist, album) DO UPDATE SET
           year = excluded.year,
           duration_seconds = excluded.duration_seconds,
+          cover_path = excluded.cover_path,
           ignored = excluded.ignored,
           track_count = excluded.track_count,
           updated_at = (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
@@ -36,5 +37,6 @@ export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
     album.duration_seconds,
     album.track_count,
     toSqliteBool(album.ignored),
+    album.cover_path,
   ]);
 };

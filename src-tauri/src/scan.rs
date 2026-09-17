@@ -1,8 +1,7 @@
-use lofty::{
-    self, config::ParseOptions, file::AudioFile, file::TaggedFileExt, picture::Picture,
-    probe::Probe, tag::Accessor,
-};
+use lofty::{self, config::ParseOptions, file::AudioFile, probe::Probe, tag::Accessor, tag::Tag};
 use std::{collections::HashMap, env, fs, path};
+
+use crate::utils;
 
 const IGNORED_ARTISTS: &[&str] = &["Various Artists"];
 const TRACK_COUNT_THRESHOLD: usize = 3;
@@ -58,27 +57,41 @@ fn scan_albums(artist_path: &path::Path) -> Result<Vec<path::PathBuf>, String> {
     Ok(result)
 }
 
-/// Reads year and embedded cover art from `first_track`'s tag. Returns `(0, None)` if
-/// `first_track` is `None` or has no readable tag.
+fn upload_cover(tag: &Option<Tag>, cover_path: &str) -> Result<Option<String>, String> {
+    let Some(picture) = tag.as_ref().and_then(|t| t.pictures().first()) else {
+        return Ok(None);
+    };
+
+    let Some(cover_mime_type) = picture.mime_type() else {
+        return Ok(None);
+    };
+
+    let mut cover_path_ext = cover_path.to_string();
+    let Some(cover_ext) = cover_mime_type.ext() else {
+        return Ok(None);
+    };
+    cover_path_ext.push('.');
+    cover_path_ext.push_str(cover_ext);
+
+    fs::write(&cover_path_ext, picture.data()).map_err(|e| e.to_string())?;
+
+    Ok(Some(cover_path_ext))
+}
+
+/// Reads year from a tag. Returns `0` if
+/// track is `None` or has no readable tag.
 ///
 /// # Errors
 ///
-/// Returns `Err` if `first_track` exists but its audio file can't be parsed by [`lofty`].
-fn get_album_cover_and_year(
-    first_track: Option<&fs::DirEntry>,
-) -> Result<(u16, Option<Picture>), String> {
-    let first_tagged_file = first_track
-        .map(|t| lofty::read_from_path(t.path()))
-        .transpose()
-        .map_err(|e| e.to_string())?;
-    let tag = first_tagged_file
+/// Returns `Err` if track exists but its audio file can't be parsed by [`lofty`].
+fn get_album_year(tag: &Option<Tag>) -> Result<u16, String> {
+    let album_year = tag
         .as_ref()
-        .and_then(|f| f.primary_tag().or_else(|| f.first_tag()));
-    let album_year = tag.and_then(|t| t.date()).map(|t| t.year).unwrap_or(0);
+        .and_then(|t| t.date())
+        .map(|t| t.year)
+        .unwrap_or(0);
 
-    let album_cover = tag.and_then(|t| t.pictures().first().cloned());
-
-    Ok((album_year, album_cover))
+    Ok(album_year)
 }
 
 /// Returns `album_path`'s final path component as a `String`, or `None` if it has none.
@@ -117,6 +130,7 @@ fn get_album_duration(tracks: &Vec<fs::DirEntry>) -> Result<u16, String> {
 ///
 /// Returns `Err` if `album_path` can't be read, or if any track inside it can't be parsed.
 fn scan_album_metadata(
+    app: &tauri::AppHandle,
     album_path: &path::Path,
     artist_name: &str,
     existing_map: &HashMap<(String, String), AlbumExisting>,
@@ -148,9 +162,13 @@ fn scan_album_metadata(
         return Ok(None);
     }
     let first_track = tracks.first();
-    let (album_year, album_cover) = get_album_cover_and_year(first_track)?;
-    let album_has_cover = album_cover.is_some();
+    let first_track_tag = utils::get_tag(&first_track)?;
+
+    let album_year = get_album_year(&first_track_tag)?;
     let album_duration = get_album_duration(&tracks)?;
+
+    let cover_path = utils::construct_cover_path(app, artist_name, &album_name)?;
+    let album_cover_path = upload_cover(&first_track_tag, &cover_path)?;
 
     let entry = ScanResult {
         artist: artist_name.to_string(),
@@ -158,7 +176,7 @@ fn scan_album_metadata(
         track_count,
         duration_seconds: album_duration,
         year: album_year,
-        has_cover: album_has_cover,
+        cover_path: album_cover_path,
     };
 
     return Ok(Some(entry));
@@ -172,7 +190,10 @@ fn scan_album_metadata(
 /// Returns `Err` if the library root or any artist/album directory inside it can't be
 /// read, or if a track file can't be parsed.
 #[tauri::command]
-pub fn scan_library(existing: Vec<AlbumExisting>) -> Result<Vec<ScanResult>, String> {
+pub fn scan_library(
+    app: tauri::AppHandle,
+    existing: Vec<AlbumExisting>,
+) -> Result<Vec<ScanResult>, String> {
     let home = env::var("HOME").expect("HOME environment variable must be set");
     let music_path = path::Path::new(&home).join("Music").join("mp3");
 
@@ -193,7 +214,8 @@ pub fn scan_library(existing: Vec<AlbumExisting>) -> Result<Vec<ScanResult>, Str
 
         let albums = scan_albums(&artist_path)?;
         for album_path in albums {
-            let album_metadata = scan_album_metadata(&album_path, &artist_name, &existing_map)?;
+            let album_metadata =
+                scan_album_metadata(&app, &album_path, &artist_name, &existing_map)?;
 
             if let Some(entry) = album_metadata {
                 result.push(entry);
@@ -217,7 +239,7 @@ pub struct ScanResult {
     track_count: usize,
     duration_seconds: u16,
     year: u16,
-    has_cover: bool,
+    cover_path: Option<String>,
 }
 
 /// One album already in the `albums` table, as passed in from TypeScript to let
@@ -227,5 +249,4 @@ pub struct AlbumExisting {
     artist: String,
     album: String,
     track_count: usize,
-    ignored: bool,
 }

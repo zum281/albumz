@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -50,6 +51,7 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
       duration_seconds: a.duration_seconds,
       track_count: a.track_count,
       ignored: !a.accepted,
+      cover_path: a.cover_path,
     }));
     upsertMutation.mutate(payload);
   };
@@ -76,7 +78,16 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                 />
                 {field.artist} - {field.album} - {field.track_count} songs,{" "}
                 {field.year}
-                {field.has_cover ? " Cover" : " Cover Missing"}
+                {field.cover_path ? (
+                  <img
+                    src={convertFileSrc(field.cover_path)}
+                    alt={`${field.album} cover`}
+                    width="64"
+                    height="64"
+                  />
+                ) : (
+                  " Cover Missing"
+                )}
                 {field.duration_seconds > 0 &&
                   `, duration ${secondsToMinutes(field.duration_seconds)}mins`}
               </li>

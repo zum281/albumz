@@ -5,6 +5,5 @@ export const albumToExisting = (album: Album): AlbumExisting => {
     artist: album.artist,
     album: album.album,
     track_count: album.track_count,
-    ignored: album.ignored,
   };
 };
