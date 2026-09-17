@@ -138,7 +138,7 @@ fn scan_album_metadata(
     let track_count = tracks.len();
 
     if let Some(existing) = existing_map.get(&(artist_name.to_string(), album_name.clone())) {
-        let should_resurface = existing.ignored && track_count > existing.track_count;
+        let should_resurface = track_count > existing.track_count;
         if !should_resurface {
             return Ok(None);
         }
