@@ -10,7 +10,7 @@ export const getAlbums = async (): Promise<Album[]> => {
       SELECT *
       FROM albums
       WHERE ignored = 0
-      ORDER BY artist COLLATE NOCASE, album COLLATE NOCASE
+      ORDER BY artist COLLATE NOCASE, album COLLATE NOCASE;
     `;
   const rows = await db.select(query);
 
@@ -28,7 +28,7 @@ export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
           cover_path = excluded.cover_path,
           ignored = excluded.ignored,
           track_count = excluded.track_count,
-          updated_at = (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+          updated_at = (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
       `;
   return db.execute(query, [
     album.artist,
@@ -49,8 +49,22 @@ export const updateAlbumListen = async (
   const query = sql`
         UPDATE albums
         SET listened = $2
-        WHERE id = $1
+        WHERE id = $1;
       `;
 
   return db.execute(query, [id, toSqliteBool(listened)]);
+};
+
+export const updateAlbumRating = async (
+  id: Album["id"],
+  rating: Album["rating"],
+): Promise<QueryResult> => {
+  const db = await getDb();
+  const query = sql`
+        UPDATE albums
+        SET rating = $2
+        WHERE id = $1;
+  `;
+
+  return db.execute(query, [id, rating]);
 };

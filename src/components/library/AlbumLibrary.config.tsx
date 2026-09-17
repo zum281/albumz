@@ -9,6 +9,7 @@ import type { Album } from "../../types/album";
 import { secondsToMinutes } from "../../utils/time";
 import { CoverPlaceholder } from "../CoverPlaceholder";
 import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
+import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
 
 export const albumLibraryFeatures = tableFeatures({
   columnSizingFeature,
@@ -75,6 +76,16 @@ export const albumLibraryColumns: Array<
   {
     accessorKey: "rating",
     header: () => "Rating",
+    cell: (props) => {
+      const album = props.row.original;
+      return (
+        <AlbumLibraryRatingCell
+          id={album.id}
+          album={album.album}
+          rating={album.rating}
+        />
+      );
+    },
   },
   {
     accessorKey: "listened",

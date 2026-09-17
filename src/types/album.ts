@@ -10,6 +10,7 @@ const sqliteBool = z
 
 const positiveInteger = z.number().int().nonnegative();
 
+export const AlbumRatingSchema = positiveInteger.gte(1).lte(5).nullable();
 export const AlbumSchema = z.object({
   id: positiveInteger,
   cover_path: z.string().nullable(),
@@ -19,7 +20,7 @@ export const AlbumSchema = z.object({
   duration_seconds: positiveInteger,
   track_count: positiveInteger,
   listened: sqliteBool,
-  rating: positiveInteger.gte(1).lte(5).nullable(),
+  rating: AlbumRatingSchema,
   ignored: sqliteBool,
   media_type: z.enum(MediaType),
   source: z.enum(Source),

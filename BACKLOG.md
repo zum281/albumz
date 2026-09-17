@@ -5,11 +5,8 @@
 - Cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
   if found new, update the rows. UI: will be a custom button.
 - Add refresh button and/or refresh UI with cmd+r, Ctrl-r (windows)
-- Add rating stars/attach to BE
 - Styles refactor
-
----
-
-## Done
-
-- Add listened checkbox / attach to BE
+- add searchbar to table
+- paginate table
+- add quick filters to table
+- guard against interpolation sql
