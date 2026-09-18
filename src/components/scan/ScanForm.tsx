@@ -1,14 +1,15 @@
+import { Checkbox } from "@/components/ui/checkbox";
+import { albumsQueryOptions, upsertAlbum } from "@/db/albums";
+import type { AlbumInsert } from "@/types/album";
+import type { ScanFormValues, ScanResult } from "@/types/scan";
+import { ScanFormSchema } from "@/types/scan";
+import { secondsToMinutes } from "@/utils/time";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { albumsQueryOptions, upsertAlbum } from "@/db/albums";
-import type { AlbumInsert } from "@/types/album";
-import type { ScanFormValues, ScanResult } from "@/types/scan";
-import { ScanFormSchema } from "@/types/scan";
-import { secondsToMinutes } from "@/utils/time";
 export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
   const queryClient = useQueryClient();
   const { queryKey } = albumsQueryOptions();
@@ -121,11 +122,9 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                   background: "var(--card)",
                 }}
               >
-                <input
-                  type="checkbox"
+                <Checkbox
                   id={`accept-${field.id}`}
                   {...register(`albums.${index}.accepted`)}
-                  style={{ width: "1.125rem", height: "1.125rem" }}
                 />
                 {field.cover_path ? (
                   <img

@@ -1,7 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { ChangeEventHandler, FC } from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { albumsQueryOptions, updateAlbumListen } from "@/db/albums";
 import type { Album } from "@/types/album";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { FC } from "react";
 
 export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   id,
@@ -24,28 +25,19 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
     },
   });
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleCheckedChange = (checked: boolean) => {
     console.assert(
-      e.target.checked === !listened,
+      checked === !listened,
       "checkbox checked out of sync with listened prop",
     );
     updateListenedMutation.mutate(!listened);
   };
 
   return (
-    <input
-      type="checkbox"
+    <Checkbox
       aria-label={`${album}-${listened ? "listened" : "not-listened"}`}
-      onChange={handleChange}
+      onCheckedChange={handleCheckedChange}
       checked={listened}
-      style={{
-        display: "block",
-        margin: "auto",
-        width: "1.25rem",
-        height: "1.25rem",
-        cursor: "pointer",
-        accentColor: "var(--primary)",
-      }}
     />
   );
 };

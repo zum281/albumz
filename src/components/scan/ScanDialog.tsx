@@ -1,8 +1,9 @@
+import { scanQueryOptions } from "@/commands/scan";
+import { Button } from "@/components/ui/button/button";
+import type { AlbumExisting } from "@/types/album";
 import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 import { useEffect, useRef } from "react";
-import { scanQueryOptions } from "@/commands/scan";
-import type { AlbumExisting } from "@/types/album";
 import { ScanForm } from "./ScanForm";
 
 export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
@@ -77,57 +78,14 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
             gap: "0.75rem",
           }}
         >
-          <button
-            type="button"
-            onClick={() => ref.current?.close()}
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "var(--radius)",
-              border: "1px solid var(--border)",
-              background: "var(--card)",
-              color: "var(--foreground)",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.9375rem",
-              cursor: "pointer",
-            }}
-          >
-            Close
-          </button>
-          <button
-            type="submit"
-            form="scan-results-form"
-            style={{
-              padding: "0.5rem 1rem",
-              borderRadius: "var(--radius)",
-              border: "1px solid var(--primary)",
-              background: "var(--primary)",
-              color: "var(--background)",
-              fontFamily: "var(--font-sans)",
-              fontSize: "0.9375rem",
-              cursor: "pointer",
-            }}
-          >
+          <Button onClick={() => ref.current?.close()}>Close</Button>
+          <Button type="submit" form="scan-results-form">
             Save
-          </button>
+          </Button>
         </div>
       </dialog>
 
-      <button
-        type="button"
-        onClick={() => void refetch()}
-        style={{
-          padding: "0.5rem 1rem",
-          borderRadius: "var(--radius)",
-          border: "1px solid var(--primary)",
-          background: "var(--primary)",
-          color: "var(--background)",
-          fontFamily: "var(--font-sans)",
-          fontSize: "0.75rem",
-          cursor: "pointer",
-        }}
-      >
-        Scan
-      </button>
+      <Button onClick={() => void refetch()}>Scan</Button>
     </div>
   );
 };

@@ -1,22 +1,12 @@
+import { Button } from "@/components/ui/button/button";
+import type { Album } from "@/types/album";
 import type { useTable } from "@tanstack/react-table";
 import type { FC } from "react";
-import type { Album } from "@/types/album";
 import type { albumLibraryFeatures } from "./AlbumLibrary.config";
 
 export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
   table,
 }) => {
-  const buttonStyle = {
-    padding: "0.375rem 0.625rem",
-    borderRadius: "var(--radius)",
-    border: "1px solid var(--border)",
-    background: "var(--card)",
-    color: "var(--foreground)",
-    fontFamily: "var(--font-mono)",
-    fontSize: "0.875rem",
-    cursor: "pointer",
-  } as const;
-
   return (
     <div
       style={{
@@ -26,28 +16,24 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
         padding: "0.75rem 0",
       }}
     >
-      <button
-        type="button"
+      <Button
         onClick={() => {
           table.firstPage();
         }}
         disabled={!table.getCanPreviousPage()}
-        style={buttonStyle}
         aria-label="First page"
       >
         «
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
         onClick={() => {
           table.previousPage();
         }}
         disabled={!table.getCanPreviousPage()}
-        style={buttonStyle}
         aria-label="Previous page"
       >
         ‹
-      </button>
+      </Button>
       <span
         style={{
           fontFamily: "var(--font-mono)",
@@ -58,35 +44,31 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
       >
         Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
       </span>
-      <button
-        type="button"
+      <Button
         onClick={() => {
           table.nextPage();
         }}
         disabled={!table.getCanNextPage()}
-        style={buttonStyle}
         aria-label="Next page"
       >
         ›
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
         onClick={() => {
           table.lastPage();
         }}
         disabled={!table.getCanLastPage()}
-        style={buttonStyle}
         aria-label="Last page"
       >
         »
-      </button>
+      </Button>
       <select
         value={table.state.pagination.pageSize}
         onChange={(e) => {
           table.setPageSize(Number(e.target.value));
         }}
-        style={{ ...buttonStyle, marginLeft: "auto" }}
         aria-label="Rows per page"
+        className="ml-auto"
       >
         {[10, 20, 30, 40, 50].map((pageSize) => (
           <option key={pageSize} value={pageSize}>
