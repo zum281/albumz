@@ -1,7 +1,7 @@
 import type { useTable } from "@tanstack/react-table";
 import type { FC } from "react";
 import type { Album } from "../../types/album";
-import { albumLibraryFeatures } from "./AlbumLibrary.config";
+import type { albumLibraryFeatures } from "./AlbumLibrary.config";
 
 export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
   table,
@@ -27,7 +27,10 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
       }}
     >
       <button
-        onClick={() => table.firstPage()}
+        type="button"
+        onClick={() => {
+          table.firstPage();
+        }}
         disabled={!table.getCanPreviousPage()}
         style={buttonStyle}
         aria-label="First page"
@@ -35,7 +38,10 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
         «
       </button>
       <button
-        onClick={() => table.previousPage()}
+        type="button"
+        onClick={() => {
+          table.previousPage();
+        }}
         disabled={!table.getCanPreviousPage()}
         style={buttonStyle}
         aria-label="Previous page"
@@ -53,7 +59,10 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
         Page {table.state.pagination.pageIndex + 1} of {table.getPageCount()}
       </span>
       <button
-        onClick={() => table.nextPage()}
+        type="button"
+        onClick={() => {
+          table.nextPage();
+        }}
         disabled={!table.getCanNextPage()}
         style={buttonStyle}
         aria-label="Next page"
@@ -61,7 +70,10 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
         ›
       </button>
       <button
-        onClick={() => table.lastPage()}
+        type="button"
+        onClick={() => {
+          table.lastPage();
+        }}
         disabled={!table.getCanLastPage()}
         style={buttonStyle}
         aria-label="Last page"
@@ -70,11 +82,10 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
       </button>
       <select
         value={table.state.pagination.pageSize}
-        onChange={(e) => table.setPageSize(Number(e.target.value))}
-        style={{
-          ...buttonStyle,
-          marginLeft: "auto",
+        onChange={(e) => {
+          table.setPageSize(Number(e.target.value));
         }}
+        style={{ ...buttonStyle, marginLeft: "auto" }}
         aria-label="Rows per page"
       >
         {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -87,6 +98,6 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
   );
 };
 
-type AlbumLibraryPaginationProps = {
+interface AlbumLibraryPaginationProps {
   table: ReturnType<typeof useTable<typeof albumLibraryFeatures, Album>>;
-};
+}

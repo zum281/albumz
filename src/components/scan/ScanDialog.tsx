@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { invoke } from "@tauri-apps/api/core";
 import type { FC } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { scanQueryOptions } from "../../commands/scan";
 import type { AlbumExisting } from "../../types/album";
-import { ScanResultSchema } from "../../types/scan";
 import { ScanForm } from "./ScanForm";
 
 export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
-  const [launchScan, setLaunchScan] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
 
   const {
@@ -16,22 +14,11 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
     isError,
     error,
     dataUpdatedAt,
-  } = useQuery({
-    queryKey: ["scan"],
-    queryFn: async () => {
-      const res = await invoke("scan_library", { existing: existingAlbums });
-      return ScanResultSchema.array().parse(res);
-    },
-    enabled: !!existingAlbums && launchScan,
-  });
-
-  const handleLaunchScan = () => {
-    setLaunchScan(true);
-  };
+    refetch,
+  } = useQuery(scanQueryOptions(existingAlbums));
 
   useEffect(() => {
     if (!scanResults) return;
-    setLaunchScan(false);
     ref.current?.showModal();
   }, [scanResults, dataUpdatedAt]);
 
@@ -91,6 +78,7 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
           }}
         >
           <button
+            type="button"
             onClick={() => ref.current?.close()}
             style={{
               padding: "0.5rem 1rem",
@@ -125,7 +113,8 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
       </dialog>
 
       <button
-        onClick={handleLaunchScan}
+        type="button"
+        onClick={() => void refetch()}
         style={{
           padding: "0.5rem 1rem",
           borderRadius: "var(--radius)",
@@ -143,6 +132,6 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
   );
 };
 
-type ScanDialogProps = {
+interface ScanDialogProps {
   existingAlbums: AlbumExisting[];
-};
+}

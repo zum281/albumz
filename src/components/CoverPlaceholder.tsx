@@ -18,6 +18,6 @@ export const CoverPlaceholder: FC<CoverPlaceholderProps> = ({ size }) => (
   </div>
 );
 
-type CoverPlaceholderProps = {
+interface CoverPlaceholderProps {
   size?: number;
-};
+}

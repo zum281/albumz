@@ -20,9 +20,10 @@ export const albumLibraryFeatures = tableFeatures({
   paginatedRowModel: createPaginatedRowModel(),
 });
 
-export const albumLibraryColumns: Array<
-  ColumnDef<typeof albumLibraryFeatures, Album>
-> = [
+export const albumLibraryColumns: ColumnDef<
+  typeof albumLibraryFeatures,
+  Album
+>[] = [
   {
     accessorKey: "cover_path",
     header: "Cover",
@@ -43,24 +44,10 @@ export const albumLibraryColumns: Array<
       );
     },
   },
-  {
-    accessorKey: "artist",
-    header: "Artist",
-    size: 300,
-  },
-  {
-    accessorKey: "album",
-    header: () => "Album",
-    size: 300,
-  },
-  {
-    accessorKey: "year",
-    header: () => "Year",
-  },
-  {
-    accessorKey: "track_count",
-    header: () => "#tracks",
-  },
+  { accessorKey: "artist", header: "Artist", size: 300 },
+  { accessorKey: "album", header: () => "Album", size: 300 },
+  { accessorKey: "year", header: () => "Year" },
+  { accessorKey: "track_count", header: () => "#tracks" },
   {
     accessorKey: "duration_seconds",
     header: () => "Duration (min)",

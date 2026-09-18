@@ -12,4 +12,5 @@
 - sort rows of table
 - resize table columns
 - add sidebar (for routes)
-- add router
+- add tailwind
+- setup shadcn (with theme)

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { FC } from "react";
-import { ChangeEventHandler, useState } from "react";
-import { updateAlbumRating } from "../../../db/albums";
+import type { ChangeEventHandler, FC } from "react";
+import { useState } from "react";
+import { albumsQueryOptions, updateAlbumRating } from "../../../db/albums";
 import type { Album } from "../../../types/album";
 import { AlbumRatingSchema } from "../../../types/album";
 
@@ -11,28 +11,23 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   rating,
 }) => {
   const queryClient = useQueryClient();
+  const { queryKey } = albumsQueryOptions();
 
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const updateRatingMutation = useMutation({
     mutationFn: async (rating: number) => updateAlbumRating(id, rating),
-    onMutate: async (newRating) => {
-      const previous = queryClient.getQueryData<Album[]>(["albums"]);
-      queryClient.setQueryData<Album[]>(["albums"], (old) =>
+    onMutate: (newRating) => {
+      const previous = queryClient.getQueryData<Album[]>(queryKey);
+      queryClient.setQueryData<Album[]>(queryKey, (old) =>
         old?.map((a) =>
-          a.id === id
-            ? {
-                ...a,
-                rating: newRating,
-                listened: newRating !== null ? true : a.listened,
-              }
-            : a,
+          a.id === id ? { ...a, rating: newRating, listened: true } : a,
         ),
       );
       return { previous };
     },
     onError: (_err, _newRating, context) => {
-      queryClient.setQueryData(["albums"], context?.previous);
+      queryClient.setQueryData(queryKey, context?.previous);
     },
   });
 
@@ -93,8 +88,8 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   );
 };
 
-type AlbumLibraryRatingCellProps = {
+interface AlbumLibraryRatingCellProps {
   id: number;
   album: string;
   rating: number | null;
-};
+}

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 import { AlbumLibrary } from "../components/library/AlbumLibrary";
 import { ScanDialog } from "../components/scan/ScanDialog";
-import { getAlbums } from "../db/albums";
+import { albumsQueryOptions } from "../db/albums";
 import { albumToExisting } from "../utils/album";
 
 export const Home: FC = () => {
@@ -11,10 +11,7 @@ export const Home: FC = () => {
     isLoading,
     isError,
     error,
-  } = useQuery({
-    queryKey: ["albums"],
-    queryFn: getAlbums,
-  });
+  } = useQuery(albumsQueryOptions());
 
   if (isError) return <pre>{String(error)}</pre>;
   if (isLoading) return <p>Loading…</p>;

@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { FC } from "react";
-import { ChangeEventHandler } from "react";
-import { updateAlbumListen } from "../../../db/albums";
+import type { ChangeEventHandler, FC } from "react";
+import { albumsQueryOptions, updateAlbumListen } from "../../../db/albums";
 import type { Album } from "../../../types/album";
 
 export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
@@ -10,17 +9,18 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   listened,
 }) => {
   const queryClient = useQueryClient();
+  const { queryKey } = albumsQueryOptions();
   const updateListenedMutation = useMutation({
     mutationFn: async (listened: boolean) => updateAlbumListen(id, listened),
-    onMutate: async (newListened) => {
-      const previous = queryClient.getQueryData<Album[]>(["albums"]);
-      queryClient.setQueryData<Album[]>(["albums"], (old) =>
+    onMutate: (newListened) => {
+      const previous = queryClient.getQueryData<Album[]>(queryKey);
+      queryClient.setQueryData<Album[]>(queryKey, (old) =>
         old?.map((a) => (a.id === id ? { ...a, listened: newListened } : a)),
       );
       return { previous };
     },
     onError: (_err, _newListened, context) => {
-      queryClient.setQueryData(["albums"], context?.previous);
+      queryClient.setQueryData(queryKey, context?.previous);
     },
   });
 
@@ -35,7 +35,7 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   return (
     <input
       type="checkbox"
-      aria-label={`${album}-${listened}`}
+      aria-label={`${album}-${listened ? "listened" : "not-listened"}`}
       onChange={handleChange}
       checked={listened}
       style={{
@@ -50,8 +50,8 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   );
 };
 
-type AlbumLibraryCellProps = {
+interface AlbumLibraryCellProps {
   id: number;
   album: string;
   listened: boolean;
-};
+}

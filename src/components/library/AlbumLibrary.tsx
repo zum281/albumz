@@ -82,6 +82,6 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
   );
 };
 
-type AlbumLibraryProps = {
+interface AlbumLibraryProps {
   albums: Album[];
-};
+}

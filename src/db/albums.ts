@@ -1,3 +1,4 @@
+import { queryOptions } from "@tanstack/react-query";
 import type { QueryResult } from "@tauri-apps/plugin-sql";
 import type { Album, AlbumInsert } from "../types/album";
 import { AlbumsSchema } from "../types/album";
@@ -16,6 +17,9 @@ export const getAlbums = async (): Promise<Album[]> => {
 
   return AlbumsSchema.parse(rows);
 };
+
+export const albumsQueryOptions = () =>
+  queryOptions({ queryKey: ["albums"], queryFn: getAlbums });
 
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
   const db = await getDb();

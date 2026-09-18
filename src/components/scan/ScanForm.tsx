@@ -4,13 +4,14 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { upsertAlbum } from "../../db/albums";
+import { albumsQueryOptions, upsertAlbum } from "../../db/albums";
 import type { AlbumInsert } from "../../types/album";
 import type { ScanFormValues, ScanResult } from "../../types/scan";
 import { ScanFormSchema } from "../../types/scan";
 import { secondsToMinutes } from "../../utils/time";
 export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
   const queryClient = useQueryClient();
+  const { queryKey } = albumsQueryOptions();
 
   const [failed, setFailed] = useState<
     { album: AlbumInsert; reason: unknown }[]
@@ -30,14 +31,14 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
       Promise.allSettled(albums.map(upsertAlbum)).then((results) =>
         results.map((r, i) => ({ result: r, album: albums[i] })),
       ),
-    onSuccess: (results) => {
-      queryClient.invalidateQueries({ queryKey: ["albums"] });
+    onSuccess: async (results) => {
+      await queryClient.invalidateQueries({ queryKey });
       setFailed(
         results
           .filter((r) => r.result.status === "rejected")
           .map((r) => ({
             album: r.album,
-            reason: (r.result as PromiseRejectedResult).reason,
+            reason: (r.result as PromiseRejectedResult).reason as unknown,
           })),
       );
     },
@@ -90,7 +91,10 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
           ))}
         </ul>
       )}
-      <form id="scan-results-form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        id="scan-results-form"
+        onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+      >
         {scanResults.length > 0 && (
           <ul
             style={{
@@ -146,7 +150,11 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                 )}
                 <label
                   htmlFor={`accept-${field.id}`}
-                  style={{ display: "flex", flexDirection: "column", gap: "0.125rem" }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.125rem",
+                  }}
                 >
                   <span style={{ fontSize: "0.9375rem" }}>
                     {field.artist} - {field.album}
@@ -158,7 +166,7 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                       color: "var(--clr-text-muted)",
                     }}
                   >
-                    {field.year ?? "-"} · {field.track_count} tracks
+                    {field.year} · {field.track_count} tracks
                     {field.duration_seconds > 0 &&
                       ` · ${secondsToMinutes(field.duration_seconds)} min`}
                   </span>
@@ -172,6 +180,6 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
   );
 };
 
-type ScanFormProps = {
+interface ScanFormProps {
   scanResults: ScanResult[];
-};
+}
