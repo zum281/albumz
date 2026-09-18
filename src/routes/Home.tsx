@@ -22,9 +22,29 @@ export const Home: FC = () => {
 
   return (
     <main>
-      <h1>Albumz</h1>
+      <header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0.5rem 0 0.25rem",
+          marginBottom: "0.25rem",
+        }}
+      >
+        <h1
+          style={{
+            margin: 0,
+            fontFamily: "var(--font-display)",
+            fontWeight: 500,
+            fontSize: "1.5rem",
+            letterSpacing: "var(--track-display)",
+          }}
+        >
+          Albumz
+        </h1>
+        <ScanDialog existingAlbums={albums.map(albumToExisting)} />
+      </header>
 
-      <ScanDialog existingAlbums={albums.map(albumToExisting)} />
       <AlbumLibrary albums={albums} />
     </main>
   );

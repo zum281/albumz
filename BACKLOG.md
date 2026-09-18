@@ -7,6 +7,9 @@
 - Add refresh button and/or refresh UI with cmd+r, Ctrl-r (windows)
 - Styles refactor
 - add searchbar to table
-- paginate table
 - add quick filters to table
 - guard against interpolation sql
+- sort rows of table
+- resize table columns
+- add sidebar (for routes)
+- add router

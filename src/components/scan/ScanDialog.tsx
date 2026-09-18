@@ -36,24 +36,27 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
   }, [scanResults, dataUpdatedAt]);
 
   return (
-    <>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
       {isLoading && (
         <p
           style={{
             fontFamily: "var(--font-mono)",
             color: "var(--clr-text-muted)",
+            margin: 0,
+            fontSize: "0.8125rem",
           }}
         >
-          Scanning…
+          Scanning… //TODO use progress bar
         </p>
       )}
       {isError && (
         <pre
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: "0.875rem",
+            fontSize: "0.8125rem",
             color: "var(--clr-text-muted)",
             whiteSpace: "pre-wrap",
+            margin: 0,
           }}
         >
           {String(error)}
@@ -130,13 +133,13 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
           background: "var(--clr-accent)",
           color: "var(--clr-bg)",
           fontFamily: "var(--font-body)",
-          fontSize: "0.9375rem",
+          fontSize: "0.75rem",
           cursor: "pointer",
         }}
       >
         Scan
       </button>
-    </>
+    </div>
   );
 };
 

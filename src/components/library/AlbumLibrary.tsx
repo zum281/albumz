@@ -7,6 +7,7 @@ import {
   albumLibraryColumns,
   albumLibraryFeatures,
 } from "./AlbumLibrary.config";
+import { AlbumLibraryPagination } from "./AlbumLibraryPagination";
 
 export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
   const table = useTable({
@@ -76,6 +77,7 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
           ))}
         </tbody>
       </table>
+      <AlbumLibraryPagination table={table} />
     </section>
   );
 };

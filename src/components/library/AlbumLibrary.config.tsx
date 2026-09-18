@@ -2,6 +2,8 @@ import type { ColumnDef } from "@tanstack/react-table";
 import {
   columnResizingFeature,
   columnSizingFeature,
+  createPaginatedRowModel,
+  rowPaginationFeature,
   tableFeatures,
 } from "@tanstack/react-table";
 import { convertFileSrc } from "@tauri-apps/api/core";
@@ -14,6 +16,8 @@ import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
 export const albumLibraryFeatures = tableFeatures({
   columnSizingFeature,
   columnResizingFeature,
+  rowPaginationFeature,
+  paginatedRowModel: createPaginatedRowModel(),
 });
 
 export const albumLibraryColumns: Array<
