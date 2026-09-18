@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 import { useEffect, useRef } from "react";
-import { scanQueryOptions } from "../../commands/scan";
-import type { AlbumExisting } from "../../types/album";
+import { scanQueryOptions } from "@/commands/scan";
+import type { AlbumExisting } from "@/types/album";
 import { ScanForm } from "./ScanForm";
 
 export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
@@ -28,7 +28,7 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
         <p
           style={{
             fontFamily: "var(--font-mono)",
-            color: "var(--clr-text-muted)",
+            color: "var(--muted-foreground)",
             margin: 0,
             fontSize: "0.8125rem",
           }}
@@ -41,7 +41,7 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.8125rem",
-            color: "var(--clr-text-muted)",
+            color: "var(--muted-foreground)",
             whiteSpace: "pre-wrap",
             margin: 0,
           }}
@@ -56,11 +56,11 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
           position: "fixed",
           inset: "0",
           margin: "auto",
-          border: "1px solid var(--clr-border)",
+          border: "1px solid var(--border)",
           borderRadius: "var(--radius)",
-          background: "var(--clr-bg)",
-          color: "var(--clr-text)",
-          fontFamily: "var(--font-body)",
+          background: "var(--background)",
+          color: "var(--foreground)",
+          fontFamily: "var(--font-sans)",
           padding: "1.5rem",
           width: "min(640px, 90vw)",
           maxHeight: "80vh",
@@ -83,10 +83,10 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
             style={{
               padding: "0.5rem 1rem",
               borderRadius: "var(--radius)",
-              border: "1px solid var(--clr-border)",
-              background: "var(--clr-surface)",
-              color: "var(--clr-text)",
-              fontFamily: "var(--font-body)",
+              border: "1px solid var(--border)",
+              background: "var(--card)",
+              color: "var(--foreground)",
+              fontFamily: "var(--font-sans)",
               fontSize: "0.9375rem",
               cursor: "pointer",
             }}
@@ -99,10 +99,10 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
             style={{
               padding: "0.5rem 1rem",
               borderRadius: "var(--radius)",
-              border: "1px solid var(--clr-accent)",
-              background: "var(--clr-accent)",
-              color: "var(--clr-bg)",
-              fontFamily: "var(--font-body)",
+              border: "1px solid var(--primary)",
+              background: "var(--primary)",
+              color: "var(--background)",
+              fontFamily: "var(--font-sans)",
               fontSize: "0.9375rem",
               cursor: "pointer",
             }}
@@ -118,10 +118,10 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
         style={{
           padding: "0.5rem 1rem",
           borderRadius: "var(--radius)",
-          border: "1px solid var(--clr-accent)",
-          background: "var(--clr-accent)",
-          color: "var(--clr-bg)",
-          fontFamily: "var(--font-body)",
+          border: "1px solid var(--primary)",
+          background: "var(--primary)",
+          color: "var(--background)",
+          fontFamily: "var(--font-sans)",
           fontSize: "0.75rem",
           cursor: "pointer",
         }}

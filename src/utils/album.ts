@@ -1,4 +1,4 @@
-import type { Album, AlbumExisting } from "../types/album";
+import type { Album, AlbumExisting } from "@/types/album";
 
 export const albumToExisting = (album: Album): AlbumExisting => {
   return {

@@ -7,9 +7,9 @@ import {
   tableFeatures,
 } from "@tanstack/react-table";
 import { convertFileSrc } from "@tauri-apps/api/core";
-import type { Album } from "../../types/album";
-import { secondsToMinutes } from "../../utils/time";
-import { CoverPlaceholder } from "../CoverPlaceholder";
+import type { Album } from "@/types/album";
+import { secondsToMinutes } from "@/utils/time";
+import { CoverPlaceholder } from "@/components/CoverPlaceholder";
 import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
 import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
 

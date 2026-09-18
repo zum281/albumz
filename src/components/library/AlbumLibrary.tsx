@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { Album } from "../../types/album";
+import type { Album } from "@/types/album";
 
 import { useTable } from "@tanstack/react-table";
 import { useTanStackTableDevtools } from "@tanstack/react-table-devtools";
@@ -26,10 +26,10 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
         style={{
           borderCollapse: "collapse",
           width: "100%",
-          fontFamily: "var(--font-body)",
+          fontFamily: "var(--font-sans)",
           fontSize: "0.9375rem",
-          color: "var(--clr-text)",
-          background: "var(--clr-bg)",
+          color: "var(--foreground)",
+          background: "var(--background)",
         }}
       >
         <thead>
@@ -42,13 +42,13 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
                     width: `${header.getSize()}px`,
                     textAlign: "left",
                     padding: "0.625rem 0.875rem",
-                    background: "var(--clr-surface)",
-                    borderBottom: "1px solid var(--clr-border)",
+                    background: "var(--card)",
+                    borderBottom: "1px solid var(--border)",
                     fontFamily: "var(--font-mono)",
                     fontSize: "0.8125rem",
                     letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    color: "var(--clr-text-muted)",
+                    color: "var(--muted-foreground)",
                   }}
                 >
                   {header.isPlaceholder ? null : (
@@ -67,7 +67,7 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
                   key={cell.id}
                   style={{
                     padding: "0.5rem 0.875rem",
-                    borderBottom: "1px solid var(--clr-border)",
+                    borderBottom: "1px solid var(--border)",
                   }}
                 >
                   <table.FlexRender cell={cell} />

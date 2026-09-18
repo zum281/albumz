@@ -8,8 +8,8 @@ export const CoverPlaceholder: FC<CoverPlaceholderProps> = ({ size }) => (
       height: size ?? DEFAULT_SIZE,
       display: "grid",
       placeItems: "center",
-      background: "var(--clr-surface, #eee)",
-      color: "var(--clr-muted, #999)",
+      background: "var(--card, #eee)",
+      color: "var(--muted-foreground, #999)",
       fontSize: 10,
       borderRadius: 4,
     }}

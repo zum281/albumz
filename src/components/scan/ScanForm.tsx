@@ -4,11 +4,11 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { albumsQueryOptions, upsertAlbum } from "../../db/albums";
-import type { AlbumInsert } from "../../types/album";
-import type { ScanFormValues, ScanResult } from "../../types/scan";
-import { ScanFormSchema } from "../../types/scan";
-import { secondsToMinutes } from "../../utils/time";
+import { albumsQueryOptions, upsertAlbum } from "@/db/albums";
+import type { AlbumInsert } from "@/types/album";
+import type { ScanFormValues, ScanResult } from "@/types/scan";
+import { ScanFormSchema } from "@/types/scan";
+import { secondsToMinutes } from "@/utils/time";
 export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
   const queryClient = useQueryClient();
   const { queryKey } = albumsQueryOptions();
@@ -78,9 +78,9 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
             margin: "0 0 1rem",
             padding: "0.75rem 1rem",
             borderRadius: "var(--radius)",
-            border: "1px solid var(--clr-border)",
-            background: "var(--clr-surface)",
-            color: "var(--clr-text-muted)",
+            border: "1px solid var(--border)",
+            background: "var(--card)",
+            color: "var(--muted-foreground)",
             fontSize: "0.875rem",
           }}
         >
@@ -117,8 +117,8 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                   gap: "0.75rem",
                   padding: "0.5rem 0.75rem",
                   borderRadius: "var(--radius)",
-                  border: "1px solid var(--clr-border)",
-                  background: "var(--clr-surface)",
+                  border: "1px solid var(--border)",
+                  background: "var(--card)",
                 }}
               >
                 <input
@@ -142,8 +142,8 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                       height: "48px",
                       flexShrink: 0,
                       borderRadius: "4px",
-                      background: "var(--clr-bg)",
-                      border: "1px dashed var(--clr-border)",
+                      background: "var(--background)",
+                      border: "1px dashed var(--border)",
                     }}
                     aria-hidden="true"
                   />
@@ -163,7 +163,7 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
                     style={{
                       fontFamily: "var(--font-mono)",
                       fontSize: "0.8125rem",
-                      color: "var(--clr-text-muted)",
+                      color: "var(--muted-foreground)",
                     }}
                   >
                     {field.year} · {field.track_count} tracks

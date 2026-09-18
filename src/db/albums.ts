@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import type { QueryResult } from "@tauri-apps/plugin-sql";
-import type { Album, AlbumInsert } from "../types/album";
-import { AlbumsSchema } from "../types/album";
+import type { Album, AlbumInsert } from "@/types/album";
+import { AlbumsSchema } from "@/types/album";
 import { getDb } from "./db";
 import { sql, toSqliteBool } from "./sql";
 

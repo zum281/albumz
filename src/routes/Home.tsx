@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
-import { AlbumLibrary } from "../components/library/AlbumLibrary";
-import { ScanDialog } from "../components/scan/ScanDialog";
-import { albumsQueryOptions } from "../db/albums";
-import { albumToExisting } from "../utils/album";
+import { AlbumLibrary } from "@/components/library/AlbumLibrary";
+import { ScanDialog } from "@/components/scan/ScanDialog";
+import { albumsQueryOptions } from "@/db/albums";
+import { albumToExisting } from "@/utils/album";
 
 export const Home: FC = () => {
   const {

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ChangeEventHandler, FC } from "react";
-import { albumsQueryOptions, updateAlbumListen } from "../../../db/albums";
-import type { Album } from "../../../types/album";
+import { albumsQueryOptions, updateAlbumListen } from "@/db/albums";
+import type { Album } from "@/types/album";
 
 export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   id,
@@ -44,7 +44,7 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
         width: "1.25rem",
         height: "1.25rem",
         cursor: "pointer",
-        accentColor: "var(--clr-accent)",
+        accentColor: "var(--primary)",
       }}
     />
   );

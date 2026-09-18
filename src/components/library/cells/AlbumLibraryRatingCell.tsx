@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ChangeEventHandler, FC } from "react";
 import { useState } from "react";
-import { albumsQueryOptions, updateAlbumRating } from "../../../db/albums";
-import type { Album } from "../../../types/album";
-import { AlbumRatingSchema } from "../../../types/album";
+import { albumsQueryOptions, updateAlbumRating } from "@/db/albums";
+import type { Album } from "@/types/album";
+import { AlbumRatingSchema } from "@/types/album";
 
 export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   id,
@@ -52,10 +52,10 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
           display: "block",
           padding: "0.25rem 0.5rem",
           borderRadius: "var(--radius)",
-          border: "1px solid var(--clr-border)",
-          background: "var(--clr-surface)",
-          color: "var(--clr-text)",
-          fontFamily: "var(--font-body)",
+          border: "1px solid var(--border)",
+          background: "var(--card)",
+          color: "var(--foreground)",
+          fontFamily: "var(--font-sans)",
           fontSize: "0.875rem",
           cursor: "pointer",
           margin: "auto",
@@ -77,7 +77,7 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.75rem",
-            color: "var(--clr-text-muted)",
+            color: "var(--muted-foreground)",
             textAlign: "center",
           }}
         >

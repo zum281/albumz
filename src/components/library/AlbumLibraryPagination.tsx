@@ -1,6 +1,6 @@
 import type { useTable } from "@tanstack/react-table";
 import type { FC } from "react";
-import type { Album } from "../../types/album";
+import type { Album } from "@/types/album";
 import type { albumLibraryFeatures } from "./AlbumLibrary.config";
 
 export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
@@ -9,9 +9,9 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
   const buttonStyle = {
     padding: "0.375rem 0.625rem",
     borderRadius: "var(--radius)",
-    border: "1px solid var(--clr-border)",
-    background: "var(--clr-surface)",
-    color: "var(--clr-text)",
+    border: "1px solid var(--border)",
+    background: "var(--card)",
+    color: "var(--foreground)",
     fontFamily: "var(--font-mono)",
     fontSize: "0.875rem",
     cursor: "pointer",
@@ -52,7 +52,7 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
         style={{
           fontFamily: "var(--font-mono)",
           fontSize: "0.8125rem",
-          color: "var(--clr-text-muted)",
+          color: "var(--muted-foreground)",
           padding: "0 0.5rem",
         }}
       >

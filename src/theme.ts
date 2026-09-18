@@ -10,7 +10,7 @@ export const setTheme = async (choice: ThemeChoice): Promise<void> => {
       const osTheme = await win.theme();
       document.documentElement.setAttribute("data-theme", osTheme ?? "light");
     } else {
-      await win.setTheme(choice);
+      await win.setTheme(choice === "amoled" ? "dark" : choice);
       document.documentElement.setAttribute("data-theme", choice);
     }
     localStorage.setItem(THEME_LS_KEY, choice);
@@ -21,7 +21,10 @@ export const setTheme = async (choice: ThemeChoice): Promise<void> => {
 
 export const loadTheme = (): ThemeChoice => {
   const stored = localStorage.getItem(THEME_LS_KEY);
-  return stored === "light" || stored === "dark" || stored === "system"
+  return stored === "light" ||
+    stored === "dark" ||
+    stored === "amoled" ||
+    stored === "system"
     ? stored
     : "system";
 };
@@ -35,4 +38,4 @@ export const watchSystemTheme = async (): Promise<void> => {
   });
 };
 
-type ThemeChoice = "light" | "dark" | "system";
+type ThemeChoice = "light" | "dark" | "amoled" | "system";
