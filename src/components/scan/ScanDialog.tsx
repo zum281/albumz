@@ -78,7 +78,9 @@ export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
             gap: "0.75rem",
           }}
         >
-          <Button onClick={() => ref.current?.close()}>Close</Button>
+          <Button variant="outline" onClick={() => ref.current?.close()}>
+            Close
+          </Button>
           <Button type="submit" form="scan-results-form">
             Save
           </Button>

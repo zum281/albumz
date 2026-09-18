@@ -17,6 +17,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -25,6 +26,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-hover: var(--destructive-hover);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -53,6 +55,14 @@
 :root {
   --radius: 0rem; /* brutalist pass: hard edges throughout */
 
+  /* Hover = lightness shift at constant chroma/hue, matching the mockups.
+     Signed per theme: darker on light ground, lighter on dark grounds. */
+  --hover-shift: -0.065;
+  --primary-hover: oklch(from var(--primary) calc(l + var(--hover-shift)) c h);
+  --destructive-hover: oklch(
+    from var(--destructive) calc(l + var(--hover-shift)) c h
+  );
+
   --font-display: "Bricolage Grotesque", system-ui, sans-serif;
   --font-sans: "Familjen Grotesk", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -72,6 +82,7 @@
   --accent: oklch(0.913 0.015 145.4); /* #DCE5DC */
   --accent-foreground: oklch(0.329 0.035 163); /* #243B30 */
   --destructive: oklch(0.472 0.143 35.6); /* #9B3418 */
+  --destructive-foreground: oklch(0.948 0.013 82.4); /* #F2EDE4 */
   --border: oklch(0.851 0.025 83.4); /* #D6CDBC */
   --input: oklch(0.851 0.025 83.4); /* #D6CDBC */
   --ring: oklch(0.661 0.05 156.4); /* #7A9C86 */
@@ -96,6 +107,8 @@
 }
 
 [data-theme="dark"] {
+  --hover-shift: 0.065;
+
   --background: oklch(0.213 0.009 137.8); /* #171A16 */
   --foreground: oklch(0.948 0.013 82.4); /* #F2EDE4 */
   --card: oklch(0.254 0.012 135.1); /* #20241E */
@@ -111,6 +124,7 @@
   --accent: oklch(0.357 0.031 132.7); /* #36402F */
   --accent-foreground: oklch(0.948 0.013 82.4); /* #F2EDE4 */
   --destructive: oklch(0.637 0.184 36.5); /* #E4572E */
+  --destructive-foreground: oklch(0.213 0.009 137.8); /* #171A16 */
   --border: oklch(0.365 0.021 134.1); /* #3A4136 */
   --input: oklch(0.401 0.024 133.4); /* #434B3E */
   --ring: oklch(0.661 0.05 156.4); /* #7A9C86 */
@@ -135,6 +149,8 @@
 }
 
 [data-theme="amoled"] {
+  --hover-shift: 0.065;
+
   --background: oklch(0 0 0); /* #000000 */
   --foreground: oklch(0.919 0 0); /* #E4E4E4 */
   --card: oklch(0 0 0); /* #000000 */
@@ -150,6 +166,7 @@
   --accent: oklch(0.19 0 0); /* #161616 */
   --accent-foreground: oklch(0.861 0.073 154.6); /* #A6E0B8 */
   --destructive: oklch(0.705 0.191 37.5); /* #FF6B3D */
+  --destructive-foreground: oklch(0 0 0); /* #000000 */
   --border: oklch(0.452 0 0); /* #595959 */
   --input: oklch(0.52 0 0); /* #6B6B6B */
   --ring: oklch(0.861 0.073 154.6); /* #A6E0B8 */
