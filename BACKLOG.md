@@ -11,6 +11,6 @@
 - guard against interpolation sql
 - sort rows of table
 - resize table columns
-- add sidebar (for routes)
-- add tailwind
-- setup shadcn (with theme)
+- show real progress bar
+- move scan action to sidebar
+- calculate real values for sidebar

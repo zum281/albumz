@@ -22,6 +22,19 @@ const home = createRoute({
   path: "/",
   component: Home,
 });
-const routeTree = rootRoute.addChildren([home]);
+
+const statz = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/statz",
+  component: () => <main>Statz</main>,
+});
+
+const settings = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/settings",
+  component: () => <main>Settings</main>,
+});
+
+const routeTree = rootRoute.addChildren([home, statz, settings]);
 
 export const router = createRouter({ routeTree });

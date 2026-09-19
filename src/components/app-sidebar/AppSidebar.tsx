@@ -18,6 +18,7 @@ import {
 import type { FC } from "react";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
 import { AppSidebarFooterAction } from "./AppSidebarFooterAction";
+import { AppSidebarFooterNavigation } from "./AppSidebarFooterNavigation";
 import { AppSidebarListenedProgress } from "./AppSidebarListenedProgress";
 import { AppSidebarLogo } from "./AppSidebarLogo";
 import { AppSidebarNavigationItem } from "./AppSidebarNavigationItem";
@@ -29,11 +30,17 @@ export const AppSidebar: FC = () => {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <AppSidebarNavigationItem title="Library" data={412} icon={Disc3} />
+            <AppSidebarNavigationItem
+              title="Library"
+              data={412}
+              icon={Disc3}
+              linkProps={{ to: "/" }}
+            />
             <AppSidebarNavigationItem
               title="Statz"
               data="3%"
               icon={BarChart3}
+              linkProps={{ to: "/statz" }}
             />
           </SidebarMenu>
         </SidebarGroup>
@@ -59,7 +66,11 @@ export const AppSidebar: FC = () => {
         <SidebarSeparator />
         <div className="flex gap-px group-data-[collapsible=icon]:flex-col">
           <AppSidebarFooterAction title="Reload UI" icon={RotateCw} />
-          <AppSidebarFooterAction title="Settings" icon={Settings} />
+          <AppSidebarFooterNavigation
+            title="Settings"
+            icon={Settings}
+            linkProps={{ to: "/settings" }}
+          />
           <SidebarTrigger />
         </div>
       </SidebarFooter>
