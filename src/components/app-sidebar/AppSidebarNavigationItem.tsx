@@ -24,7 +24,7 @@ export const AppSidebarNavigationItem: FC<AppSidebarNavigationItemProps> = ({
       >
         <Icon />
         <span className="group-data-[collapsible=icon]:hidden">{title}</span>
-        <span className="ml-auto font-mono text-[11.5px] text-muted-foreground group-data-[collapsible=icon]:hidden">
+        <span className="ml-auto font-mono text-xs text-muted-foreground group-data-[collapsible=icon]:hidden">
           {data}
         </span>
       </SidebarMenuButton>

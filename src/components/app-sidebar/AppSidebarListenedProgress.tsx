@@ -3,7 +3,7 @@ import type { FC } from "react";
 export const AppSidebarListenedProgress: FC = () => {
   return (
     <div className="flex flex-col gap-1.5 px-2.5 pb-3 group-data-[collapsible=icon]:hidden">
-      <div className="flex items-baseline justify-between gap-2 font-mono text-[11px]">
+      <div className="flex items-baseline justify-between gap-2 font-mono text-xs">
         <span className="tracking-widest text-muted-foreground uppercase">
           Listened
         </span>

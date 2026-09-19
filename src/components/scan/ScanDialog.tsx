@@ -1,97 +1,118 @@
 import { scanQueryOptions } from "@/commands/scan";
 import { Button } from "@/components/ui/button/button";
-import type { AlbumExisting } from "@/types/album";
+import {
+  DialogClose,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { albumsQueryOptions } from "@/db/albums";
+import type { ScanFormValues, ScanResult } from "@/types/scan";
+import { ScanFormSchema } from "@/types/scan";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
+import { FolderIcon } from "lucide-react";
 import type { FC } from "react";
-import { useEffect, useRef } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { ScanForm } from "./ScanForm";
 
-export const ScanDialog: FC<ScanDialogProps> = ({ existingAlbums }) => {
-  const ref = useRef<HTMLDialogElement>(null);
+const SCAN_SOURCE = "~/Music/mp3";
 
+export const ScanDialog: FC = () => {
+  const { data: existingAlbums } = useQuery(albumsQueryOptions());
   const {
     data: scanResults,
     isLoading,
     isError,
     error,
-    dataUpdatedAt,
-    refetch,
   } = useQuery(scanQueryOptions(existingAlbums));
 
-  useEffect(() => {
-    if (!scanResults) return;
-    ref.current?.showModal();
-  }, [scanResults, dataUpdatedAt]);
+  if (scanResults) return <ScanDialogResults scanResults={scanResults} />;
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-      {isLoading && (
-        <p
-          style={{
-            fontFamily: "var(--font-mono)",
-            color: "var(--muted-foreground)",
-            margin: 0,
-            fontSize: "0.8125rem",
-          }}
-        >
-          Scanning… //TODO use progress bar
-        </p>
-      )}
-      {isError && (
-        <pre
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.8125rem",
-            color: "var(--muted-foreground)",
-            whiteSpace: "pre-wrap",
-            margin: 0,
-          }}
-        >
-          {String(error)}
-        </pre>
-      )}
-
-      <dialog
-        ref={ref}
-        style={{
-          position: "fixed",
-          inset: "0",
-          margin: "auto",
-          border: "1px solid var(--border)",
-          borderRadius: "var(--radius)",
-          background: "var(--background)",
-          color: "var(--foreground)",
-          fontFamily: "var(--font-sans)",
-          padding: "1.5rem",
-          width: "min(640px, 90vw)",
-          maxHeight: "80vh",
-        }}
-      >
-        {scanResults && <ScanForm scanResults={scanResults} />}
-        {!scanResults && <p>Impossible state?</p>}
-        <div
-          style={{
-            marginTop: "1rem",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            gap: "0.75rem",
-          }}
-        >
-          <Button variant="outline" onClick={() => ref.current?.close()}>
-            Close
-          </Button>
-          <Button type="submit" form="scan-results-form">
-            Save
-          </Button>
-        </div>
-      </dialog>
-
-      <Button onClick={() => void refetch()}>Scan</Button>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <DialogHeader className="gap-4 pt-6 pr-12 pb-4 pl-6">
+        <DialogTitle className="font-display text-3xl leading-none font-bold tracking-tighter uppercase">
+          {isLoading ? "Scanning…" : "Scan failed"}
+        </DialogTitle>
+        {isError && (
+          <pre className="font-mono text-sm whitespace-pre-wrap text-destructive">
+            {String(error)}
+          </pre>
+        )}
+      </DialogHeader>
+      <DialogFooter className="mx-0 mt-4 mb-0 rounded-none border-t-2 bg-transparent px-6 pt-4 pb-6">
+        <DialogClose render={<Button variant="outline">Close</Button>} />
+      </DialogFooter>
     </div>
   );
 };
 
-interface ScanDialogProps {
-  existingAlbums: AlbumExisting[];
+const ScanDialogResults: FC<ScanDialogResultsProps> = ({ scanResults }) => {
+  const form = useForm<ScanFormValues>({
+    resolver: zodResolver(ScanFormSchema),
+    defaultValues: {
+      albums: scanResults.map((r) => ({ ...r, accepted: true })),
+    },
+  });
+
+  const albums = useWatch({ control: form.control, name: "albums" });
+  const acceptedCount = albums.filter((a) => a.accepted).length;
+
+  const noneSelected = acceptedCount === 0;
+
+  const toggleAll = () => {
+    albums.forEach((_, i) => {
+      form.setValue(`albums.${i}.accepted`, noneSelected, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+    });
+  };
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      <DialogHeader className="gap-4 pt-6 pr-12 pb-4 pl-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <DialogTitle className="font-display text-3xl leading-none font-bold tracking-tighter uppercase">
+            Found {scanResults.length} new album
+            {scanResults.length === 1 ? "" : "s"}
+          </DialogTitle>
+          <DialogDescription className="font-mono text-xs">
+            {acceptedCount} SELECTED · 1 FOLDER
+          </DialogDescription>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <span className="flex items-center gap-2 border border-l-4 border-border border-l-chart-1 bg-card px-3 py-1.5 font-mono text-xs text-muted-foreground">
+            <FolderIcon className="size-3.5 shrink-0" aria-hidden="true" />
+            <span className="max-w-48 truncate">{SCAN_SOURCE}</span>
+            <span>+{scanResults.length}</span>
+          </span>
+        </div>
+      </DialogHeader>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-6">
+        <ScanForm scanResults={scanResults} form={form} source={SCAN_SOURCE} />
+      </div>
+      <DialogFooter className="mx-0 mt-4 mb-0 rounded-none border-t-2 bg-transparent px-6 pt-4 pb-6">
+        <Button
+          type="button"
+          variant="link"
+          className="px-0 sm:mr-auto"
+          onClick={toggleAll}
+        >
+          {noneSelected ? "Select all" : "Deselect all"}
+        </Button>
+        <DialogClose render={<Button variant="outline">Close</Button>} />
+        <Button type="submit" form="scan-results-form">
+          Add {acceptedCount}
+        </Button>
+      </DialogFooter>
+    </div>
+  );
+};
+
+interface ScanDialogResultsProps {
+  scanResults: ScanResult[];
 }

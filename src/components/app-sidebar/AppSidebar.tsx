@@ -16,6 +16,7 @@ import {
   Settings,
 } from "lucide-react";
 import type { FC } from "react";
+import { ScanDialog } from "../scan/ScanDialog";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
 import { AppSidebarFooterAction } from "./AppSidebarFooterAction";
 import { AppSidebarFooterNavigation } from "./AppSidebarFooterNavigation";
@@ -52,11 +53,13 @@ export const AppSidebar: FC = () => {
               data="2h"
               tooltip="Scan for new albums"
               icon={ScanSearch}
+              actionContent={ScanDialog}
             />
             <AppSidebarActionItem
               title="Metadata"
               tooltip="Refresh metadata"
               icon={RefreshCw}
+              actionContent={ScanDialog}
             />
           </SidebarMenu>
         </SidebarGroup>

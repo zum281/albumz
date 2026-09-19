@@ -1,9 +1,7 @@
+import { AlbumLibrary } from "@/components/library/AlbumLibrary";
+import { albumsQueryOptions } from "@/db/albums";
 import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
-import { AlbumLibrary } from "@/components/library/AlbumLibrary";
-import { ScanDialog } from "@/components/scan/ScanDialog";
-import { albumsQueryOptions } from "@/db/albums";
-import { albumToExisting } from "@/utils/album";
 
 export const Home: FC = () => {
   const {
@@ -39,7 +37,6 @@ export const Home: FC = () => {
         >
           Albumz
         </h1>
-        <ScanDialog existingAlbums={albums.map(albumToExisting)} />
       </header>
 
       <AlbumLibrary albums={albums} />

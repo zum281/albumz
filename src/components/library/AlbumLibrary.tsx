@@ -1,5 +1,5 @@
-import type { FC } from "react";
 import type { Album } from "@/types/album";
+import type { FC } from "react";
 
 import { useTable } from "@tanstack/react-table";
 import { useTanStackTableDevtools } from "@tanstack/react-table-devtools";
@@ -20,8 +20,6 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
   useTanStackTableDevtools(table);
   return (
     <section>
-      <p>Total albums: {albums.length}</p>
-      <br />
       <table
         style={{
           borderCollapse: "collapse",

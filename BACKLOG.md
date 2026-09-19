@@ -1,7 +1,5 @@
 ## Todo
 
-- move scan action to sidebar
-
 ## Backlog
 
 - Cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
@@ -13,3 +11,4 @@
 - resize table columns
 - show real progress bar in sidebar
 - calculate real values for sidebar
+- metadata action (placeholder)

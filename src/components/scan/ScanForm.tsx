@@ -2,15 +2,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { albumsQueryOptions, upsertAlbum } from "@/db/albums";
 import type { AlbumInsert } from "@/types/album";
 import type { ScanFormValues, ScanResult } from "@/types/scan";
-import { ScanFormSchema } from "@/types/scan";
 import { secondsToMinutes } from "@/utils/time";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC } from "react";
 import { useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
+import type { UseFormReturn } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
+export const ScanForm: FC<ScanFormProps> = ({ scanResults, form, source }) => {
   const queryClient = useQueryClient();
   const { queryKey } = albumsQueryOptions();
 
@@ -18,12 +17,7 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
     { album: AlbumInsert; reason: unknown }[]
   >([]);
 
-  const { register, handleSubmit, control } = useForm<ScanFormValues>({
-    resolver: zodResolver(ScanFormSchema),
-    defaultValues: {
-      albums: scanResults.map((r) => ({ ...r, accepted: true })),
-    },
-  });
+  const { handleSubmit, control } = form;
 
   const { fields } = useFieldArray({ control, name: "albums" });
 
@@ -60,31 +54,8 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
 
   return (
     <>
-      <h2
-        style={{
-          margin: "0 0 1rem",
-          fontFamily: "var(--font-display)",
-          fontWeight: 500,
-          fontSize: "1.25rem",
-          letterSpacing: "var(--track-display)",
-        }}
-      >
-        Found {scanResults.length} album{scanResults.length === 1 ? "" : "s"}
-      </h2>
-
       {failed.length > 0 && (
-        <ul
-          style={{
-            listStyle: "none",
-            margin: "0 0 1rem",
-            padding: "0.75rem 1rem",
-            borderRadius: "var(--radius)",
-            border: "1px solid var(--border)",
-            background: "var(--card)",
-            color: "var(--muted-foreground)",
-            fontSize: "0.875rem",
-          }}
-        >
+        <ul className="mb-4 list-none border border-border bg-card px-4 py-3 text-sm text-muted-foreground">
           {failed.map(({ album, reason }) => (
             <li key={`${album.artist}-${album.album}`}>
               {album.artist} - {album.album}: {String(reason)}
@@ -97,79 +68,58 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
         onSubmit={(e) => void handleSubmit(onSubmit)(e)}
       >
         {scanResults.length > 0 && (
-          <ul
-            style={{
-              listStyle: "none",
-              margin: 0,
-              padding: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-              maxHeight: "50vh",
-              overflowY: "auto",
-            }}
-          >
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
             {fields.map((field, index) => (
               <li
                 key={field.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                  padding: "0.5rem 0.75rem",
-                  borderRadius: "var(--radius)",
-                  border: "1px solid var(--border)",
-                  background: "var(--card)",
-                }}
+                className="flex items-center gap-4 border border-border bg-card px-4 py-3"
               >
-                <Checkbox
-                  id={`accept-${field.id}`}
-                  {...register(`albums.${index}.accepted`)}
+                <Controller
+                  control={control}
+                  name={`albums.${index}.accepted`}
+                  render={({ field: { value, onChange } }) => (
+                    <Checkbox
+                      id={`accept-${field.id}`}
+                      checked={value}
+                      onCheckedChange={(checked) => {
+                        onChange(checked);
+                      }}
+                    />
+                  )}
                 />
                 {field.cover_path ? (
                   <img
                     src={convertFileSrc(field.cover_path)}
                     alt={`${field.album} cover`}
-                    width="48"
-                    height="48"
-                    style={{ borderRadius: "4px", flexShrink: 0 }}
+                    width="44"
+                    height="44"
+                    className="shrink-0"
                   />
                 ) : (
                   <span
-                    style={{
-                      width: "48px",
-                      height: "48px",
-                      flexShrink: 0,
-                      borderRadius: "4px",
-                      background: "var(--background)",
-                      border: "1px dashed var(--border)",
-                    }}
+                    className="size-11 shrink-0 border border-dashed border-border bg-background"
                     aria-hidden="true"
                   />
                 )}
                 <label
                   htmlFor={`accept-${field.id}`}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.125rem",
-                  }}
+                  className="flex min-w-0 flex-1 flex-col gap-1"
                 >
-                  <span style={{ fontSize: "0.9375rem" }}>
+                  <span className="truncate text-sm text-foreground">
                     {field.artist} - {field.album}
                   </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.8125rem",
-                      color: "var(--muted-foreground)",
-                    }}
-                  >
+                  <span className="font-mono text-xs text-muted-foreground">
                     {field.year} · {field.track_count} tracks
                     {field.duration_seconds > 0 &&
                       ` · ${secondsToMinutes(field.duration_seconds)} min`}
                   </span>
                 </label>
+                <span
+                  title={source}
+                  className="font-mono text-xs whitespace-nowrap text-muted-foreground"
+                >
+                  {source}
+                </span>
               </li>
             ))}
           </ul>
@@ -181,4 +131,6 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults }) => {
 
 interface ScanFormProps {
   scanResults: ScanResult[];
+  form: UseFormReturn<ScanFormValues>;
+  source: string;
 }
