@@ -7,6 +7,8 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
+import { albumsQueryOptions } from "@/db/albums";
+import { useQuery } from "@tanstack/react-query";
 import {
   BarChart3,
   Disc3,
@@ -25,15 +27,17 @@ import { AppSidebarLogo } from "./AppSidebarLogo";
 import { AppSidebarNavigationItem } from "./AppSidebarNavigationItem";
 
 export const AppSidebar: FC = () => {
+  const { data: existingAlbums } = useQuery(albumsQueryOptions());
   return (
     <Sidebar collapsible="icon">
       <AppSidebarLogo />
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
+            {/* TODO: use skeleton and don't show button until data is ready */}
             <AppSidebarNavigationItem
               title="Library"
-              data={412}
+              data={existingAlbums?.length ?? 0}
               icon={Disc3}
               linkProps={{ to: "/" }}
             />
