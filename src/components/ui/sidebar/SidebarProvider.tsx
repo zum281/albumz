@@ -1,4 +1,3 @@
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { cn } from "cn";
 import type { ComponentProps, CSSProperties, FC } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -7,9 +6,10 @@ import type { SidebarContextProps } from "./sidebar.types";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = "16rem";
-const SIDEBAR_WIDTH_ICON = "3rem";
+const SIDEBAR_WIDTH = "14.125rem";
+const SIDEBAR_WIDTH_ICON = "4.5rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
+const NARROW_QUERY = "(max-width: 767px)";
 export const SidebarProvider: FC<
   ComponentProps<"div"> & {
     defaultOpen?: boolean;
@@ -25,12 +25,11 @@ export const SidebarProvider: FC<
   children,
   ...props
 }) => {
-  const isMobile = useIsMobile();
-  const [openMobile, setOpenMobile] = useState(false);
-
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const [internalOpen, setInternalOpen] = useState(
+    () => defaultOpen && !window.matchMedia(NARROW_QUERY).matches,
+  );
   const open = openProp ?? internalOpen;
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
@@ -49,9 +48,21 @@ export const SidebarProvider: FC<
 
   // Helper to toggle the sidebar.
   const toggleSidebar = useCallback(() => {
-    if (isMobile) setOpenMobile((open) => !open);
     setOpen((open) => !open);
-  }, [isMobile, setOpen, setOpenMobile]);
+  }, [setOpen]);
+
+  // Collapse to the icon rail when the window gets narrow. The user can still
+  // expand it again; only crossing the breakpoint re-collapses it.
+  useEffect(() => {
+    const mql = window.matchMedia(NARROW_QUERY);
+    const onChange = (event: MediaQueryListEvent) => {
+      if (event.matches) setInternalOpen(false);
+    };
+    mql.addEventListener("change", onChange);
+    return () => {
+      mql.removeEventListener("change", onChange);
+    };
+  }, []);
 
   // Adds a keyboard shortcut to toggle the sidebar.
   useEffect(() => {
@@ -76,16 +87,8 @@ export const SidebarProvider: FC<
   const state = open ? "expanded" : "collapsed";
 
   const contextValue = useMemo<SidebarContextProps>(
-    () => ({
-      state,
-      open,
-      setOpen,
-      isMobile,
-      openMobile,
-      setOpenMobile,
-      toggleSidebar,
-    }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+    () => ({ state, open, setOpen, toggleSidebar }),
+    [state, open, setOpen, toggleSidebar],
   );
 
   return (

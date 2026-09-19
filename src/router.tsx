@@ -1,20 +1,19 @@
+import { SidebarProvider } from "@/components/ui/sidebar/SidebarProvider";
 import {
   createRootRoute,
   createRoute,
   createRouter,
-  Link,
   Outlet,
 } from "@tanstack/react-router";
+import { AppSidebar } from "./components/app-sidebar/AppSidebar";
 import { Home } from "./routes/Home";
 
 export const rootRoute = createRootRoute({
   component: () => (
-    <>
-      <nav>
-        <Link to="/">Home</Link>
-      </nav>
+    <SidebarProvider>
+      <AppSidebar />
       <Outlet />
-    </>
+    </SidebarProvider>
   ),
 });
 
