@@ -187,7 +187,10 @@ export const SidebarSeparator: FC<ComponentProps<typeof Separator>> = ({
     <Separator
       data-slot="sidebar-separator"
       data-sidebar="separator"
-      className={cn("mx-2 w-auto bg-sidebar-border", className)}
+      className={cn(
+        "bg-sidebar-border data-horizontal:mx-2 data-horizontal:w-auto",
+        className,
+      )}
       {...props}
     />
   );
