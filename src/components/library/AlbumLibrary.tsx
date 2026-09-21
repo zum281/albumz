@@ -15,6 +15,7 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
     columns: albumLibraryColumns,
     data: albums,
     features: albumLibraryFeatures,
+    autoResetPageIndex: false,
   });
 
   useTanStackTableDevtools(table);

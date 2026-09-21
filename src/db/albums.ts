@@ -52,6 +52,7 @@ export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
           track_count = excluded.track_count,
           updated_at = (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
       `;
+
   return db.execute(query, [
     album.artist,
     album.album,

@@ -1,9 +1,13 @@
+import {
+  albumsQueryOptions,
+  listenedAlbumsCountQueryOptions,
+  updateAlbumRating,
+} from "@/db/albums";
+import type { Album } from "@/types/album";
+import { AlbumRatingSchema } from "@/types/album";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { ChangeEventHandler, FC } from "react";
 import { useState } from "react";
-import { albumsQueryOptions, updateAlbumRating } from "@/db/albums";
-import type { Album } from "@/types/album";
-import { AlbumRatingSchema } from "@/types/album";
 
 export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   id,
@@ -11,23 +15,32 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   rating,
 }) => {
   const queryClient = useQueryClient();
-  const { queryKey } = albumsQueryOptions();
+  const { queryKey: albumsQueryKey } = albumsQueryOptions();
+  const { queryKey: listenedAlbumsCountQueryKey } =
+    listenedAlbumsCountQueryOptions();
 
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const updateRatingMutation = useMutation({
     mutationFn: async (rating: number) => updateAlbumRating(id, rating),
     onMutate: (newRating) => {
-      const previous = queryClient.getQueryData<Album[]>(queryKey);
-      queryClient.setQueryData<Album[]>(queryKey, (old) =>
+      const previous = queryClient.getQueryData<Album[]>(albumsQueryKey);
+      queryClient.setQueryData<Album[]>(albumsQueryKey, (old) =>
         old?.map((a) =>
           a.id === id ? { ...a, rating: newRating, listened: true } : a,
         ),
       );
       return { previous };
     },
+    onSuccess: async () => {
+      // Invalidating cound since updating rating has the side effect
+      // of updating listened column at db level
+      await queryClient.invalidateQueries({
+        queryKey: listenedAlbumsCountQueryKey,
+      });
+    },
     onError: (_err, _newRating, context) => {
-      queryClient.setQueryData(queryKey, context?.previous);
+      queryClient.setQueryData(albumsQueryKey, context?.previous);
     },
   });
 

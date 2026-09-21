@@ -1,5 +1,9 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { albumsQueryOptions, updateAlbumListen } from "@/db/albums";
+import {
+  albumsQueryOptions,
+  listenedAlbumsCountQueryOptions,
+  updateAlbumListen,
+} from "@/db/albums";
 import type { Album } from "@/types/album";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { FC } from "react";
@@ -10,18 +14,26 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   listened,
 }) => {
   const queryClient = useQueryClient();
-  const { queryKey } = albumsQueryOptions();
+  const { queryKey: albumsQueryKey } = albumsQueryOptions();
+  const { queryKey: listenedAlbumsCountQueryKey } =
+    listenedAlbumsCountQueryOptions();
+
   const updateListenedMutation = useMutation({
     mutationFn: async (listened: boolean) => updateAlbumListen(id, listened),
     onMutate: (newListened) => {
-      const previous = queryClient.getQueryData<Album[]>(queryKey);
-      queryClient.setQueryData<Album[]>(queryKey, (old) =>
+      const previous = queryClient.getQueryData<Album[]>(albumsQueryKey);
+      queryClient.setQueryData<Album[]>(albumsQueryKey, (old) =>
         old?.map((a) => (a.id === id ? { ...a, listened: newListened } : a)),
       );
       return { previous };
     },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: listenedAlbumsCountQueryKey,
+      });
+    },
     onError: (_err, _newListened, context) => {
-      queryClient.setQueryData(queryKey, context?.previous);
+      queryClient.setQueryData(albumsQueryKey, context?.previous);
     },
   });
 
