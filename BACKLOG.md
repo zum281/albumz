@@ -9,4 +9,3 @@
 - sort rows of table
 - resize table columns
 - metadata action (placeholder)
-- Add refresh button and/or refresh UI with cmd+r, Ctrl-r (windows)

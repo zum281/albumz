@@ -17,18 +17,17 @@ import {
   BarChart3,
   Disc3,
   RefreshCw,
-  RotateCw,
   ScanSearch,
   Settings,
 } from "lucide-react";
 import { type FC } from "react";
 import { ScanDialog } from "../scan/ScanDialog";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
-import { AppSidebarFooterAction } from "./AppSidebarFooterAction";
 import { AppSidebarFooterNavigation } from "./AppSidebarFooterNavigation";
 import { AppSidebarListenedProgress } from "./AppSidebarListenedProgress";
 import { AppSidebarLogo } from "./AppSidebarLogo";
 import { AppSidebarNavigationItem } from "./AppSidebarNavigationItem";
+import { AppSidebarRefreshButton } from "./AppSidebarRefreshButton";
 
 export const AppSidebar: FC = () => {
   const { data: existingAlbums } = useQuery(albumsQueryOptions());
@@ -90,7 +89,7 @@ export const AppSidebar: FC = () => {
         />
         <SidebarSeparator />
         <div className="flex gap-px group-data-[collapsible=icon]:flex-col">
-          <AppSidebarFooterAction title="Reload UI" icon={RotateCw} />
+          <AppSidebarRefreshButton />
           <AppSidebarFooterNavigation
             title="Settings"
             icon={Settings}
