@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/button/button";
 import { cn } from "cn";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MoreHorizontalIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { ComponentProps, FC } from "react";
 
 export const Pagination: FC<ComponentProps<"nav">> = ({
@@ -16,7 +12,10 @@ export const Pagination: FC<ComponentProps<"nav">> = ({
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"
-      className={cn("mx-auto flex w-full justify-center", className)}
+      className={cn(
+        "mx-auto flex w-full items-center justify-between flex-wrap gap-x-5 gap-y-3 border-t border-border bg-card px-4.5 py-3",
+        className,
+      )}
       {...props}
     />
   );
@@ -29,7 +28,7 @@ export const PaginationContent: FC<ComponentProps<"ul">> = ({
   return (
     <ul
       data-slot="pagination-content"
-      className={cn("flex items-center gap-0.5", className)}
+      className={cn("flex items-center gap-1", className)}
       {...props}
     />
   );
@@ -39,64 +38,49 @@ export const PaginationItem: FC<ComponentProps<"li">> = ({ ...props }) => {
   return <li data-slot="pagination-item" {...props} />;
 };
 
-type PaginationLinkProps = { isActive?: boolean } & Pick<
-  ComponentProps<typeof Button>,
-  "size"
-> &
-  ComponentProps<"a">;
+type PaginationLinkProps = { isActive?: boolean } & ComponentProps<
+  typeof Button
+>;
 
 export const PaginationLink: FC<PaginationLinkProps> = ({
   className,
   isActive,
-  size = "icon",
   ...props
 }) => {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
-      size={size}
-      className={cn(className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? "page" : undefined}
-          data-slot="pagination-link"
-          data-active={isActive}
-          {...props}
-        />
-      }
+      variant={isActive ? "default" : "ghost"}
+      className={cn(
+        "h-7.5 min-w-7.5 px-2 font-mono text-xs font-normal",
+        isActive
+          ? "border-primary hover:border-primary-hover"
+          : "border-muted-foreground/70 text-muted-foreground hover:bg-transparent enabled:hover:border-primary enabled:hover:text-foreground",
+        className,
+      )}
+      aria-current={isActive ? "page" : undefined}
+      data-slot="pagination-link"
+      data-active={isActive}
+      {...props}
     />
   );
 };
 
-export const PaginationPrevious: FC<
-  ComponentProps<typeof PaginationLink> & { text?: string }
-> = ({ className, text = "Previous", ...props }) => {
+export const PaginationPrevious: FC<ComponentProps<typeof PaginationLink>> = ({
+  ...props
+}) => {
   return (
-    <PaginationLink
-      aria-label="Go to previous page"
-      size="default"
-      className={cn("pl-1.5!", className)}
-      {...props}
-    >
-      <ChevronLeftIcon data-icon="inline-start" className="cn-rtl-flip" />
-      <span className="hidden sm:block">{text}</span>
+    <PaginationLink aria-label="Previous page" title="Previous page" {...props}>
+      <ChevronLeftIcon className="size-3.5 cn-rtl-flip" />
     </PaginationLink>
   );
 };
 
-export const PaginationNext: FC<
-  ComponentProps<typeof PaginationLink> & { text?: string }
-> = ({ className, text = "Next", ...props }) => {
+export const PaginationNext: FC<ComponentProps<typeof PaginationLink>> = ({
+  ...props
+}) => {
   return (
-    <PaginationLink
-      aria-label="Go to next page"
-      size="default"
-      className={cn("pr-1.5!", className)}
-      {...props}
-    >
-      <span className="hidden sm:block">{text}</span>
-      <ChevronRightIcon data-icon="inline-end" className="cn-rtl-flip" />
+    <PaginationLink aria-label="Next page" title="Next page" {...props}>
+      <ChevronRightIcon className="size-3.5 cn-rtl-flip" />
     </PaginationLink>
   );
 };
@@ -108,15 +92,31 @@ export const PaginationEllipsis: FC<ComponentProps<"span">> = ({
   return (
     <span
       aria-hidden
+      title="Skipped pages"
       data-slot="pagination-ellipsis"
       className={cn(
-        "flex size-8 items-center justify-center [&_svg:not([class*='size-'])]:size-4",
+        "flex h-7.5 min-w-4.5 items-center justify-center font-mono text-xs text-muted-foreground",
         className,
       )}
       {...props}
     >
-      <MoreHorizontalIcon />
-      <span className="sr-only">More pages</span>
+      …
     </span>
+  );
+};
+
+export const PaginationSummary: FC<ComponentProps<"span">> = ({
+  className,
+  ...props
+}) => {
+  return (
+    <span
+      data-slot="pagination-summary"
+      className={cn(
+        "font-mono text-xs whitespace-nowrap text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
   );
 };

@@ -197,4 +197,8 @@
   body {
     @apply bg-background text-foreground font-sans;
   }
+
+  main {
+    @apply px-5.5 pb-10;
+  }
 }

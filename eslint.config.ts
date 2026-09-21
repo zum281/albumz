@@ -62,6 +62,7 @@ export default defineConfig([
             "eslint.config.ts",
             "prettier.config.ts",
             "commitlint.config.ts",
+            "src/router.d.ts",
           ],
         },
       },
