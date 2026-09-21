@@ -52,7 +52,7 @@ export const AppSidebar: FC = () => {
             {/* TODO: use skeleton and don't show button until data is ready */}
             <AppSidebarNavigationItem
               title="Library"
-              data={existingAlbums?.length ?? 0}
+              data={totalAlbumsCount}
               icon={Disc3}
               linkProps={{ to: "/" }}
             />
