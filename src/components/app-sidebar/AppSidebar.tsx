@@ -86,6 +86,7 @@ export const AppSidebar: FC = () => {
         <AppSidebarListenedProgress
           total={totalAlbumsCount}
           listened={listenedAlbumsCount}
+          percentage={listenedAlbumsPercentage}
         />
         <SidebarSeparator />
         <div className="flex gap-px group-data-[collapsible=icon]:flex-col">
