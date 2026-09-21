@@ -7,7 +7,11 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
-import { albumsQueryOptions } from "@/db/albums";
+import {
+  albumsQueryOptions,
+  listenedAlbumsCountQueryOptions,
+} from "@/db/albums";
+import { getListenedAlbumsPercentage } from "@/utils/album";
 import { useQuery } from "@tanstack/react-query";
 import {
   BarChart3,
@@ -17,7 +21,7 @@ import {
   ScanSearch,
   Settings,
 } from "lucide-react";
-import type { FC } from "react";
+import { type FC } from "react";
 import { ScanDialog } from "../scan/ScanDialog";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
 import { AppSidebarFooterAction } from "./AppSidebarFooterAction";
@@ -28,6 +32,17 @@ import { AppSidebarNavigationItem } from "./AppSidebarNavigationItem";
 
 export const AppSidebar: FC = () => {
   const { data: existingAlbums } = useQuery(albumsQueryOptions());
+  const { data: listenedAlbumsCount = 0 } = useQuery(
+    listenedAlbumsCountQueryOptions(),
+  );
+
+  const totalAlbumsCount = existingAlbums?.length ?? 0;
+
+  const listenedAlbumsPercentage = getListenedAlbumsPercentage(
+    totalAlbumsCount,
+    listenedAlbumsCount,
+  );
+
   return (
     <Sidebar collapsible="icon">
       <AppSidebarLogo />
@@ -43,7 +58,7 @@ export const AppSidebar: FC = () => {
             />
             <AppSidebarNavigationItem
               title="Statz"
-              data="3%"
+              data={`${listenedAlbumsPercentage.toFixed(1)}%`}
               icon={BarChart3}
               linkProps={{ to: "/statz" }}
             />
@@ -54,7 +69,6 @@ export const AppSidebar: FC = () => {
           <SidebarMenu>
             <AppSidebarActionItem
               title="Scan"
-              data="2h"
               tooltip="Scan for new albums"
               icon={ScanSearch}
               actionContent={ScanDialog}
@@ -69,7 +83,10 @@ export const AppSidebar: FC = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <AppSidebarListenedProgress />
+        <AppSidebarListenedProgress
+          total={totalAlbumsCount}
+          listened={listenedAlbumsCount}
+        />
         <SidebarSeparator />
         <div className="flex gap-px group-data-[collapsible=icon]:flex-col">
           <AppSidebarFooterAction title="Reload UI" icon={RotateCw} />

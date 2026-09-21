@@ -1,10 +1,13 @@
-import { queryOptions } from "@tanstack/react-query";
-import type { QueryResult } from "@tauri-apps/plugin-sql";
 import type { Album, AlbumInsert } from "@/types/album";
 import { AlbumsSchema } from "@/types/album";
+import { queryOptions } from "@tanstack/react-query";
+import type { QueryResult } from "@tauri-apps/plugin-sql";
 import { getDb } from "./db";
 import { sql, toSqliteBool } from "./sql";
 
+export const albumsQueryOptions = () => {
+  return queryOptions({ queryKey: ["albums"], queryFn: getAlbums });
+};
 export const getAlbums = async (): Promise<Album[]> => {
   const db = await getDb();
   const query = sql`
@@ -18,8 +21,23 @@ export const getAlbums = async (): Promise<Album[]> => {
   return AlbumsSchema.parse(rows);
 };
 
-export const albumsQueryOptions = () =>
-  queryOptions({ queryKey: ["albums"], queryFn: getAlbums });
+export const listenedAlbumsCountQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "listened", "count"],
+    queryFn: getListenedAlbumsCount,
+  });
+};
+export const getListenedAlbumsCount = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT COUNT(*) AS count
+    FROM albums
+    WHERE listened = 1 AND ignored = 0;
+  `;
+
+  const rows = await db.select<{ count: number }[]>(query);
+  return rows[0].count;
+};
 
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
   const db = await getDb();
