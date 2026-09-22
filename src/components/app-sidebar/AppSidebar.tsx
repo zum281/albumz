@@ -13,13 +13,7 @@ import {
 } from "@/db/albums";
 import { getListenedAlbumsPercentage } from "@/utils/album";
 import { useQuery } from "@tanstack/react-query";
-import {
-  BarChart3,
-  Disc3,
-  RefreshCw,
-  ScanSearch,
-  Settings,
-} from "lucide-react";
+import { BarChart3, Disc3, ScanSearch, Settings } from "lucide-react";
 import { type FC } from "react";
 import { ScanDialog } from "../scan/ScanDialog";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
@@ -70,12 +64,6 @@ export const AppSidebar: FC = () => {
               title="Scan"
               tooltip="Scan for new albums"
               icon={ScanSearch}
-              actionContent={ScanDialog}
-            />
-            <AppSidebarActionItem
-              title="Metadata"
-              tooltip="Refresh metadata"
-              icon={RefreshCw}
               actionContent={ScanDialog}
             />
           </SidebarMenu>

@@ -92,7 +92,7 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "rating",
     header: () => "Rating",
-    size: 116,
+    size: 132,
     cell: (props) => {
       const album = props.row.original;
       return (

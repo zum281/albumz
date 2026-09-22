@@ -12,4 +12,14 @@
 - table filters: search
 - table filters: played/backlog
 - table filters: year
-- ui: rating column
+- settings: theme switcher
+- settings: pick player
+- settings: delete all data
+- settings: show database path
+- statz: route setup
+- statz: basic stats
+- statz: play progress graph
+- statz: backlog leaders chart
+- statz: decades breakdown chart
+- stats: verdicts pie
+- stats: heavy rotation chart

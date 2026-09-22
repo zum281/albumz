@@ -1,13 +1,18 @@
+import disc from "@/assets/ratings/glyph-rating-disc.svg";
 import {
   albumsQueryOptions,
   listenedAlbumsCountQueryOptions,
   updateAlbumRating,
 } from "@/db/albums";
 import type { Album } from "@/types/album";
-import { AlbumRatingSchema } from "@/types/album";
+import { Radio } from "@base-ui/react/radio";
+import { RadioGroup } from "@base-ui/react/radio-group";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { ChangeEventHandler, FC } from "react";
+import { cn } from "cn";
+import type { FC } from "react";
 import { useState } from "react";
+
+const RATINGS = [1, 2, 3, 4, 5] as const;
 
 export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   id,
@@ -18,8 +23,6 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   const { queryKey: albumsQueryKey } = albumsQueryOptions();
   const { queryKey: listenedAlbumsCountQueryKey } =
     listenedAlbumsCountQueryOptions();
-
-  const [validationError, setValidationError] = useState<string | null>(null);
 
   const updateRatingMutation = useMutation({
     mutationFn: async (rating: number) => updateAlbumRating(id, rating),
@@ -33,7 +36,7 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
       return { previous };
     },
     onSuccess: async () => {
-      // Invalidating cound since updating rating has the side effect
+      // Invalidating count since updating rating has the side effect
       // of updating listened column at db level
       await queryClient.invalidateQueries({
         queryKey: listenedAlbumsCountQueryKey,
@@ -44,42 +47,43 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
     },
   });
 
-  const handleChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
-    const newRating = Number(e.target.value);
-    const result = AlbumRatingSchema.safeParse(Number(e.target.value));
-    if (!result.success) {
-      setValidationError(result.error.issues[0].message);
-      return;
-    }
-    setValidationError(null);
-    updateRatingMutation.mutate(newRating);
-  };
+  // Hover previews the rating the click would set
+  const [hovered, setHovered] = useState<number | null>(null);
+  const shown = hovered ?? rating;
 
   return (
-    <>
-      <select
-        aria-label={`${album}-rating`}
-        defaultValue={rating ?? ""}
-        onChange={handleChange}
-        className="m-auto block cursor-pointer border border-border bg-card px-2 py-1 font-sans text-sm text-foreground"
-      >
-        {rating === null && (
-          <option value="" disabled hidden>
-            –
-          </option>
-        )}
-        {[1, 2, 3, 4, 5].map((n) => (
-          <option key={n} value={n}>
-            {n}
-          </option>
-        ))}
-      </select>
-      {validationError && (
-        <pre className="text-center font-mono text-xs text-muted-foreground">
-          {validationError}
-        </pre>
-      )}
-    </>
+    <RadioGroup
+      aria-label={`Rating: ${album}`}
+      value={rating}
+      onValueChange={(value) => {
+        if (value !== null) updateRatingMutation.mutate(value);
+      }}
+      onPointerLeave={() => {
+        setHovered(null);
+      }}
+      className="flex items-center"
+    >
+      {RATINGS.map((n) => (
+        <Radio.Root
+          key={n}
+          value={n}
+          aria-label={`${n} ${n === 1 ? "disc" : "discs"}`}
+          onPointerEnter={() => {
+            setHovered(n);
+          }}
+          className={cn(
+            "flex-none cursor-pointer p-0.5 focus-visible:outline-2 focus-visible:outline-ring",
+            shown !== null && n <= shown ? "text-chart-4" : "text-border",
+          )}
+        >
+          <span
+            aria-hidden
+            className="block size-4 bg-current mask-contain mask-center mask-no-repeat"
+            style={{ maskImage: `url(${disc})` }}
+          />
+        </Radio.Root>
+      ))}
+    </RadioGroup>
   );
 };
 
