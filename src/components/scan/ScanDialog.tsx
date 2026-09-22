@@ -84,7 +84,7 @@ const ScanDialogResults: FC<ScanDialogResultsProps> = ({ scanResults }) => {
           </DialogDescription>
         </div>
         <div className="flex flex-wrap gap-2">
-          <span className="flex items-center gap-2 border border-l-4 border-border border-l-chart-1 bg-card px-3 py-1.5 font-mono text-xs text-muted-foreground">
+          <span className="flex items-center gap-2 border border-l-4 border-border border-l-chart-1 bg-card px-3 py-2 font-mono text-xs text-muted-foreground">
             <FolderIcon className="size-3.5 shrink-0" aria-hidden="true" />
             <span className="max-w-48 truncate">{SCAN_SOURCE}</span>
             <span>+{scanResults.length}</span>

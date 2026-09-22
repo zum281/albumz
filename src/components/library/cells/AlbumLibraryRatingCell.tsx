@@ -61,18 +61,7 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
         aria-label={`${album}-rating`}
         defaultValue={rating ?? ""}
         onChange={handleChange}
-        style={{
-          display: "block",
-          padding: "0.25rem 0.5rem",
-          borderRadius: "var(--radius)",
-          border: "1px solid var(--border)",
-          background: "var(--card)",
-          color: "var(--foreground)",
-          fontFamily: "var(--font-sans)",
-          fontSize: "0.875rem",
-          cursor: "pointer",
-          margin: "auto",
-        }}
+        className="m-auto block cursor-pointer border border-border bg-card px-2 py-1 font-sans text-sm text-foreground"
       >
         {rating === null && (
           <option value="" disabled hidden>
@@ -86,14 +75,7 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
         ))}
       </select>
       {validationError && (
-        <pre
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.75rem",
-            color: "var(--muted-foreground)",
-            textAlign: "center",
-          }}
-        >
+        <pre className="text-center font-mono text-xs text-muted-foreground">
           {validationError}
         </pre>
       )}

@@ -74,7 +74,7 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
           table.setPageSize(Number(e.target.value));
         }}
         aria-label="Rows per page"
-        className="h-7 cursor-pointer border border-muted-foreground/70 bg-background px-2 font-mono text-xs text-muted-foreground"
+        className="cursor-pointer border border-muted-foreground/70 bg-background p-2 font-mono text-xs text-muted-foreground"
       >
         {PAGE_SIZES.map((size) => (
           <option key={size} value={size}>

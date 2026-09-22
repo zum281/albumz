@@ -1,8 +1,15 @@
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Album } from "@/types/album";
-import type { FC } from "react";
-
 import { useTable } from "@tanstack/react-table";
 import { useTanStackTableDevtools } from "@tanstack/react-table-devtools";
+import type { FC } from "react";
 import {
   albumLibraryColumns,
   albumLibraryFeatures,
@@ -20,62 +27,40 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
 
   useTanStackTableDevtools(table);
   return (
-    <section>
-      <table
-        style={{
-          borderCollapse: "collapse",
-          width: "100%",
-          fontFamily: "var(--font-sans)",
-          fontSize: "0.9375rem",
-          color: "var(--foreground)",
-          background: "var(--background)",
-        }}
-      >
-        <thead>
+    <section
+      aria-label="Album library"
+      className="border border-border bg-background"
+    >
+      <Table aria-label={`Album library, ${albums.length} rows`}>
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <th
+                <TableHead
                   key={header.id}
-                  style={{
-                    width: `${header.getSize()}px`,
-                    textAlign: "left",
-                    padding: "0.625rem 0.875rem",
-                    background: "var(--card)",
-                    borderBottom: "1px solid var(--border)",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.8125rem",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color: "var(--muted-foreground)",
-                  }}
+                  scope="col"
+                  style={{ width: header.getSize() }}
                 >
                   {header.isPlaceholder ? null : (
                     <table.FlexRender header={header} />
                   )}
-                </th>
+                </TableHead>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </thead>
-        <tbody>
+        </TableHeader>
+        <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <TableRow key={row.id} className="group hover:bg-card">
               {row.getAllCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  style={{
-                    padding: "0.5rem 0.875rem",
-                    borderBottom: "1px solid var(--border)",
-                  }}
-                >
+                <TableCell key={cell.id}>
                   <table.FlexRender cell={cell} />
-                </td>
+                </TableCell>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <AlbumLibraryPagination table={table} />
     </section>
   );
