@@ -106,7 +106,7 @@ export const albumLibraryColumns: ColumnDef<
   },
   {
     accessorKey: "listened",
-    header: () => "Listened",
+    header: () => "Status",
     size: 110,
     cell: (props) => {
       const album = props.row.original;

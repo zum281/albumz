@@ -1,11 +1,12 @@
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   albumsQueryOptions,
   listenedAlbumsCountQueryOptions,
   updateAlbumListen,
 } from "@/db/albums";
 import type { Album } from "@/types/album";
+import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cn } from "cn";
 import type { FC } from "react";
 
 export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
@@ -37,20 +38,23 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
     },
   });
 
-  const handleCheckedChange = (checked: boolean) => {
-    console.assert(
-      checked === !listened,
-      "checkbox checked out of sync with listened prop",
-    );
-    updateListenedMutation.mutate(!listened);
-  };
-
   return (
-    <Checkbox
-      aria-label={`${album}-${listened ? "listened" : "not-listened"}`}
-      onCheckedChange={handleCheckedChange}
-      checked={listened}
-    />
+    <label
+      className={cn(
+        "flex cursor-pointer items-center gap-2 font-mono text-xs tracking-widest uppercase",
+        listened ? "text-chart-2" : "text-muted-foreground",
+      )}
+    >
+      <CheckboxPrimitive.Root
+        checked={listened}
+        onCheckedChange={(checked) => {
+          updateListenedMutation.mutate(checked);
+        }}
+        className="block size-2 flex-none ring-1 ring-current ring-inset focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring data-checked:bg-current"
+      />
+      <span aria-hidden>{listened ? "Played" : "Backlog"}</span>
+      <span className="sr-only">Listened: {album}</span>
+    </label>
   );
 };
 
