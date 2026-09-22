@@ -9,11 +9,12 @@ import {
   PaginationSummary,
 } from "@/components/ui/pagination";
 import type { Album } from "@/types/album";
-import { getPageWindow, PAGE_SIZES } from "@/utils/pagination";
+import { getPageWindow } from "@/utils/pagination";
 import type { useTable } from "@tanstack/react-table";
 import type { FC } from "react";
 import { Fragment } from "react";
 import type { albumLibraryFeatures } from "./AlbumLibrary.config";
+import { AlbumLibraryPaginationPageSelect } from "./AlbumLibraryPaginationPagesSelect";
 
 export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
   table,
@@ -68,21 +69,7 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
           />
         </PaginationItem>
       </PaginationContent>
-      <select
-        value={pageSize}
-        onChange={(e) => {
-          table.setPageSize(Number(e.target.value));
-        }}
-        aria-label="Rows per page"
-        className="cursor-pointer border border-muted-foreground/70 bg-background p-2 font-mono text-xs text-muted-foreground"
-      >
-        {PAGE_SIZES.map((size) => (
-          <option key={size} value={size}>
-            {size} / page
-          </option>
-        ))}
-        <option value={Math.max(rowCount, 1)}>All</option>
-      </select>
+      <AlbumLibraryPaginationPageSelect table={table} />
     </Pagination>
   );
 };
