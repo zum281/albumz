@@ -6,6 +6,7 @@ import {
   Outlet,
 } from "@tanstack/react-router";
 import { AppSidebar } from "./components/app-sidebar/AppSidebar";
+import { RouteHeader } from "./components/RouteHeader";
 import { Home } from "./routes/Home";
 
 export const rootRoute = createRootRoute({
@@ -26,13 +27,13 @@ const home = createRoute({
 const statz = createRoute({
   getParentRoute: () => rootRoute,
   path: "/statz",
-  component: () => <main>Statz</main>,
+  component: () => <RouteHeader title="Statz" />,
 });
 
 const settings = createRoute({
   getParentRoute: () => rootRoute,
   path: "/settings",
-  component: () => <main>Settings</main>,
+  component: () => <RouteHeader title="Settings" />,
 });
 
 const routeTree = rootRoute.addChildren([home, statz, settings]);
