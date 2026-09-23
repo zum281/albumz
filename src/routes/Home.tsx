@@ -1,5 +1,5 @@
 import { AlbumLibrary } from "@/components/library/AlbumLibrary";
-import { AlbumLibraryFilters } from "@/components/library/AlbumLibraryFilters";
+import { AlbumLibraryFilters } from "@/components/library/filters/AlbumLibraryFilters";
 import { RouteHeader } from "@/components/RouteHeader";
 import { albumsQueryOptions } from "@/db/albums";
 import type { Album } from "@/types/album";
@@ -31,7 +31,6 @@ export const Home: FC = () => {
       <div className="flex flex-col gap-4 px-7 pt-6 pb-10">
         <AlbumLibraryFilters
           allAlbums={albums}
-          filteredAlbums={filteredAlbums}
           setFilteredAlbums={setFilteredAlbums}
         />
         <AlbumLibrary albums={filteredAlbums} />
