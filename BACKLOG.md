@@ -9,7 +9,6 @@
 - resize table columns
 - metadata action (placeholder)
 - open in player
-- table filters: year
 - settings: theme switcher
 - settings: pick player
 - settings: delete all data

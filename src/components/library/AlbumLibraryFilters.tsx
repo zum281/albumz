@@ -4,6 +4,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
 import type { Album } from "@/types/album";
 import Fuse from "fuse.js";
 import { Search } from "lucide-react";
@@ -16,6 +17,16 @@ export const AlbumLibraryFilters: FC<AlbumLibraryFiltersProps> = ({
 }) => {
   const [query, setQuery] = useState<string>("");
   const [toggle, setToggle] = useState<"all" | "played" | "backlog">("all");
+
+  const maxAlbumYear: number = useMemo(() => {
+    return Math.max(...allAlbums.map((a) => a.year));
+  }, [allAlbums]);
+
+  const minAlbumYear: number = useMemo(() => {
+    return Math.min(...allAlbums.map((a) => a.year));
+  }, [allAlbums]);
+
+  const [years, setYears] = useState<number[]>([minAlbumYear, maxAlbumYear]);
 
   const fuse = useMemo(() => {
     return new Fuse(allAlbums, {
@@ -49,38 +60,50 @@ export const AlbumLibraryFilters: FC<AlbumLibraryFiltersProps> = ({
     [],
   );
 
+  const handeYearFilter = useCallback((albums: Album[], years: number[]) => {
+    const [min, max] = years;
+    return albums.filter((a) => a.year >= min && a.year <= max);
+  }, []);
+
   const handleFilters = useCallback(
-    (query: string, toggle: "all" | "played" | "backlog") => {
+    (query: string, toggle: "all" | "played" | "backlog", years: number[]) => {
       const filteredBySearch = handleSearch(allAlbums, query);
       const filteredByToggle = handlePlayedBacklogToggle(
         filteredBySearch,
         toggle,
       );
+      const filteredByYear = handeYearFilter(filteredByToggle, years);
 
-      setFilteredAlbums([...filteredByToggle]);
+      setFilteredAlbums([...filteredByYear]);
     },
-    [allAlbums, handleSearch, setFilteredAlbums, handlePlayedBacklogToggle],
+    [
+      allAlbums,
+      handleSearch,
+      setFilteredAlbums,
+      handlePlayedBacklogToggle,
+      handeYearFilter,
+    ],
   );
 
   useEffect(() => {
-    handleFilters(query, toggle);
-  }, [query, toggle, handleFilters]);
+    handleFilters(query, toggle, years);
+  }, [query, toggle, years, handleFilters]);
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
-      <InputGroup className="w-1/2">
+    <div className="flex flex-wrap items-stretch gap-3">
+      <InputGroup className="h-auto w-auto grow basis-55">
         <InputGroupAddon align="inline-start">
           <Search />
         </InputGroupAddon>
         <InputGroupInput
           id="input-group-search"
+          className="h-auto self-stretch"
           placeholder="Search album or artist..."
           onChange={(e) => {
             setQuery(e.target.value);
           }}
         />
       </InputGroup>
-
       <RadioGroup
         variant="segmented"
         aria-label="Listened status"
@@ -99,6 +122,24 @@ export const AlbumLibraryFilters: FC<AlbumLibraryFiltersProps> = ({
           Backlog
         </RadioGroupItem>
       </RadioGroup>
+      <div className="flex grow basis-64 items-center gap-2 border border-border bg-card px-3 py-2.25 font-mono text-xs tabular-nums">
+        <span className="tracking-widest text-muted-foreground uppercase">
+          Years
+        </span>
+        <span>{years[0]}</span>
+        <div className="shrink-0 grow basis-21">
+          <Slider
+            defaultValue={[minAlbumYear, maxAlbumYear]}
+            min={minAlbumYear}
+            max={maxAlbumYear}
+            step={1}
+            onValueChange={(value) => {
+              setYears([...(value as number[])]);
+            }}
+          />
+        </div>
+        <span>{years[1]}</span>
+      </div>
     </div>
   );
 };
