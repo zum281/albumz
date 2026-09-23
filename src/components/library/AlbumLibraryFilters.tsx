@@ -1,6 +1,11 @@
-import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import type { Album } from "@/types/album";
 import Fuse from "fuse.js";
+import { Search } from "lucide-react";
 import type { ChangeEventHandler, Dispatch, FC, SetStateAction } from "react";
 
 export const AlbumLibraryFilters: FC<AlbumLibraryFiltersProps> = ({
@@ -29,7 +34,16 @@ export const AlbumLibraryFilters: FC<AlbumLibraryFiltersProps> = ({
 
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      <Input placeholder="Search album or artist..." onChange={filterAlbums} />
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <Search />
+        </InputGroupAddon>
+        <InputGroupInput
+          id="input-group-search"
+          placeholder="Search album or artist..."
+          onChange={filterAlbums}
+        />
+      </InputGroup>
     </div>
   );
 };
