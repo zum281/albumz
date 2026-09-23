@@ -1,7 +1,5 @@
 ## Todo
 
-- table filters: search
-
 ## Backlog
 
 - Cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
@@ -11,7 +9,6 @@
 - resize table columns
 - metadata action (placeholder)
 - open in player
-- table filters: played/backlog
 - table filters: year
 - settings: theme switcher
 - settings: pick player

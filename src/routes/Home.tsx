@@ -31,6 +31,7 @@ export const Home: FC = () => {
       <div className="flex flex-col gap-4 px-7 pt-6 pb-10">
         <AlbumLibraryFilters
           allAlbums={albums}
+          filteredAlbums={filteredAlbums}
           setFilteredAlbums={setFilteredAlbums}
         />
         <AlbumLibrary albums={filteredAlbums} />
