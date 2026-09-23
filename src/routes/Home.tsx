@@ -1,8 +1,11 @@
 import { AlbumLibrary } from "@/components/library/AlbumLibrary";
+import { AlbumLibraryFilters } from "@/components/library/AlbumLibraryFilters";
 import { RouteHeader } from "@/components/RouteHeader";
 import { albumsQueryOptions } from "@/db/albums";
+import type { Album } from "@/types/album";
 import { useQuery } from "@tanstack/react-query";
 import type { FC } from "react";
+import { useState } from "react";
 
 export const Home: FC = () => {
   const {
@@ -11,6 +14,8 @@ export const Home: FC = () => {
     isError,
     error,
   } = useQuery(albumsQueryOptions());
+
+  const [filteredAlbums, setFilteredAlbums] = useState<Album[]>(albums ?? []);
 
   if (isError) return <pre>{String(error)}</pre>;
   if (isLoading) return <p>Loading…</p>;
@@ -24,7 +29,11 @@ export const Home: FC = () => {
       />
 
       <div className="flex flex-col gap-4 px-7 pt-6 pb-10">
-        <AlbumLibrary albums={albums} />
+        <AlbumLibraryFilters
+          allAlbums={albums}
+          setFilteredAlbums={setFilteredAlbums}
+        />
+        <AlbumLibrary albums={filteredAlbums} />
       </div>
     </main>
   );
