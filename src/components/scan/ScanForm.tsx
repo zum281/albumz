@@ -48,6 +48,7 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults, form, source }) => {
       track_count: a.track_count,
       ignored: !a.accepted,
       cover_path: a.cover_path,
+      path: a.path,
     }));
     upsertMutation.mutate(payload);
   };

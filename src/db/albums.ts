@@ -42,12 +42,13 @@ export const getListenedAlbumsCount = async (): Promise<number> => {
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
   const db = await getDb();
   const query = sql`
-        INSERT INTO albums (artist, album, year, duration_seconds, track_count, ignored, cover_path)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO albums (artist, album, year, duration_seconds, track_count, ignored, cover_path, path)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         ON CONFLICT(artist, album) DO UPDATE SET
           year = excluded.year,
           duration_seconds = excluded.duration_seconds,
           cover_path = excluded.cover_path,
+          path = excluded.path,
           ignored = excluded.ignored,
           track_count = excluded.track_count,
           updated_at = (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
@@ -61,6 +62,7 @@ export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
     album.track_count,
     toSqliteBool(album.ignored),
     album.cover_path,
+    album.path,
   ]);
 };
 

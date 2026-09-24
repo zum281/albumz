@@ -170,6 +170,11 @@ fn scan_album_metadata(
     let cover_path = utils::construct_cover_path(app, artist_name, &album_name)?;
     let album_cover_path = upload_cover(&first_track_tag, &cover_path)?;
 
+    let path = album_path
+        .to_str()
+        .ok_or_else(|| format!("non-UTF-8 path: {}", album_path.display()))?
+        .to_string();
+
     let entry = ScanResult {
         artist: artist_name.to_string(),
         album: album_name,
@@ -177,6 +182,7 @@ fn scan_album_metadata(
         duration_seconds: album_duration,
         year: album_year,
         cover_path: album_cover_path,
+        path,
     };
 
     return Ok(Some(entry));
@@ -240,6 +246,7 @@ pub struct ScanResult {
     duration_seconds: u16,
     year: u16,
     cover_path: Option<String>,
+    path: String,
 }
 
 /// One album already in the `albums` table, as passed in from TypeScript to let

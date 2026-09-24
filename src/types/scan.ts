@@ -10,7 +10,7 @@ export const ScanResultSchema = AlbumSchema.omit({
   updated_at: true,
   source: true,
   media_type: true,
-});
+}).extend({ path: z.string().min(1) });
 
 export type ScanResult = z.infer<typeof ScanResultSchema>;
 

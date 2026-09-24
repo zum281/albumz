@@ -16,6 +16,7 @@ export const AlbumSchema = z.object({
   cover_path: z.string().nullable(),
   artist: z.string().min(1),
   album: z.string().min(1),
+  path: z.string().nullable(),
   year: positiveInteger,
   duration_seconds: positiveInteger,
   track_count: positiveInteger,
@@ -41,4 +42,4 @@ export type AlbumInsert = Pick<
   | "track_count"
   | "ignored"
   | "cover_path"
->;
+> & { path: string };

@@ -2,13 +2,11 @@
 
 ## Backlog
 
-- Cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
+- cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
   if found new, update the rows. UI: will be a custom button.
 - guard against interpolation sql
-- sort rows of table
+- sort table rows
 - resize table columns
-- metadata action (placeholder)
-- open in player
 - settings: theme switcher
 - settings: pick player
 - settings: delete all data
@@ -20,3 +18,5 @@
 - statz: decades breakdown chart
 - stats: verdicts pie
 - stats: heavy rotation chart
+- add proper ui errors
+- add proper ui loaders

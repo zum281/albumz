@@ -8,10 +8,12 @@ import {
   rowPaginationFeature,
   tableFeatures,
 } from "@tanstack/react-table";
+import { openPath } from "@tauri-apps/plugin-opener";
+import { Play } from "lucide-react";
+import { Button } from "../ui/button/button";
 import { AlbumLibraryCoverCell } from "./cells/AlbumLibraryCoverCell";
 import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
 import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
-
 export const albumLibraryFeatures = tableFeatures({
   columnSizingFeature,
   columnResizingFeature,
@@ -48,7 +50,6 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "year",
     header: () => "Year",
-    size: 82,
     cell: (props) => (
       <span className="font-mono text-xs text-muted-foreground">
         {props.getValue<number | null>()}
@@ -58,7 +59,6 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "track_count",
     header: () => "Trk",
-    size: 80,
     cell: (props) => (
       <span className="font-mono text-xs text-muted-foreground">
         {props.getValue<number>()}
@@ -68,7 +68,6 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "duration_seconds",
     header: () => "Duration",
-    size: 98,
     cell: (props) => {
       const album = props.row.original;
       return (
@@ -81,7 +80,6 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "media_type",
     header: () => "Type",
-    size: 104,
     cell: (props) => {
       const type = props.getValue<string>();
       return (
@@ -92,7 +90,6 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "rating",
     header: () => "Rating",
-    size: 132,
     cell: (props) => {
       const album = props.row.original;
       return (
@@ -107,7 +104,6 @@ export const albumLibraryColumns: ColumnDef<
   {
     accessorKey: "listened",
     header: () => "Status",
-    size: 110,
     cell: (props) => {
       const album = props.row.original;
       return (
@@ -120,15 +116,22 @@ export const albumLibraryColumns: ColumnDef<
     },
   },
   {
-    accessorKey: "source",
-    header: () => "Source",
-    size: 110,
+    id: "open",
+    header: () => <span className="block text-center">Play</span>,
     cell: (props) => {
-      const source = props.getValue<string>();
+      const albumPath = props.row.original.path;
+      if (!albumPath) return null;
       return (
-        <span className="text-xs text-muted-foreground capitalize">
-          {source}
-        </span>
+        <Button
+          variant="outline"
+          size="icon"
+          className="block mx-auto"
+          onClick={() => {
+            void openPath(albumPath, "Music");
+          }}
+        >
+          <Play className="size-3 fill-current text-muted-foreground" />
+        </Button>
       );
     },
   },
