@@ -1,7 +1,5 @@
 ## Todo
 
-- refactor filters: maybe add context?
-
 ## Backlog
 
 - Cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
