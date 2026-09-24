@@ -8,3 +8,9 @@ export enum Source {
   MANUAL = "manual",
   IMPORT = "import",
 }
+
+export enum AlbumListenedToggle {
+  ALL = "all",
+  PLAYED = "played",
+  BACKLOG = "backlog",
+}

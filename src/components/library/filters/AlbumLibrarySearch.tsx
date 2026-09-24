@@ -3,12 +3,13 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { useAlbumLibraryFilters } from "@/hooks/useAlbumLibraryFilters";
 import { Search } from "lucide-react";
-import type { Dispatch, FC, SetStateAction } from "react";
+import type { FC } from "react";
 
-export const AlbumLibrarySearch: FC<AlbumLibrarySearchProps> = ({
-  setQuery,
-}) => {
+export const AlbumLibrarySearch: FC = () => {
+  const { updateQuery } = useAlbumLibraryFilters();
+
   return (
     <InputGroup className="h-auto w-auto grow basis-55">
       <InputGroupAddon align="inline-start">
@@ -19,11 +20,9 @@ export const AlbumLibrarySearch: FC<AlbumLibrarySearchProps> = ({
         className="h-auto self-stretch"
         placeholder="Search album or artist..."
         onChange={(e) => {
-          setQuery(e.target.value);
+          updateQuery(e.target.value);
         }}
       />
     </InputGroup>
   );
 };
-
-type AlbumLibrarySearchProps = { setQuery: Dispatch<SetStateAction<string>> };

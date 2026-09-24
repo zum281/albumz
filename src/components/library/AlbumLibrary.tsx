@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Album } from "@/types/album";
+import { useAlbums } from "@/hooks/useAlbums";
 import { useTable } from "@tanstack/react-table";
 import { useTanStackTableDevtools } from "@tanstack/react-table-devtools";
 import type { FC } from "react";
@@ -16,11 +16,12 @@ import {
 } from "./AlbumLibrary.config";
 import { AlbumLibraryPagination } from "./AlbumLibraryPagination";
 
-export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
+export const AlbumLibrary: FC = () => {
+  const { filteredAlbums } = useAlbums();
   const table = useTable({
     key: "albums-table",
     columns: albumLibraryColumns,
-    data: albums,
+    data: filteredAlbums,
     features: albumLibraryFeatures,
     autoResetPageIndex: false,
   });
@@ -31,7 +32,7 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
       aria-label="Album library"
       className="border border-border bg-background"
     >
-      <Table aria-label={`Album library, ${albums.length} rows`}>
+      <Table aria-label={`Album library, ${filteredAlbums.length} rows`}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -65,5 +66,3 @@ export const AlbumLibrary: FC<AlbumLibraryProps> = ({ albums }) => {
     </section>
   );
 };
-
-type AlbumLibraryProps = { albums: Album[] };

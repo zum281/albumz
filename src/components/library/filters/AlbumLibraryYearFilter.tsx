@@ -1,23 +1,23 @@
 import { Slider } from "@/components/ui/slider";
+import { useAlbumLibraryFilters } from "@/hooks/useAlbumLibraryFilters";
+import { useAlbums } from "@/hooks/useAlbums";
 import { selectOnFirstClick, selectOnFocus } from "@/utils/ui";
-import type { Dispatch, FC, SetStateAction } from "react";
+import type { FC } from "react";
 import { useState } from "react";
 
-export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
-  minYear,
-  maxYear,
-  years,
-  setYears,
-}) => {
-  const [minDraft, setMinDraft] = useState<string>(String(minYear));
-  const [maxDraft, setMaxDraft] = useState<string>(String(maxYear));
+export const AlbumLibraryYearFilter: FC = () => {
+  const { minAlbumYear, maxAlbumYear } = useAlbums();
+  const { years, updateYears } = useAlbumLibraryFilters();
+
+  const [minDraft, setMinDraft] = useState<string>(String(minAlbumYear));
+  const [maxDraft, setMaxDraft] = useState<string>(String(maxAlbumYear));
 
   const commitMin = () => {
     const parsed = Number.parseInt(minDraft, 10);
     const next = Number.isNaN(parsed)
       ? years[0]
-      : Math.min(Math.max(parsed, minYear), years[1]);
-    setYears([next, years[1]]);
+      : Math.min(Math.max(parsed, minAlbumYear), years[1]);
+    updateYears([next, years[1]]);
     setMinDraft(String(next));
   };
 
@@ -25,8 +25,8 @@ export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
     const parsed = Number.parseInt(maxDraft, 10);
     const next = Number.isNaN(parsed)
       ? years[1]
-      : Math.max(Math.min(parsed, maxYear), years[0]);
-    setYears([years[0], next]);
+      : Math.max(Math.min(parsed, maxAlbumYear), years[0]);
+    updateYears([years[0], next]);
     setMaxDraft(String(next));
   };
 
@@ -47,8 +47,8 @@ export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
         onChange={(e) => {
           setMinDraft(e.target.value);
           const parsed = Number.parseInt(e.target.value, 10);
-          if (parsed >= minYear && parsed <= years[1]) {
-            setYears([parsed, years[1]]);
+          if (parsed >= minAlbumYear && parsed <= years[1]) {
+            updateYears([parsed, years[1]]);
           }
         }}
         onBlur={commitMin}
@@ -59,12 +59,12 @@ export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
       <div className="shrink-0 grow basis-21">
         <Slider
           value={years}
-          min={minYear}
-          max={maxYear}
+          min={minAlbumYear}
+          max={maxAlbumYear}
           step={1}
           onValueChange={(value) => {
             const [min, max] = value as number[];
-            setYears([min, max]);
+            updateYears([min, max]);
             setMinDraft(String(min));
             setMaxDraft(String(max));
           }}
@@ -82,8 +82,8 @@ export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
         onChange={(e) => {
           setMaxDraft(e.target.value);
           const parsed = Number.parseInt(e.target.value, 10);
-          if (parsed >= years[0] && parsed <= maxYear) {
-            setYears([years[0], parsed]);
+          if (parsed >= years[0] && parsed <= maxAlbumYear) {
+            updateYears([years[0], parsed]);
           }
         }}
         onBlur={commitMax}
@@ -93,11 +93,4 @@ export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
       />
     </div>
   );
-};
-
-type AlbumLibraryYearFilterProps = {
-  minYear: number;
-  maxYear: number;
-  years: number[];
-  setYears: Dispatch<SetStateAction<number[]>>;
 };
