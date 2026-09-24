@@ -26,6 +26,4 @@ export const AlbumLibraryCoverCell: FC<AlbumLibraryCoverCellProps> = ({
   );
 };
 
-interface AlbumLibraryCoverCellProps {
-  album: Album;
-}
+type AlbumLibraryCoverCellProps = { album: Album };

@@ -129,8 +129,8 @@ export const ScanForm: FC<ScanFormProps> = ({ scanResults, form, source }) => {
   );
 };
 
-interface ScanFormProps {
+type ScanFormProps = {
   scanResults: ScanResult[];
   form: UseFormReturn<ScanFormValues>;
   source: string;
-}
+};

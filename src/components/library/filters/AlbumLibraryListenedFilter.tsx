@@ -26,6 +26,6 @@ export const AlbumLibraryListenedFilter: FC<
   );
 };
 
-interface AlbumLibraryListenedFilterProps {
+type AlbumLibraryListenedFilterProps = {
   setListened: Dispatch<SetStateAction<"all" | "played" | "backlog">>;
-}
+};

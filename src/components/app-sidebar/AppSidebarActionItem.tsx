@@ -31,10 +31,10 @@ export const AppSidebarActionItem: FC<AppSidebarActionItemProps> = ({
   );
 };
 
-interface AppSidebarActionItemProps {
+type AppSidebarActionItemProps = {
   title: string;
   tooltip?: string;
   icon: LucideIcon;
 
   actionContent: ComponentType;
-}
+};

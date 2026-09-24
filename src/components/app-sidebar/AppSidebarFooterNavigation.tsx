@@ -21,9 +21,9 @@ export const AppSidebarFooterNavigation: FC<
   );
 };
 
-interface AppSidebarFooterNavigationProps {
+type AppSidebarFooterNavigationProps = {
   title: string;
   icon: LucideIcon;
 
   linkProps: LinkProps;
-}
+};

@@ -74,6 +74,6 @@ export const AlbumLibraryPagination: FC<AlbumLibraryPaginationProps> = ({
   );
 };
 
-interface AlbumLibraryPaginationProps {
+type AlbumLibraryPaginationProps = {
   table: ReturnType<typeof useTable<typeof albumLibraryFeatures, Album>>;
-}
+};

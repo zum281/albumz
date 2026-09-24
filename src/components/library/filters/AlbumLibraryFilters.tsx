@@ -26,7 +26,7 @@ export const AlbumLibraryFilters: FC<AlbumLibraryFiltersProps> = ({
   );
 };
 
-interface AlbumLibraryFiltersProps {
+type AlbumLibraryFiltersProps = {
   allAlbums: Album[];
   setFilteredAlbums: Dispatch<SetStateAction<Album[]>>;
-}
+};

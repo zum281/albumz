@@ -95,9 +95,9 @@ export const AlbumLibraryYearFilter: FC<AlbumLibraryYearFilterProps> = ({
   );
 };
 
-interface AlbumLibraryYearFilterProps {
+type AlbumLibraryYearFilterProps = {
   minYear: number;
   maxYear: number;
   years: number[];
   setYears: Dispatch<SetStateAction<number[]>>;
-}
+};

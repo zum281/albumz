@@ -45,6 +45,6 @@ export const AlbumLibraryPaginationPageSelect: FC<
   );
 };
 
-interface AlbumLibraryPaginationPagesSelect {
+type AlbumLibraryPaginationPagesSelect = {
   table: ReturnType<typeof useTable<typeof albumLibraryFeatures, Album>>;
-}
+};

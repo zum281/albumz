@@ -32,10 +32,10 @@ export const AppSidebarNavigationItem: FC<AppSidebarNavigationItemProps> = ({
   );
 };
 
-interface AppSidebarNavigationItemProps {
+type AppSidebarNavigationItemProps = {
   title: string;
   data: string | number;
   linkProps: LinkProps;
   isActive?: boolean;
   icon: LucideIcon;
-}
+};

@@ -21,8 +21,8 @@ export const AppSidebarListenedProgress: FC<
   );
 };
 
-interface AppSidebarListenedProgressProps {
+type AppSidebarListenedProgressProps = {
   listened: number;
   total: number;
   percentage: number;
-}
+};

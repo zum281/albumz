@@ -113,6 +113,4 @@ const ScanDialogResults: FC<ScanDialogResultsProps> = ({ scanResults }) => {
   );
 };
 
-interface ScanDialogResultsProps {
-  scanResults: ScanResult[];
-}
+type ScanDialogResultsProps = { scanResults: ScanResult[] };

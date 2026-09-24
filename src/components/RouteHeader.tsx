@@ -17,7 +17,4 @@ export const RouteHeader: FC<RouteHeaderProps> = ({ title, rightElement }) => {
   );
 };
 
-interface RouteHeaderProps {
-  title: string;
-  rightElement?: ReactNode;
-}
+type RouteHeaderProps = { title: string; rightElement?: ReactNode };

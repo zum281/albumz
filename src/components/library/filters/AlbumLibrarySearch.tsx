@@ -26,6 +26,4 @@ export const AlbumLibrarySearch: FC<AlbumLibrarySearchProps> = ({
   );
 };
 
-interface AlbumLibrarySearchProps {
-  setQuery: Dispatch<SetStateAction<string>>;
-}
+type AlbumLibrarySearchProps = { setQuery: Dispatch<SetStateAction<string>> };

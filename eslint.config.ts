@@ -1,7 +1,8 @@
 import eslintReact from "@eslint-react/eslint-plugin";
+import js from "@eslint/js";
 import tanstackQuery from "@tanstack/eslint-plugin-query";
 import tanstackRouter from "@tanstack/eslint-plugin-router";
-import js from "@eslint/js";
+import type { ESLint } from "eslint";
 import prettier from "eslint-plugin-prettier";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -81,6 +82,13 @@ export default defineConfig([
         { prefer: "type-imports", fixStyle: "separate-type-imports" },
       ],
       "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+    },
+  },
+  {
+    files: ["**/*.d.ts"],
+    rules: {
+      "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     },
   },
   {
@@ -89,7 +97,7 @@ export default defineConfig([
       eslintReact.configs["strict-type-checked"],
       reactRefresh.configs.vite,
     ],
-    plugins: { "react-hooks": reactHooks },
+    plugins: { "react-hooks": reactHooks as ESLint.Plugin },
     rules: {
       "@eslint-react/exhaustive-deps": "error",
       "@eslint-react/no-array-index-key": "error",

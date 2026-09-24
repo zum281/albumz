@@ -58,8 +58,4 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   );
 };
 
-interface AlbumLibraryCellProps {
-  id: number;
-  album: string;
-  listened: boolean;
-}
+type AlbumLibraryCellProps = { id: number; album: string; listened: boolean };

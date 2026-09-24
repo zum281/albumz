@@ -87,8 +87,8 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
   );
 };
 
-interface AlbumLibraryRatingCellProps {
+type AlbumLibraryRatingCellProps = {
   id: number;
   album: string;
   rating: number | null;
-}
+};
