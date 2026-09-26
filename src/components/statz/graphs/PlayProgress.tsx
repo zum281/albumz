@@ -32,8 +32,8 @@ export const PlayProgress: FC = () => {
 
   return (
     <GraphCard title="Play Progress">
-      <div className="flex flex-wrap gap-6 itemc-center">
-        <div className="relative w-36">
+      <div className="flex flex-wrap gap-6 items-center">
+        <div className="relative w-36 mx-auto">
           <Doughnut
             aria-hidden
             data={data}
@@ -54,7 +54,7 @@ export const PlayProgress: FC = () => {
             </span>
           </div>
         </div>
-        <div className="grid place-content-center text-sm gap-2">
+        <div className="grid place-content-center text-sm gap-2 mx-auto">
           <ul className="grid gap-2">
             <li className="flex items-center gap-[1ch]">
               <span aria-hidden className="size-3 bg-chart-2" />
