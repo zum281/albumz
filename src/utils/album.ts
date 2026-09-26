@@ -7,6 +7,3 @@ export const albumToExisting = (album: Album): AlbumExisting => {
     track_count: album.track_count,
   };
 };
-
-export const getListenedAlbumsPercentage = (total: number, listened: number) =>
-  total === 0 ? 0 : (listened / total) * 100;

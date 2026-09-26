@@ -13,6 +13,5 @@
 - settings: show database path
 - statz: backlog leaders chart
 - statz: decades breakdown chart
-- stats: verdicts pie
 - stats: heavy rotation chart
 - add proper ui errors

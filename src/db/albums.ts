@@ -92,6 +92,79 @@ export const getTotalAlbumsDuration = async (): Promise<number> => {
   return rows[0].total;
 };
 
+export const ratedAlbumsCountQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "rated", "count"],
+    queryFn: getRatedAlbumsCount,
+  });
+};
+
+export const getRatedAlbumsCount = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT COUNT(*) as count
+    FROM albums
+    WHERE rating AND ignored = 0
+  `;
+
+  const rows = await db.select<{ count: number }[]>(query);
+  return rows[0].count;
+};
+
+export const likedAlbumsCountQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "rated", "liked", "count"],
+    queryFn: getLikedAlbumsCount,
+  });
+};
+
+export const getLikedAlbumsCount = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT COUNT(*) as count
+    FROM albums
+    WHERE  rating > 3 AND ignored = 0
+  `;
+
+  const rows = await db.select<{ count: number }[]>(query);
+  return rows[0].count;
+};
+export const neutralAlbumsCountQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "rated", "neutral", "count"],
+    queryFn: getNeutralAlbumsCount,
+  });
+};
+
+export const getNeutralAlbumsCount = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT COUNT(*) as count
+    FROM albums
+    WHERE rating = 3 AND ignored = 0
+  `;
+
+  const rows = await db.select<{ count: number }[]>(query);
+  return rows[0].count;
+};
+export const dislikedAlbumsCountQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "rated", "disliked", "count"],
+    queryFn: getDislikedAlbumsCount,
+  });
+};
+
+export const getDislikedAlbumsCount = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT COUNT(*) as count
+    FROM albums
+    WHERE rating < 3 AND ignored = 0
+  `;
+
+  const rows = await db.select<{ count: number }[]>(query);
+  return rows[0].count;
+};
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
   const db = await getDb();
   const query = sql`

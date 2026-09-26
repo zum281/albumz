@@ -1,10 +1,14 @@
 import {
+  dislikedAlbumsCountQueryOptions,
+  likedAlbumsCountQueryOptions,
   listenedAlbumsCountQueryOptions,
   listenedAlbumsDurationQueryOptions,
+  neutralAlbumsCountQueryOptions,
+  ratedAlbumsCountQueryOptions,
   totalAlbumsDurationQueryOptions,
 } from "@/db/albums";
 import type { Album } from "@/types/album";
-import { getListenedAlbumsPercentage } from "@/utils/album";
+import { getPercentage } from "@/utils/math";
 import { useQuery } from "@tanstack/react-query";
 import type { FC, PropsWithChildren } from "react";
 import { useMemo } from "react";
@@ -25,12 +29,39 @@ export const AlbumsStatzProvider: FC<AlbumsStatzProviderProps> = ({
     listenedAlbumsDurationQueryOptions(),
   );
 
+  const { data: ratedAlbumsCount = 0 } = useQuery(
+    ratedAlbumsCountQueryOptions(),
+  );
+
+  const { data: likedAlbumsCount = 0 } = useQuery(
+    likedAlbumsCountQueryOptions(),
+  );
+  const { data: neutralAlbumsCount = 0 } = useQuery(
+    neutralAlbumsCountQueryOptions(),
+  );
+  const { data: dislikedAlbumsCount = 0 } = useQuery(
+    dislikedAlbumsCountQueryOptions(),
+  );
+
   const totalAlbumsCount = albums.length;
   const backlogAlbumsCount = totalAlbumsCount - listenedAlbumsCount;
 
-  const percentageListenedAlbums = getListenedAlbumsPercentage(
+  const percentageListenedAlbums = getPercentage(
     totalAlbumsCount,
     listenedAlbumsCount,
+  );
+
+  const likedAlbumsPercentage = getPercentage(
+    ratedAlbumsCount,
+    likedAlbumsCount,
+  );
+  const neutralAlbumsPercentage = getPercentage(
+    ratedAlbumsCount,
+    neutralAlbumsCount,
+  );
+  const dislikedAlbumsPercentage = getPercentage(
+    ratedAlbumsCount,
+    dislikedAlbumsCount,
   );
 
   const value: AlbumsStatzContextType = useMemo(
@@ -41,6 +72,13 @@ export const AlbumsStatzProvider: FC<AlbumsStatzProviderProps> = ({
       totalAlbumsDuration,
       listenedAlbumsDuration,
       backlogAlbumsCount,
+      ratedAlbumsCount,
+      likedAlbumsCount,
+      neutralAlbumsCount,
+      dislikedAlbumsCount,
+      likedAlbumsPercentage,
+      neutralAlbumsPercentage,
+      dislikedAlbumsPercentage,
     }),
     [
       totalAlbumsCount,
@@ -49,6 +87,13 @@ export const AlbumsStatzProvider: FC<AlbumsStatzProviderProps> = ({
       totalAlbumsDuration,
       listenedAlbumsDuration,
       backlogAlbumsCount,
+      ratedAlbumsCount,
+      likedAlbumsCount,
+      neutralAlbumsCount,
+      dislikedAlbumsCount,
+      likedAlbumsPercentage,
+      neutralAlbumsPercentage,
+      dislikedAlbumsPercentage,
     ],
   );
 

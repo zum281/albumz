@@ -11,7 +11,7 @@ import {
   albumsQueryOptions,
   listenedAlbumsCountQueryOptions,
 } from "@/db/albums";
-import { getListenedAlbumsPercentage } from "@/utils/album";
+import { getPercentage } from "@/utils/math";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart3, Disc3, ScanSearch, Settings } from "lucide-react";
 import { type FC } from "react";
@@ -31,7 +31,7 @@ export const AppSidebar: FC = () => {
 
   const totalAlbumsCount = existingAlbums?.length ?? 0;
 
-  const listenedAlbumsPercentage = getListenedAlbumsPercentage(
+  const listenedAlbumsPercentage = getPercentage(
     totalAlbumsCount,
     listenedAlbumsCount,
   );

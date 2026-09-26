@@ -1,4 +1,7 @@
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import type { FC, PropsWithChildren } from "react";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const GraphCard: FC<GraphCardProps> = ({ title, children }) => {
   return (

@@ -1,12 +1,9 @@
 import { useAlbumsStatz } from "@/hooks/useAlbumsStatz";
 import { cssvar } from "@/utils/graphs";
 import { secondsToHours } from "@/utils/time";
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { useMemo, type FC } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { GraphCard } from "./GraphCard";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 export const PlayProgress: FC = () => {
   const {
