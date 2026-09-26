@@ -11,7 +11,6 @@
 - settings: pick player
 - settings: delete all data
 - settings: show database path
-- statz: play progress graph
 - statz: backlog leaders chart
 - statz: decades breakdown chart
 - stats: verdicts pie
