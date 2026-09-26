@@ -1,6 +1,7 @@
 import { AlbumLibrary } from "@/components/library/AlbumLibrary";
 import { AlbumLibraryFilters } from "@/components/library/filters/AlbumLibraryFilters";
 import { RouteHeader } from "@/components/RouteHeader";
+import { Spinner } from "@/components/ui/spinner";
 import { AlbumLibraryFiltersProvider } from "@/context/album-library-filters/AlbumLibraryFiltersProvider";
 import { AlbumsProvider } from "@/context/albums/AlbumsProvider";
 import { albumsQueryOptions } from "@/db/albums";
@@ -16,7 +17,7 @@ export const Home: FC = () => {
   } = useQuery(albumsQueryOptions());
 
   if (isError) return <pre>{String(error)}</pre>;
-  if (isLoading) return <p>Loading…</p>;
+  if (isLoading) return <Spinner className="size-6" />;
   if (!albums) return <p>I really don't know what happened</p>;
 
   return (

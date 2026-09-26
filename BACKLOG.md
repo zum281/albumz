@@ -19,4 +19,3 @@
 - stats: verdicts pie
 - stats: heavy rotation chart
 - add proper ui errors
-- add proper ui loaders
