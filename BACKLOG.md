@@ -11,8 +11,6 @@
 - settings: pick player
 - settings: delete all data
 - settings: show database path
-- statz: route setup
-- statz: basic stats
 - statz: play progress graph
 - statz: backlog leaders chart
 - statz: decades breakdown chart

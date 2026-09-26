@@ -39,6 +39,59 @@ export const getListenedAlbumsCount = async (): Promise<number> => {
   return rows[0].count;
 };
 
+export const totalAlbumsTracksQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "track", "total"],
+    queryFn: getTotalAlbumsTracks,
+  });
+};
+export const getTotalAlbumsTracks = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT SUM(track_count) as total
+    FROM albums
+    WHERE ignored = 0;
+  `;
+
+  const rows = await db.select<{ total: number }[]>(query);
+  return rows[0].total;
+};
+
+export const listenedAlbumsDurationQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "duration", "listened"],
+    queryFn: getListenedAlbumsDuration,
+  });
+};
+export const getListenedAlbumsDuration = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT SUM(duration_seconds) as total
+    FROM albums
+    WHERE listened = 1 AND ignored = 0;
+  `;
+
+  const rows = await db.select<{ total: number }[]>(query);
+  return rows[0].total;
+};
+export const totalAlbumsDurationQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "duration", "total"],
+    queryFn: getTotalAlbumsDuration,
+  });
+};
+export const getTotalAlbumsDuration = async (): Promise<number> => {
+  const db = await getDb();
+  const query = sql`
+    SELECT SUM(duration_seconds) as total
+    FROM albums
+    WHERE ignored = 0;
+  `;
+
+  const rows = await db.select<{ total: number }[]>(query);
+  return rows[0].total;
+};
+
 export const upsertAlbum = async (album: AlbumInsert): Promise<QueryResult> => {
   const db = await getDb();
   const query = sql`

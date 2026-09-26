@@ -8,6 +8,7 @@ import {
 import { AppSidebar } from "./components/app-sidebar/AppSidebar";
 import { RouteHeader } from "./components/RouteHeader";
 import { Home } from "./routes/Home";
+import { Statz } from "./routes/Statz";
 
 export const rootRoute = createRootRoute({
   component: () => (
@@ -27,7 +28,7 @@ const home = createRoute({
 const statz = createRoute({
   getParentRoute: () => rootRoute,
   path: "/statz",
-  component: () => <RouteHeader title="Statz" />,
+  component: Statz,
 });
 
 const settings = createRoute({
