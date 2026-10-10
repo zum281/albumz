@@ -1,3 +1,4 @@
+import { Boundaries } from "@/components/Boundaries";
 import type { FC, PropsWithChildren } from "react";
 
 export const SettingsCard: FC<SettingsCardProps> = ({
@@ -11,7 +12,9 @@ export const SettingsCard: FC<SettingsCardProps> = ({
         <h2 className="text-lg font-medium text-foreground">{title}</h2>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <div className="shrink-0">{children}</div>
+      <div className="shrink-0">
+        <Boundaries getResetKey={() => title}>{children}</Boundaries>
+      </div>
     </section>
   );
 };

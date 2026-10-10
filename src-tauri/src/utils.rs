@@ -3,6 +3,7 @@ use lofty::{file::TaggedFileExt, tag::Tag};
 use std::{
     fs::{self, DirEntry},
     hash::Hasher,
+    path,
 };
 use tauri::Manager;
 
@@ -41,6 +42,25 @@ pub fn clear_covers(app: tauri::AppHandle) -> Result<(), String> {
         Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(e.to_string()),
         _ => Ok(()),
     }
+}
+
+/// Resolves where `tauri-plugin-sql` stores `albumz.db`, with the home dir shown as `~`.
+///
+/// # Errors
+///
+/// Returns `Err` if the app config dir or the home dir can't be resolved.
+#[tauri::command]
+pub fn get_db_path(app: tauri::AppHandle) -> Result<String, String> {
+    let config_dir = app.path().app_config_dir().map_err(|e| e.to_string())?;
+    let home_dir = app.path().home_dir().map_err(|e| e.to_string())?;
+    let db_path = config_dir.join("albumz.db");
+
+    let display_path = match db_path.strip_prefix(&home_dir) {
+        Ok(relative) => path::Path::new("~").join(relative),
+        Err(_) => db_path,
+    };
+
+    Ok(display_path.to_string_lossy().to_string())
 }
 
 pub fn get_tag(track: &Option<&DirEntry>) -> Result<Option<Tag>, String> {

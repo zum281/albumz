@@ -11,7 +11,9 @@ pub fn run() {
                 .add_migrations("sqlite:albumz.db", migrations::get_migrations())
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![scan::scan_library, utils::clear_covers])
+        .invoke_handler(tauri::generate_handler![scan::scan_library, utils::clear_covers,
+            utils::get_db_path
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

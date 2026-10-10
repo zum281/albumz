@@ -1,5 +1,5 @@
 import { RouteHeader } from "@/components/route-header/RouteHeader";
-import { DatabasePath } from "@/components/settings/DatabasePath";
+import { DatabasePath } from "@/components/settings/database-path/DatabasePath";
 import { DeleteAllData } from "@/components/settings/DeleteAllData";
 import { PlayerPicker } from "@/components/settings/PlayerPicker";
 import { ThemeSwitcher } from "@/components/settings/ThemeSwitcher";

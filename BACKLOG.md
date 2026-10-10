@@ -11,4 +11,3 @@
 - resize table columns
 
 - settings: pick player
-- settings: show database path
