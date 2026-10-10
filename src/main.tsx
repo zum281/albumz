@@ -10,7 +10,9 @@ import "./css/main.css";
 void setTheme(loadTheme());
 void watchSystemTheme();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { throwOnError: true } },
+});
 
 const rootElement = document.getElementById("root");
 if (!rootElement) throw new Error("Root element not found");

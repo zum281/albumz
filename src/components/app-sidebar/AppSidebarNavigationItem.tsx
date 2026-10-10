@@ -5,7 +5,7 @@ import {
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 
 export const AppSidebarNavigationItem: FC<AppSidebarNavigationItemProps> = ({
   title,
@@ -34,7 +34,7 @@ export const AppSidebarNavigationItem: FC<AppSidebarNavigationItemProps> = ({
 
 type AppSidebarNavigationItemProps = {
   title: string;
-  data: string | number;
+  data: ReactNode;
   linkProps: LinkProps;
   isActive?: boolean;
   icon: LucideIcon;

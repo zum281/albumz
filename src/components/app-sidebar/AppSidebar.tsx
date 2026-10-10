@@ -7,51 +7,34 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
-import {
-  albumsQueryOptions,
-  listenedAlbumsCountQueryOptions,
-} from "@/db/albums";
-import { getPercentage } from "@/utils/math";
-import { useQuery } from "@tanstack/react-query";
 import { BarChart3, Disc3, ScanSearch, Settings } from "lucide-react";
 import { type FC } from "react";
 import { ScanDialog } from "../scan/ScanDialog";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
 import { AppSidebarFooterNavigation } from "./AppSidebarFooterNavigation";
-import { AppSidebarListenedProgress } from "./AppSidebarListenedProgress";
 import { AppSidebarLogo } from "./AppSidebarLogo";
 import { AppSidebarNavigationItem } from "./AppSidebarNavigationItem";
 import { AppSidebarRefreshButton } from "./AppSidebarRefreshButton";
+import { AppSidebarListenedProgress } from "./progress/AppSidebarListenedProgress";
+import { AppSidebarLibraryStat } from "./statz/library/AppSidebarLibraryStat";
+import { AppSidebarListenedAlbumsPercentStat } from "./statz/listenedAlbumsPercent/AppSidebarListenedAlbumsPercentStat";
 
 export const AppSidebar: FC = () => {
-  const { data: existingAlbums } = useQuery(albumsQueryOptions());
-  const { data: listenedAlbumsCount = 0 } = useQuery(
-    listenedAlbumsCountQueryOptions(),
-  );
-
-  const totalAlbumsCount = existingAlbums?.length ?? 0;
-
-  const listenedAlbumsPercentage = getPercentage(
-    totalAlbumsCount,
-    listenedAlbumsCount,
-  );
-
   return (
     <Sidebar collapsible="icon">
       <AppSidebarLogo />
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            {/* TODO: use skeleton and don't show button until data is ready */}
             <AppSidebarNavigationItem
               title="Library"
-              data={totalAlbumsCount}
+              data={<AppSidebarLibraryStat />}
               icon={Disc3}
               linkProps={{ to: "/" }}
             />
             <AppSidebarNavigationItem
               title="Statz"
-              data={`${listenedAlbumsPercentage.toFixed(1)}%`}
+              data={<AppSidebarListenedAlbumsPercentStat />}
               icon={BarChart3}
               linkProps={{ to: "/statz" }}
             />
@@ -70,11 +53,7 @@ export const AppSidebar: FC = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <AppSidebarListenedProgress
-          total={totalAlbumsCount}
-          listened={listenedAlbumsCount}
-          percentage={listenedAlbumsPercentage}
-        />
+        <AppSidebarListenedProgress />
         <SidebarSeparator />
         <div className="flex gap-px group-data-[collapsible=icon]:flex-col">
           <AppSidebarRefreshButton />
