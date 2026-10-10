@@ -10,7 +10,6 @@
 - sort table rows
 - resize table columns
 
-- settings: theme switcher
 - settings: pick player
 - settings: delete all data
 - settings: show database path

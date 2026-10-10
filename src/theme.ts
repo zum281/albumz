@@ -1,4 +1,5 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import type { ThemeChoice } from "./types/theme";
 
 const THEME_LS_KEY = "albumz-theme";
 
@@ -37,5 +38,3 @@ export const watchSystemTheme = async (): Promise<void> => {
     }
   });
 };
-
-type ThemeChoice = "light" | "dark" | "amoled" | "system";
