@@ -14,7 +14,7 @@ import type { FC } from "react";
 
 export const Statz: FC = () => {
   return (
-    <main className="flex min-w-0 flex-1 flex-col gap-7">
+    <main className="flex min-w-0 flex-1 flex-col gap-7 pb-7">
       <RouteHeader title="Statz" rightElement={<RouteHeaderStatz />} />
       <Boundaries
         getResetKey={() => "statz-albums-provider"}
