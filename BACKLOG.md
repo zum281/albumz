@@ -1,7 +1,5 @@
 ## Todo
 
-- statz: decades breakdown chart
-
 ## Backlog
 
 - cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
@@ -15,3 +13,4 @@
 - settings: show database path
 
 - bug: scan show already ignored results
+- bug: ignored are not ignored in queries lol

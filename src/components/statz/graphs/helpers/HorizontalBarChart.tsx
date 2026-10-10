@@ -12,15 +12,10 @@ export const HorizontalBarChart: FC<HorizontalBarChartProps> = ({
     barPercentage: 0.5,
     indexAxis: "y" as const,
     responsive: true,
-    layout: { padding: { right: 40 } },
     plugins: { legend: { display: false } },
     scales: {
-      x: { grid: { display: false }, ticks: { display: false }, stacked: true },
-      y: {
-        grid: { display: false },
-        stacked: true,
-        ticks: { color: cssvar("--foreground") },
-      },
+      x: { grid: { display: false }, ticks: { display: false } },
+      y: { grid: { display: false }, ticks: { color: cssvar("--foreground") } },
     },
   };
 
