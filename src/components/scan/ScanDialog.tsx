@@ -16,6 +16,7 @@ import { FolderIcon } from "lucide-react";
 import type { FC } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Boundaries } from "../Boundaries";
+import { ScanDialogEmpty } from "./ScanDialogEmpty";
 import { ScanDialogError } from "./ScanDialogError";
 import { ScanDialogSkeleton } from "./ScanDialogSkeleton";
 import { ScanForm } from "./ScanForm";
@@ -41,6 +42,10 @@ const ScanDialogContent: FC = () => {
   const { data: scanResults } = useSuspenseQuery(
     scanQueryOptions(existingAlbums),
   );
+
+  if (scanResults.length === 0) {
+    return <ScanDialogEmpty source={SCAN_SOURCE} />;
+  }
 
   return <ScanDialogResults scanResults={scanResults} />;
 };
