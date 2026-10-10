@@ -11,42 +11,36 @@ import { albumsQueryOptions } from "@/db/albums";
 import type { ScanFormValues, ScanResult } from "@/types/scan";
 import { ScanFormSchema } from "@/types/scan";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { FolderIcon } from "lucide-react";
 import type { FC } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { Boundaries } from "../Boundaries";
+import { ScanDialogError } from "./ScanDialogError";
+import { ScanDialogSkeleton } from "./ScanDialogSkeleton";
 import { ScanForm } from "./ScanForm";
 
 const SCAN_SOURCE = "~/Music/mp3";
 
 export const ScanDialog: FC = () => {
-  const { data: existingAlbums } = useQuery(albumsQueryOptions());
-  const {
-    data: scanResults,
-    isLoading,
-    isError,
-    error,
-  } = useQuery(scanQueryOptions(existingAlbums));
-
-  if (scanResults) return <ScanDialogResults scanResults={scanResults} />;
-
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <DialogHeader className="gap-4 pt-6 pr-12 pb-4 pl-6">
-        <DialogTitle className="font-display text-3xl leading-none font-bold tracking-tighter uppercase">
-          {isLoading ? "Scanning…" : "Scan failed"}
-        </DialogTitle>
-        {isError && (
-          <pre className="font-mono text-sm whitespace-pre-wrap text-destructive">
-            {String(error)}
-          </pre>
-        )}
-      </DialogHeader>
-      <DialogFooter className="mx-0 mt-4 mb-0 rounded-none border-t-2 bg-transparent px-6 pt-4 pb-6">
-        <DialogClose render={<Button variant="outline">Close</Button>} />
-      </DialogFooter>
-    </div>
+    <Boundaries
+      getResetKey={() => "scan-dialog"}
+      loader={<ScanDialogSkeleton />}
+      error={ScanDialogError}
+    >
+      <ScanDialogContent />
+    </Boundaries>
   );
+};
+
+const ScanDialogContent: FC = () => {
+  const { data: existingAlbums } = useSuspenseQuery(albumsQueryOptions());
+  const { data: scanResults } = useSuspenseQuery(
+    scanQueryOptions(existingAlbums),
+  );
+
+  return <ScanDialogResults scanResults={scanResults} />;
 };
 
 const ScanDialogResults: FC<ScanDialogResultsProps> = ({ scanResults }) => {

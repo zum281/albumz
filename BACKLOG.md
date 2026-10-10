@@ -13,4 +13,5 @@
 - settings: show database path
 - statz: decades breakdown chart
 - stats: heavy rotation chart
-- add proper ui errors
+
+- bug: scan show already ignored results
