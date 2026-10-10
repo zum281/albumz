@@ -3,9 +3,8 @@ import { cssvar } from "@/utils/graphs";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 import { Bar } from "react-chartjs-2";
-import { GraphCard } from "./helpers/GraphCard";
 
-export const DecadeBreakdown: FC = () => {
+export const DecadeBreakdownChart: FC = () => {
   const { data: decades } = useSuspenseQuery(getDecadesBreakdownQueryOptions());
 
   const labels = decades.map((d) => `${d.decade}s`);
@@ -40,10 +39,8 @@ export const DecadeBreakdown: FC = () => {
     ],
   };
   return (
-    <GraphCard title="Decade Breakdown">
-      <div className="relative w-full h-full">
-        <Bar options={options} className="w-full h-full mx-auto" data={data} />
-      </div>
-    </GraphCard>
+    <div className="relative w-full h-full">
+      <Bar options={options} className="w-full h-full mx-auto" data={data} />
+    </div>
   );
 };

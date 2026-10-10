@@ -33,7 +33,7 @@ export const GraphCard: FC<GraphCardProps> = ({ title, children }) => {
         {title}
       </h2>
       <Boundaries
-        getResetKey={() => "backlog-leaders-graph"}
+        getResetKey={() => title}
         loader={<GraphSkeleton />}
         error={GraphError}
       >

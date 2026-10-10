@@ -1,9 +1,8 @@
 import { useAlbumsStatz } from "@/hooks/useAlbumsStatz";
 import type { FC } from "react";
-import { DoughnutChart } from "./helpers/DoughnutChart";
-import { GraphCard } from "./helpers/GraphCard";
+import { DoughnutChart } from "../helpers/DoughnutChart";
 
-export const Verdicts: FC = () => {
+export const VerdictsChart: FC = () => {
   const {
     likedAlbumsCount,
     neutralAlbumsCount,
@@ -33,15 +32,13 @@ export const Verdicts: FC = () => {
   ];
 
   return (
-    <GraphCard title="Verdicts">
-      <DoughnutChart
-        datasets={[likedAlbumsCount, neutralAlbumsCount, dislikedAlbumsCount]}
-        barColors={["--chart-2", "--chart-3", "--chart-4"]}
-        centerInfo={
-          <span className="text-2xl font-bold">{ratedAlbumsCount}</span>
-        }
-        legend={legend}
-      />
-    </GraphCard>
+    <DoughnutChart
+      datasets={[likedAlbumsCount, neutralAlbumsCount, dislikedAlbumsCount]}
+      barColors={["--chart-2", "--chart-3", "--chart-4"]}
+      centerInfo={
+        <span className="text-2xl font-bold">{ratedAlbumsCount}</span>
+      }
+      legend={legend}
+    />
   );
 };
