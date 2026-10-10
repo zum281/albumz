@@ -13,4 +13,3 @@
 - settings: show database path
 
 - bug: scan show already ignored results
-- bug: ignored are not ignored in queries lol

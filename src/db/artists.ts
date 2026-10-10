@@ -15,7 +15,7 @@ export const getBacklogLeaders = async (): Promise<BacklogLeader[]> => {
   const query = sql`
       SELECT artist, COUNT(listened) as count
       FROM albums
-      WHERE listened = 0
+      WHERE listened = 0 AND ignored = 0
       GROUP BY artist
       ORDER BY count DESC
       LIMIT 5;
@@ -37,7 +37,7 @@ export const getHeavyRotation = async (): Promise<HeavyRotation> => {
   const query = sql`
       SELECT artist, SUM(duration_seconds) as duration
       FROM albums
-      WHERE listened = 1
+      WHERE listened = 1 AND ignored = 0
       GROUP BY artist
       ORDER BY duration DESC
       LIMIT 5;

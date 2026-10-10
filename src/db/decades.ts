@@ -18,6 +18,7 @@ export const getDecadesBreakdown = async (): Promise<DecadeBreakdown> => {
            SUM(listened = 1) AS listened,
            SUM(listened = 0) AS backlog
     FROM albums
+    WHERE ignored = 0
     GROUP BY decade
     ORDER BY decade;`;
 
