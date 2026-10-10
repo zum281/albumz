@@ -1,7 +1,7 @@
 import { getBacklogLeadersQueryOptions } from "@/db/artists";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import type { FC } from "react";
-import { HorizontalBarChart } from "./helpers/HorizontalBarChart";
+import { HorizontalBarChart } from "../helpers/HorizontalBarChart";
 
 export const BacklogLeadersGraph: FC = () => {
   const { data: backlogLeaders } = useSuspenseQuery(
