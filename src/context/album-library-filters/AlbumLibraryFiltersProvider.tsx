@@ -9,8 +9,9 @@ import type { AlbumLibraryFiltersContextType } from "./AlbumLibraryFiltersContex
 
 export const AlbumLibraryFiltersProvider: FC<
   AlbumLibraryFiltersProviderProps
-> = ({ allAlbums, children }) => {
-  const { minAlbumYear, maxAlbumYear, updateFilteredAlbums } = useAlbums();
+> = ({ children }) => {
+  const { albums, minAlbumYear, maxAlbumYear, updateFilteredAlbums } =
+    useAlbums();
   const [query, setQuery] = useState<string>("");
   const [toggle, setToggle] = useState<AlbumListenedToggle>(
     AlbumListenedToggle.ALL,
@@ -18,7 +19,7 @@ export const AlbumLibraryFiltersProvider: FC<
   const [years, setYears] = useState<number[]>([minAlbumYear, maxAlbumYear]);
 
   const fuse = useMemo(() => {
-    return new Fuse(allAlbums, {
+    return new Fuse(albums, {
       useTokenSearch: true,
       tokenMatch: "all",
       ignoreDiacritics: true,
@@ -28,7 +29,7 @@ export const AlbumLibraryFiltersProvider: FC<
       threshold: 0.25,
       keys: ["artist", "album"],
     });
-  }, [allAlbums]);
+  }, [albums]);
 
   const handleSearch = useCallback(
     (albums: Album[], query: string) => {
@@ -56,7 +57,7 @@ export const AlbumLibraryFiltersProvider: FC<
 
   const handleFilters = useCallback(
     (query: string, toggle: "all" | "played" | "backlog", years: number[]) => {
-      const filteredBySearch = handleSearch(allAlbums, query);
+      const filteredBySearch = handleSearch(albums, query);
       const filteredByToggle = handlePlayedBacklogToggle(
         filteredBySearch,
         toggle,
@@ -66,7 +67,7 @@ export const AlbumLibraryFiltersProvider: FC<
       updateFilteredAlbums([...filteredByYear]);
     },
     [
-      allAlbums,
+      albums,
       handleSearch,
       updateFilteredAlbums,
       handlePlayedBacklogToggle,
@@ -97,6 +98,4 @@ export const AlbumLibraryFiltersProvider: FC<
   );
 };
 
-type AlbumLibraryFiltersProviderProps = PropsWithChildren<{
-  allAlbums: Album[];
-}>;
+type AlbumLibraryFiltersProviderProps = PropsWithChildren;

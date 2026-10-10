@@ -1,4 +1,6 @@
 import type { FC, ReactNode } from "react";
+import { Boundaries } from "../Boundaries";
+import { ErrorSmall } from "../errors/ErrorSmall";
 
 export const RouteHeader: FC<RouteHeaderProps> = ({ title, rightElement }) => {
   return (
@@ -8,9 +10,11 @@ export const RouteHeader: FC<RouteHeaderProps> = ({ title, rightElement }) => {
       </h1>
       {!!rightElement && (
         <div className="flex gap-[1ch] ml-auto text-right font-mono text-xs tracking-widest text-muted-foreground uppercase">
-          <span>[</span>
-          {rightElement}
-          <span>]</span>
+          <Boundaries getResetKey={() => "route-header"} error={ErrorSmall}>
+            <span>[</span>
+            {rightElement}
+            <span>]</span>
+          </Boundaries>
         </div>
       )}
     </header>

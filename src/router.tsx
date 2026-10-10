@@ -1,29 +1,25 @@
 import { SidebarProvider } from "@/components/ui/sidebar/SidebarProvider";
 import {
-  CatchBoundary,
   createRootRoute,
   createRoute,
   createRouter,
   Outlet,
 } from "@tanstack/react-router";
-import { Suspense } from "react";
 import { AppSidebar } from "./components/app-sidebar/AppSidebar";
-import { RouteHeader } from "./components/RouteHeader";
-import { Spinner } from "./components/ui/spinner";
+import { Boundaries } from "./components/Boundaries";
+import { RouteHeader } from "./components/route-header/RouteHeader";
 import { Home } from "./routes/Home";
 import { Statz } from "./routes/Statz";
 
 export const rootRoute = createRootRoute({
   component: () => (
     <SidebarProvider>
-      <CatchBoundary
+      <Boundaries
         getResetKey={() => "sidebar"}
-        errorComponent={() => <div>Sidebar error</div>}
+        error={() => <div>Sidebar error</div>}
       >
-        <Suspense fallback={<Spinner />}>
-          <AppSidebar />
-        </Suspense>
-      </CatchBoundary>
+        <AppSidebar />
+      </Boundaries>
       <Outlet />
     </SidebarProvider>
   ),

@@ -1,17 +1,15 @@
-import { Spinner } from "@/components/ui/spinner";
-import { CatchBoundary } from "@tanstack/react-router";
-import { Suspense, type FC } from "react";
+import { Boundaries } from "@/components/Boundaries";
+import { ErrorSmall } from "@/components/errors/ErrorSmall";
+import { type FC } from "react";
 import { Count } from "./Count";
 
 export const AppSidebarListenedProgress: FC = () => {
   return (
-    <CatchBoundary
-      getResetKey={() => "miao"}
-      errorComponent={() => <p>error</p>}
+    <Boundaries
+      getResetKey={() => "app-sidebar-listened-progress"}
+      error={ErrorSmall}
     >
-      <Suspense fallback={<Spinner />}>
-        <Count />
-      </Suspense>
-    </CatchBoundary>
+      <Count />
+    </Boundaries>
   );
 };
