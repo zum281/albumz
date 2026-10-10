@@ -1,3 +1,4 @@
+import { Boundaries } from "@/components/Boundaries";
 import {
   ArcElement,
   BarElement,
@@ -10,6 +11,8 @@ import {
 } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import type { FC, PropsWithChildren } from "react";
+import { GraphError } from "./GraphError";
+import { GraphSkeleton } from "./GraphSkeleton";
 
 ChartJS.register(
   ArcElement,
@@ -29,7 +32,13 @@ export const GraphCard: FC<GraphCardProps> = ({ title, children }) => {
       <h2 className="uppercase text-2xl font-bold tracking-tight text-center self-start">
         {title}
       </h2>
-      {children}
+      <Boundaries
+        getResetKey={() => "backlog-leaders-graph"}
+        loader={<GraphSkeleton />}
+        error={GraphError}
+      >
+        {children}
+      </Boundaries>
     </div>
   );
 };

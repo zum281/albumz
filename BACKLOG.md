@@ -1,5 +1,7 @@
 ## Todo
 
+- statz: decades breakdown chart
+
 ## Backlog
 
 - cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
@@ -11,7 +13,5 @@
 - settings: pick player
 - settings: delete all data
 - settings: show database path
-- statz: decades breakdown chart
-- stats: heavy rotation chart
 
 - bug: scan show already ignored results

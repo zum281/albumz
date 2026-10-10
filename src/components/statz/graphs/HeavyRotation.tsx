@@ -2,9 +2,10 @@ import { getHeavyRotationQueryOptions } from "@/db/artists";
 import { secondsToHours } from "@/utils/time";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import type { FC } from "react";
-import { HorizontalBarChart } from "../helpers/HorizontalBarChart";
+import { GraphCard } from "./helpers/GraphCard";
+import { HorizontalBarChart } from "./helpers/HorizontalBarChart";
 
-export const HeavyRotationGraph: FC = () => {
+export const HeavyRotation: FC = () => {
   const { data: backlogLeaders } = useSuspenseQuery(
     getHeavyRotationQueryOptions(),
   );
@@ -12,11 +13,13 @@ export const HeavyRotationGraph: FC = () => {
   const duration = backlogLeaders.map((leader) => leader.duration);
 
   return (
-    <HorizontalBarChart
-      labels={labels}
-      dataset={duration}
-      barColor="--chart-4"
-      formatter={(value: number) => `${secondsToHours(value)}h`}
-    />
+    <GraphCard title="Heavy Rotation">
+      <HorizontalBarChart
+        labels={labels}
+        dataset={duration}
+        barColor="--chart-4"
+        formatter={(value: number) => `${secondsToHours(value)}h`}
+      />
+    </GraphCard>
   );
 };
