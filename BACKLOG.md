@@ -11,5 +11,4 @@
 - resize table columns
 
 - settings: pick player
-- settings: delete all data
 - settings: show database path

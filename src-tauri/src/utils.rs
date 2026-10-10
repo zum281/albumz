@@ -29,6 +29,20 @@ pub fn construct_cover_path(
     Ok(cover_path.to_string_lossy().to_string())
 }
 
+/// Removes every cached cover by deleting the covers directory.
+///
+/// # Errors
+///
+/// Returns `Err` if the app data dir can't be resolved or the directory can't be removed.
+#[tauri::command]
+pub fn clear_covers(app: tauri::AppHandle) -> Result<(), String> {
+    let data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    match fs::remove_dir_all(data_dir.join("covers")) {
+        Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(e.to_string()),
+        _ => Ok(()),
+    }
+}
+
 pub fn get_tag(track: &Option<&DirEntry>) -> Result<Option<Tag>, String> {
     let tagged_file = track
         .map(|t| lofty::read_from_path(t.path()))

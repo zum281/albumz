@@ -237,3 +237,12 @@ export const updateAlbumRating = async (
 
   return db.execute(query, [id, rating]);
 };
+
+export const deleteAllAlbums = async (): Promise<QueryResult> => {
+  const db = await getDb();
+  const query = sql`
+    DELETE FROM albums;
+  `;
+
+  return db.execute(query);
+};
