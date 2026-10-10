@@ -1,14 +1,6 @@
+import { positiveInteger, sqliteBool } from "@/utils/zod";
 import { z } from "zod";
 import { MediaType, Source } from "./enums";
-
-const sqliteBool = z
-  .number()
-  .int()
-  .min(0)
-  .max(1)
-  .transform((v) => v === 1);
-
-const positiveInteger = z.number().int().nonnegative();
 
 export const AlbumRatingSchema = positiveInteger.gte(1).lte(5).nullable();
 export const AlbumSchema = z.object({
