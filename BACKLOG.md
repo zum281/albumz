@@ -11,5 +11,3 @@
 - settings: pick player
 - settings: delete all data
 - settings: show database path
-
-- bug: scan show already ignored results

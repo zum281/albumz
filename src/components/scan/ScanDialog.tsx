@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { albumsQueryOptions } from "@/db/albums";
+import { existingAlbumsIncludingIgnoredQueryOptions } from "@/db/albums";
 import type { ScanFormValues, ScanResult } from "@/types/scan";
 import { ScanFormSchema } from "@/types/scan";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,7 +35,9 @@ export const ScanDialog: FC = () => {
 };
 
 const ScanDialogContent: FC = () => {
-  const { data: existingAlbums } = useSuspenseQuery(albumsQueryOptions());
+  const { data: existingAlbums } = useSuspenseQuery(
+    existingAlbumsIncludingIgnoredQueryOptions(),
+  );
   const { data: scanResults } = useSuspenseQuery(
     scanQueryOptions(existingAlbums),
   );

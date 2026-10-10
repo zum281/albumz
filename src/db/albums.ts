@@ -1,4 +1,4 @@
-import type { Album, AlbumInsert } from "@/types/album";
+import type { Album, AlbumExisting, AlbumInsert } from "@/types/album";
 import { AlbumsSchema } from "@/types/album";
 import { queryOptions } from "@tanstack/react-query";
 import type { QueryResult } from "@tauri-apps/plugin-sql";
@@ -19,6 +19,24 @@ export const getAlbums = async (): Promise<Album[]> => {
   const rows = await db.select(query);
 
   return AlbumsSchema.parse(rows);
+};
+
+export const existingAlbumsIncludingIgnoredQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "existing", "including-ignored"],
+    queryFn: getExistingAlbumsIncludingIgnored,
+  });
+};
+export const getExistingAlbumsIncludingIgnored = async (): Promise<
+  AlbumExisting[]
+> => {
+  const db = await getDb();
+  const query = sql`
+      SELECT artist, album, track_count
+      FROM albums;
+    `;
+
+  return db.select(query);
 };
 
 export const listenedAlbumsCountQueryOptions = () => {

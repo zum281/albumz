@@ -10,6 +10,7 @@ export const HorizontalBarChart: FC<HorizontalBarChartProps> = ({
 }) => {
   const options = {
     barPercentage: 0.5,
+    layout: { padding: { right: 40 } },
     indexAxis: "y" as const,
     responsive: true,
     plugins: { legend: { display: false } },
