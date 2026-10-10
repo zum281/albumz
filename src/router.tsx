@@ -7,8 +7,9 @@ import {
 } from "@tanstack/react-router";
 import { AppSidebar } from "./components/app-sidebar/AppSidebar";
 import { Boundaries } from "./components/Boundaries";
-import { RouteHeader } from "./components/route-header/RouteHeader";
+import { ErrorLargeWithRetry } from "./components/errors/ErrorLargeWithRetry";
 import { Home } from "./routes/Home";
+import { Settings } from "./routes/Settings";
 import { Statz } from "./routes/Statz";
 
 export const rootRoute = createRootRoute({
@@ -23,27 +24,28 @@ export const rootRoute = createRootRoute({
       <Outlet />
     </SidebarProvider>
   ),
-  errorComponent: () => <div>Error</div>,
+  errorComponent: ErrorLargeWithRetry,
 });
 
 const home = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
   component: Home,
-  errorComponent: () => <div>Home Error</div>,
+  errorComponent: ErrorLargeWithRetry,
 });
 
 const statz = createRoute({
   getParentRoute: () => rootRoute,
   path: "/statz",
   component: Statz,
-  errorComponent: () => <div>Statz Error</div>,
+  errorComponent: ErrorLargeWithRetry,
 });
 
 const settings = createRoute({
   getParentRoute: () => rootRoute,
   path: "/settings",
-  component: () => <RouteHeader title="Settings" />,
+  component: Settings,
+  errorComponent: ErrorLargeWithRetry,
 });
 
 const routeTree = rootRoute.addChildren([home, statz, settings]);
