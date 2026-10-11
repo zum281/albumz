@@ -19,12 +19,7 @@ export const VisualizerSwitcher: FC<VisualizerSwitcherProps> = ({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Switch visualizer"
-            className="absolute top-2 right-2 z-10"
-          />
+          <Button variant="ghost" size="icon" aria-label="Switch visualizer" />
         }
       >
         <AudioLines />
