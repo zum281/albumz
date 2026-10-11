@@ -1,23 +1,25 @@
+import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
+import { Boundaries } from "@/components/Boundaries";
+import { ErrorLargeWithRetry } from "@/components/errors/ErrorLargeWithRetry";
+import { PlayerHotkeys } from "@/components/PlayerHotkeys";
 import { SidebarProvider } from "@/components/ui/sidebar/SidebarProvider";
+import { PlayerProvider } from "@/context/player/PlayerProvider";
+import { VisualizerProvider } from "@/context/visualizer/VisualizerProvider";
+import { Home } from "@/routes/Home";
+import { Player } from "@/routes/Player";
+import { Settings } from "@/routes/Settings";
+import { Statz } from "@/routes/Statz";
 import {
   createRootRoute,
   createRoute,
   createRouter,
   Outlet,
 } from "@tanstack/react-router";
-import { AppSidebar } from "./components/app-sidebar/AppSidebar";
-import { Boundaries } from "./components/Boundaries";
-import { ErrorLargeWithRetry } from "./components/errors/ErrorLargeWithRetry";
-import { PlayerProvider } from "./context/player/PlayerProvider";
-import { VisualizerProvider } from "./context/visualizer/VisualizerProvider";
-import { Home } from "./routes/Home";
-import { Player } from "./routes/Player";
-import { Settings } from "./routes/Settings";
-import { Statz } from "./routes/Statz";
 
 export const rootRoute = createRootRoute({
   component: () => (
     <PlayerProvider>
+      <PlayerHotkeys />
       <SidebarProvider>
         <Boundaries
           getResetKey={() => "sidebar"}
