@@ -23,7 +23,8 @@ import { AppSidebarNavigationItem } from "./AppSidebarNavigationItem";
 import { AppSidebarRefreshButton } from "./AppSidebarRefreshButton";
 import { AppSidebarListenedProgress } from "./progress/AppSidebarListenedProgress";
 import { AppSidebarLibraryStat } from "./statz/library/AppSidebarLibraryStat";
-import { AppSidebarListenedAlbumsPercentStat } from "./statz/listenedAlbumsPercent/AppSidebarListenedAlbumsPercentStat";
+import { AppSidebarListenedAlbumsPercentStat } from "./statz/listened-albums-percent/AppSidebarListenedAlbumsPercentStat";
+import { AppSidebarPlayerStatus } from "./statz/player-status/AppSidebarPlayerStatus";
 
 export const AppSidebar: FC = () => {
   return (
@@ -46,7 +47,7 @@ export const AppSidebar: FC = () => {
             />
             <AppSidebarNavigationItem
               title="Player"
-              data={<p>m</p>}
+              data={<AppSidebarPlayerStatus />}
               icon={AudioLines}
               linkProps={{ to: "/player" }}
             />

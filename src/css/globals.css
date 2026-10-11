@@ -52,6 +52,28 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@theme {
+  --animate-equalizer: equalizer 1s ease-in-out infinite alternate;
+
+  @keyframes equalizer {
+    10% {
+      transform: scaleY(0.3);
+    }
+    30% {
+      transform: scaleY(1);
+    }
+    60% {
+      transform: scaleY(0.5);
+    }
+    80% {
+      transform: scaleY(0.75);
+    }
+    100% {
+      transform: scaleY(0.6);
+    }
+  }
+}
+
 :root {
   --radius: 0rem; /* brutalist pass: hard edges throughout */
 
