@@ -33,7 +33,7 @@ export const ScopeVisualizer: FC = () => {
     const style = getComputedStyle(canvas);
     const read = (name: string) => style.getPropertyValue(name).trim();
     drawScope(ctx, w, h, rem, samples, findTrigger(samples), {
-      trace: read("--chart-4"),
+      trace: read("--chart-2"),
       baseline: read("--border"),
     });
   }, []);
