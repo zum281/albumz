@@ -1,11 +1,10 @@
-import { setKeepAwake } from "@/commands/keep_awake";
 import { Button } from "@/components/ui/button/button";
+import { useFullscreen } from "@/hooks/useFullscreen";
 import { cn } from "@/lib/utils";
 import { loadVisualizer, saveVisualizer } from "@/visualizer";
 import { Maximize, X } from "lucide-react";
 import type { FC } from "react";
-import { useCallback, useEffect, useState } from "react";
-import { flushSync } from "react-dom";
+import { useState } from "react";
 import { BarsVisualizer } from "./bars/BarsVisualizer";
 import { ScopeVisualizer } from "./scope/ScopeVisualizer";
 import { TurntableVisualizer } from "./turntable/TurntableVisualizer";
@@ -13,41 +12,7 @@ import { VisualizerSwitcher } from "./VisualizerSwitcher";
 
 export const PlayerVisualizerPanel: FC = () => {
   const [visualizer, setVisualizer] = useState(loadVisualizer);
-  const [fullscreen, setFullscreen] = useState(false);
-
-  const toggleFullscreen = useCallback((next: boolean) => {
-    const update = () => {
-      // The transition snapshots the new state right after the callback returns, so the DOM must be updated synchronously.
-      // eslint-disable-next-line @eslint-react/dom-no-flush-sync
-      flushSync(() => {
-        setFullscreen(next);
-      });
-    };
-    if ("startViewTransition" in document) {
-      document.startViewTransition(update);
-    } else {
-      update();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!fullscreen) return;
-    void setKeepAwake(true);
-    return () => {
-      void setKeepAwake(false);
-    };
-  }, [fullscreen]);
-
-  useEffect(() => {
-    if (!fullscreen) return;
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") toggleFullscreen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [fullscreen, toggleFullscreen]);
+  const { fullscreen, toggleFullscreen } = useFullscreen();
 
   return (
     <div
