@@ -5,7 +5,13 @@ import {
   columnResizingFeature,
   columnSizingFeature,
   createPaginatedRowModel,
+  createSortedRowModel,
+  metaHelper,
   rowPaginationFeature,
+  rowSortingFeature,
+  sortFn_alphanumeric,
+  sortFn_datetime,
+  sortFn_text,
   tableFeatures,
 } from "@tanstack/react-table";
 import { openPath } from "@tauri-apps/plugin-opener";
@@ -14,11 +20,22 @@ import { Button } from "../ui/button/button";
 import { AlbumLibraryCoverCell } from "./cells/AlbumLibraryCoverCell";
 import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
 import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
+
+type AlbumColumnMeta = { dataType?: "string" | "number" };
+
 export const albumLibraryFeatures = tableFeatures({
   columnSizingFeature,
   columnResizingFeature,
   rowPaginationFeature,
+  rowSortingFeature,
   paginatedRowModel: createPaginatedRowModel(),
+  sortedRowModel: createSortedRowModel(),
+  columnMeta: metaHelper<AlbumColumnMeta>(),
+  sortFns: {
+    alphanumeric: sortFn_alphanumeric,
+    text: sortFn_text,
+    datetime: sortFn_datetime,
+  },
 });
 
 export const albumLibraryColumns: ColumnDef<
@@ -30,22 +47,27 @@ export const albumLibraryColumns: ColumnDef<
     header: () => <span className="sr-only">Cover</span>,
     size: 82,
     cell: (props) => <AlbumLibraryCoverCell album={props.row.original} />,
+    enableSorting: false,
   },
   {
     accessorKey: "artist",
     header: "Artist",
     size: 220,
+    maxSize: 500,
     cell: (props) => (
       <span className="block truncate">{props.getValue<string>()}</span>
     ),
+    meta: { dataType: "string" },
   },
   {
     accessorKey: "album",
     header: () => "Album",
     size: 340,
+    maxSize: 500,
     cell: (props) => (
       <span className="block truncate">{props.getValue<string>()}</span>
     ),
+    meta: { dataType: "string" },
   },
   {
     accessorKey: "year",
@@ -55,6 +77,7 @@ export const albumLibraryColumns: ColumnDef<
         {props.getValue<number | null>()}
       </span>
     ),
+    meta: { dataType: "number" },
   },
   {
     accessorKey: "track_count",
@@ -64,6 +87,7 @@ export const albumLibraryColumns: ColumnDef<
         {props.getValue<number>()}
       </span>
     ),
+    meta: { dataType: "number" },
   },
   {
     accessorKey: "duration_seconds",
@@ -76,6 +100,7 @@ export const albumLibraryColumns: ColumnDef<
         </span>
       );
     },
+    meta: { dataType: "number" },
   },
   {
     accessorKey: "media_type",
@@ -86,6 +111,7 @@ export const albumLibraryColumns: ColumnDef<
         <span className="text-xs text-muted-foreground capitalize">{type}</span>
       );
     },
+    meta: { dataType: "string" },
   },
   {
     accessorKey: "rating",
@@ -100,6 +126,7 @@ export const albumLibraryColumns: ColumnDef<
         />
       );
     },
+    meta: { dataType: "number" },
   },
   {
     accessorKey: "listened",
@@ -114,6 +141,7 @@ export const albumLibraryColumns: ColumnDef<
         />
       );
     },
+    meta: { dataType: "string" },
   },
   {
     id: "open",
@@ -134,5 +162,6 @@ export const albumLibraryColumns: ColumnDef<
         </Button>
       );
     },
+    enableSorting: false,
   },
 ];

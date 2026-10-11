@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -14,6 +13,7 @@ import {
   albumLibraryColumns,
   albumLibraryFeatures,
 } from "./AlbumLibrary.config";
+import { AlbumLibraryHeader } from "./AlbumLibraryHeader";
 import { AlbumLibraryPagination } from "./AlbumLibraryPagination";
 
 export const AlbumLibrary: FC = () => {
@@ -24,6 +24,7 @@ export const AlbumLibrary: FC = () => {
     data: filteredAlbums,
     features: albumLibraryFeatures,
     autoResetPageIndex: false,
+    initialState: { sorting: [{ id: "artist", desc: false }] },
   });
 
   useTanStackTableDevtools(table);
@@ -37,15 +38,11 @@ export const AlbumLibrary: FC = () => {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead
+                <AlbumLibraryHeader
                   key={header.id}
-                  scope="col"
-                  style={{ width: header.getSize() }}
-                >
-                  {header.isPlaceholder ? null : (
-                    <table.FlexRender header={header} />
-                  )}
-                </TableHead>
+                  table={table}
+                  header={header}
+                />
               ))}
             </TableRow>
           ))}
