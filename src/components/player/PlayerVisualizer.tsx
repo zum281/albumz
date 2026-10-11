@@ -1,3 +1,4 @@
+import { setKeepAwake } from "@/commands/keep_awake";
 import { Button } from "@/components/ui/button/button";
 import { cn } from "@/lib/utils";
 import { loadVisualizer, saveVisualizer } from "@/visualizer";
@@ -27,6 +28,14 @@ export const PlayerVisualizerPanel: FC = () => {
       update();
     }
   }, []);
+
+  useEffect(() => {
+    if (!fullscreen) return;
+    void setKeepAwake(true);
+    return () => {
+      void setKeepAwake(false);
+    };
+  }, [fullscreen]);
 
   useEffect(() => {
     if (!fullscreen) return;

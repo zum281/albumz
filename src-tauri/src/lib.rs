@@ -1,3 +1,4 @@
+mod awake;
 mod migrations;
 mod scan;
 mod tracks;
@@ -12,7 +13,9 @@ pub fn run() {
                 .add_migrations("sqlite:albumz.db", migrations::get_migrations())
                 .build(),
         )
+        .manage(awake::AwakeState::default())
         .invoke_handler(tauri::generate_handler![
+            awake::set_keep_awake,
             scan::scan_library,
             utils::clear_covers,
             tracks::list_tracks,
