@@ -1,7 +1,7 @@
 import { Boundaries } from "@/components/Boundaries";
 import { ErrorLargeWithRetry } from "@/components/errors/ErrorLargeWithRetry";
 import { RouteHeader } from "@/components/route-header/RouteHeader";
-import { RouteHeaderStatz } from "@/components/route-header/RouteHeaderData";
+import { RouteHeaderStatz } from "@/components/route-header/RouteHeaderStatz";
 import { BacklogLeaders } from "@/components/statz/graphs/backlog-leaders/BacklogLeaders";
 import { DecadeBreakdown } from "@/components/statz/graphs/decade-breakdown/DecadeBreakdown";
 import { HeavyRotation } from "@/components/statz/graphs/heavy-rotation/HeavyRotation";

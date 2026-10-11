@@ -7,7 +7,13 @@ import {
   SidebarSeparator,
   SidebarTrigger,
 } from "@/components/ui/sidebar/sidebar";
-import { BarChart3, Disc3, ScanSearch, Settings } from "lucide-react";
+import {
+  AudioLines,
+  BarChart3,
+  Disc3,
+  ScanSearch,
+  Settings,
+} from "lucide-react";
 import { type FC } from "react";
 import { ScanDialog } from "../scan/ScanDialog";
 import { AppSidebarActionItem } from "./AppSidebarActionItem";
@@ -37,6 +43,12 @@ export const AppSidebar: FC = () => {
               data={<AppSidebarListenedAlbumsPercentStat />}
               icon={BarChart3}
               linkProps={{ to: "/statz" }}
+            />
+            <AppSidebarNavigationItem
+              title="Player"
+              data={<p>m</p>}
+              icon={AudioLines}
+              linkProps={{ to: "/player" }}
             />
           </SidebarMenu>
         </SidebarGroup>

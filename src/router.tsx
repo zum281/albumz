@@ -9,6 +9,7 @@ import { AppSidebar } from "./components/app-sidebar/AppSidebar";
 import { Boundaries } from "./components/Boundaries";
 import { ErrorLargeWithRetry } from "./components/errors/ErrorLargeWithRetry";
 import { Home } from "./routes/Home";
+import { Player } from "./routes/Player";
 import { Settings } from "./routes/Settings";
 import { Statz } from "./routes/Statz";
 
@@ -48,6 +49,13 @@ const settings = createRoute({
   errorComponent: ErrorLargeWithRetry,
 });
 
-const routeTree = rootRoute.addChildren([home, statz, settings]);
+const player = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/player",
+  component: Player,
+  errorComponent: ErrorLargeWithRetry,
+});
+
+const routeTree = rootRoute.addChildren([home, statz, settings, player]);
 
 export const router = createRouter({ routeTree });
