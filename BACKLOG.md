@@ -6,5 +6,3 @@
   if found new, update the rows. UI: will be a custom button.
 
 - guard against interpolation sql
-
-- settings: pick player
