@@ -6,13 +6,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { VISUALIZERS } from "@/constants/visualizer";
-import { loadVisualizer, saveVisualizer } from "@/visualizer";
+import { useVisualizer } from "@/hooks/useVisualizer";
 import type { FC } from "react";
-import { useState } from "react";
 import { SettingsCard } from "./helpers/SettingsCard";
 
 export const VisualizerDefault: FC = () => {
-  const [value, setValue] = useState(loadVisualizer);
+  const { visualizer, updateVisualizer } = useVisualizer();
 
   return (
     <SettingsCard
@@ -21,12 +20,8 @@ export const VisualizerDefault: FC = () => {
     >
       <Select
         items={VISUALIZERS}
-        value={value}
-        onValueChange={(next) => {
-          if (next === null) return;
-          setValue(next);
-          saveVisualizer(next);
-        }}
+        value={visualizer}
+        onValueChange={updateVisualizer}
       >
         <SelectTrigger
           aria-label="Visualizer"

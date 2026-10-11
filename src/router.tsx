@@ -9,6 +9,7 @@ import { AppSidebar } from "./components/app-sidebar/AppSidebar";
 import { Boundaries } from "./components/Boundaries";
 import { ErrorLargeWithRetry } from "./components/errors/ErrorLargeWithRetry";
 import { PlayerProvider } from "./context/player/PlayerProvider";
+import { VisualizerProvider } from "./context/visualizer/VisualizerProvider";
 import { Home } from "./routes/Home";
 import { Player } from "./routes/Player";
 import { Settings } from "./routes/Settings";
@@ -25,7 +26,9 @@ export const rootRoute = createRootRoute({
           <AppSidebar />
         </Boundaries>
 
-        <Outlet />
+        <VisualizerProvider>
+          <Outlet />
+        </VisualizerProvider>
       </SidebarProvider>
     </PlayerProvider>
   ),

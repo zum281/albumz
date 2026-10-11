@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { Turntable } from "./turntable/Turntable";
+import { Turntable } from "./visualizer/turntable/Turntable";
 
 export const PlayerIdle: FC = () => {
   return (

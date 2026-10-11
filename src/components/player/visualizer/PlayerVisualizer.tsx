@@ -1,18 +1,16 @@
 import { Button } from "@/components/ui/button/button";
 import { useFullscreen } from "@/hooks/useFullscreen";
+import { useVisualizer } from "@/hooks/useVisualizer";
 import { cn } from "@/lib/utils";
-import { loadVisualizer, saveVisualizer } from "@/visualizer";
 import { Maximize, X } from "lucide-react";
 import type { FC } from "react";
-import { ViewTransition, useState } from "react";
-import { BarsVisualizer } from "./bars/BarsVisualizer";
-import { ScopeVisualizer } from "./scope/ScopeVisualizer";
-import { TurntableVisualizer } from "./turntable/TurntableVisualizer";
+import { ViewTransition } from "react";
+import { Visualizer } from "./Visualizer";
 import { VisualizerSwitcher } from "./VisualizerSwitcher";
 
 export const PlayerVisualizerPanel: FC = () => {
-  const [visualizer, setVisualizer] = useState(loadVisualizer);
   const { fullscreen, toggleFullscreen } = useFullscreen();
+  const { visualizer, updateVisualizer } = useVisualizer();
 
   return (
     <ViewTransition name="visualizer-panel" default="none" share="auto">
@@ -24,22 +22,14 @@ export const PlayerVisualizerPanel: FC = () => {
             : "h-[clamp(15rem,44vh,27.5rem)]",
         )}
       >
-        {visualizer === "bars" && <BarsVisualizer />}
-        {visualizer === "turntable" && <TurntableVisualizer />}
-        {visualizer === "scope" && <ScopeVisualizer />}
+        <Visualizer />
         <div
           className={cn(
             "absolute z-10 flex gap-1",
             fullscreen ? "top-6 right-6" : "top-2 right-2",
           )}
         >
-          <VisualizerSwitcher
-            value={visualizer}
-            onChange={(next) => {
-              setVisualizer(next);
-              saveVisualizer(next);
-            }}
-          />
+          <VisualizerSwitcher value={visualizer} onChange={updateVisualizer} />
           <Button
             variant="ghost"
             size="icon"

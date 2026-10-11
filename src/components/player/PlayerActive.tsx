@@ -9,7 +9,7 @@ import { PlayerControls } from "./PlayerControls";
 import { PlayerNowPlaying } from "./PlayerNowPlaying";
 import { PlayerSeekBar } from "./PlayerSeekBar";
 import { PlayerTracklist } from "./PlayerTracklist";
-import { PlayerVisualizerPanel } from "./PlayerVisualizer";
+import { PlayerVisualizerPanel } from "./visualizer/PlayerVisualizer";
 
 export const PlayerActive: FC<PlayerActiveProps> = ({ album }) => {
   const { index, status } = usePlayer();
