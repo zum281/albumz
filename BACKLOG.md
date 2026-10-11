@@ -6,3 +6,11 @@
   if found new, update the rows. UI: will be a custom button.
 
 - guard against interpolation sql
+
+- library: move play button somewhere more visible
+
+- player: seeker (+ hotkeys)
+- player: wavebar instead of plain progress
+- player: volume/mute (+ hotkeys)
+- player: sleep
+- put the list of hotkeys somewhere?
