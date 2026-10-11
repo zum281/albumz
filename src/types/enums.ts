@@ -17,6 +17,7 @@ export enum AlbumListenedToggle {
 
 export enum PlayerStatus {
   IDLE = "idle",
+  LOADING = "loading",
   PLAYING = "playing",
   PAUSED = "paused",
 }

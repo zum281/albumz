@@ -10,14 +10,15 @@ import type { FC } from "react";
 export const Player: FC = () => {
   const { album } = usePlayer();
 
-  if (!album) return <PlayerIdle />;
-
   return (
     <main className="flex min-w-0 flex-1 flex-col pb-7">
-      <RouteHeader title="Library" rightElement={<RouteHeaderPlayer />} />
-      <Boundaries getResetKey={() => "player"} error={ErrorLargeWithRetry}>
-        <PlayerActive album={album} />
-      </Boundaries>
+      <RouteHeader title="Player" rightElement={<RouteHeaderPlayer />} />
+      {!album && <PlayerIdle />}
+      {album && (
+        <Boundaries getResetKey={() => "player"} error={ErrorLargeWithRetry}>
+          <PlayerActive album={album} />
+        </Boundaries>
+      )}
     </main>
   );
 };
