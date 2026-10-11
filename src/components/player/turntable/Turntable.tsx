@@ -1,13 +1,8 @@
+import { usePlayer } from "@/hooks/usePlayer";
+import { PlayerStatus } from "@/types/enums";
 import { cn } from "cn";
 import type { FC, Ref } from "react";
-import {
-  ARM_PIVOT,
-  R,
-  TICK_COUNT,
-  arcPath,
-  armNeedle,
-  tickLine,
-} from "./geometry";
+import { R, TICK_COUNT, arcPath, tickLine } from "./geometry";
 
 const GROOVE_RADII = Array.from(
   { length: Math.floor((R * 0.97 - R * 0.42) / 3.2) + 1 },
@@ -16,14 +11,9 @@ const GROOVE_RADII = Array.from(
 const SHEEN_ARC_ROTATIONS = [0, Math.PI];
 const RPM = 33.333;
 
-export const Turntable: FC<TurntableProps> = ({
-  className,
-  spinning = false,
-  progress = null,
-  ticksRef,
-}) => {
-  const { tip, angleDeg } = armNeedle(progress);
-
+export const Turntable: FC<TurntableProps> = ({ className, ticksRef }) => {
+  const { status } = usePlayer();
+  const spinning = status === PlayerStatus.PLAYING;
   return (
     <svg
       viewBox="-170 -170 340 340"
@@ -48,7 +38,7 @@ export const Turntable: FC<TurntableProps> = ({
       <g
         className={cn(
           "origin-top-left animate-spin motion-reduce:animate-none",
-          !spinning && "[animation-play-state:paused]",
+          !spinning && "paused",
         )}
         style={{ animationDuration: `${60 / RPM}s` }}
       >
@@ -67,39 +57,12 @@ export const Turntable: FC<TurntableProps> = ({
         </g>
       </g>
       <circle r={3.5} className="fill-background" />
-
-      <line
-        x1={ARM_PIVOT.x}
-        y1={ARM_PIVOT.y}
-        x2={tip.x}
-        y2={tip.y}
-        strokeWidth={3.5}
-        className="stroke-muted-foreground"
-      />
-      <rect
-        x={ARM_PIVOT.x - 8}
-        y={ARM_PIVOT.y - 8}
-        width={16}
-        height={16}
-        className="fill-chart-3"
-      />
-      <rect
-        x={-2}
-        y={-5}
-        width={10}
-        height={10}
-        transform={`translate(${tip.x} ${tip.y}) rotate(${angleDeg})`}
-        className="fill-foreground"
-      />
     </svg>
   );
 };
 
 type TurntableProps = {
-  className?: string;
-  spinning?: boolean;
-  /** 0..1 through the current track; null lifts the arm to rest. */
-  progress?: number | null;
+  className: string;
   /** The `<g>` holding the tick `<line>`s, for per-frame updates outside React. */
   ticksRef?: Ref<SVGGElement>;
 };

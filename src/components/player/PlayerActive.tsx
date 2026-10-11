@@ -21,17 +21,10 @@ export const PlayerActive: FC<PlayerActiveProps> = ({ album }) => {
   const isTrackActive =
     status === PlayerStatus.PLAYING || status === PlayerStatus.PAUSED;
 
-  const progress = isTrackActive
-    ? Math.min(1, elapsedTime / currentTrack.duration_seconds)
-    : null;
-
   return (
     <div className="grid min-h-0 flex-1 gap-5 px-7 pt-6 lg:grid-cols-3">
       <div className="flex min-w-0 flex-col gap-5 lg:col-span-2">
-        <PlayerVisualizer
-          spinning={status === PlayerStatus.PLAYING}
-          progress={progress}
-        />
+        <PlayerVisualizer spinning={status === PlayerStatus.PLAYING} />
         <PlayerNowPlaying
           album={album}
           track={currentTrack}
