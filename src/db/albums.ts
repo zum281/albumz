@@ -21,10 +21,14 @@ export const getAlbums = async (): Promise<Album[]> => {
   return AlbumsSchema.parse(rows);
 };
 
+const ONE_DAY_MS = 1000 * 60 * 60 * 24;
+
 export const getShelfAlbumsQueryOptions = () => {
   return queryOptions({
     queryKey: ["albums", "shelf"],
     queryFn: getShelfAlbums,
+    staleTime: ONE_DAY_MS,
+    gcTime: ONE_DAY_MS,
   });
 };
 
