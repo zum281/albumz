@@ -14,11 +14,9 @@ import {
   sortFn_text,
   tableFeatures,
 } from "@tanstack/react-table";
-import { openPath } from "@tauri-apps/plugin-opener";
-import { Play } from "lucide-react";
-import { Button } from "../ui/button/button";
 import { AlbumLibraryCoverCell } from "./cells/AlbumLibraryCoverCell";
 import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
+import { AlbumLibraryPlayCell } from "./cells/AlbumLibraryPlayCell";
 import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
 
 type AlbumColumnMeta = { dataType?: "string" | "number"; align?: "center" };
@@ -183,20 +181,8 @@ export const albumLibraryColumns: ColumnDef<
     size: 80,
 
     cell: (props) => {
-      const albumPath = props.row.original.path;
-      if (!albumPath) return null;
-      return (
-        <Button
-          variant="outline"
-          size="icon"
-          className="block mx-auto"
-          onClick={() => {
-            void openPath(albumPath, "Music");
-          }}
-        >
-          <Play className="size-3 fill-current text-muted-foreground" />
-        </Button>
-      );
+      const album = props.row.original;
+      return <AlbumLibraryPlayCell album={album} />;
     },
     header: () => <span className="block text-center">Play</span>,
   },

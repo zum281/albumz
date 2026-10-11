@@ -8,6 +8,7 @@ import {
 import { AppSidebar } from "./components/app-sidebar/AppSidebar";
 import { Boundaries } from "./components/Boundaries";
 import { ErrorLargeWithRetry } from "./components/errors/ErrorLargeWithRetry";
+import { PlayerProvider } from "./context/player/PlayerProvider";
 import { Home } from "./routes/Home";
 import { Player } from "./routes/Player";
 import { Settings } from "./routes/Settings";
@@ -15,15 +16,18 @@ import { Statz } from "./routes/Statz";
 
 export const rootRoute = createRootRoute({
   component: () => (
-    <SidebarProvider>
-      <Boundaries
-        getResetKey={() => "sidebar"}
-        error={() => <div>Sidebar error</div>}
-      >
-        <AppSidebar />
-      </Boundaries>
-      <Outlet />
-    </SidebarProvider>
+    <PlayerProvider>
+      <SidebarProvider>
+        <Boundaries
+          getResetKey={() => "sidebar"}
+          error={() => <div>Sidebar error</div>}
+        >
+          <AppSidebar />
+        </Boundaries>
+
+        <Outlet />
+      </SidebarProvider>
+    </PlayerProvider>
   ),
   errorComponent: ErrorLargeWithRetry,
 });

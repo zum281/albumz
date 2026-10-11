@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button/button";
+import { usePlayer } from "@/hooks/usePlayer";
 import type { Album } from "@/types/album";
 import { convertFileSrc } from "@tauri-apps/api/core";
-import { openPath } from "@tauri-apps/plugin-opener";
 import { cn } from "cn";
 import { Play } from "lucide-react";
 import type { FC } from "react";
@@ -16,7 +16,7 @@ const COVER_FALLBACK_COLORS = [
 ] as const;
 
 export const ShelfCard: FC<ShelfCardProps> = ({ album }) => {
-  // Derived from the id so the color stays stable across re-renders
+  const { playAlbum } = usePlayer();
   const fallbackColor =
     COVER_FALLBACK_COLORS[album.id % COVER_FALLBACK_COLORS.length];
 
@@ -58,7 +58,7 @@ export const ShelfCard: FC<ShelfCardProps> = ({ album }) => {
           <Button
             aria-label={`Play ${album.album}`}
             onClick={() => {
-              void openPath(album.path ?? "", "Music");
+              playAlbum(album);
             }}
             size="icon"
           >

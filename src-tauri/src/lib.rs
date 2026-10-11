@@ -1,5 +1,6 @@
 mod migrations;
 mod scan;
+mod tracks;
 mod utils;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -11,7 +12,10 @@ pub fn run() {
                 .add_migrations("sqlite:albumz.db", migrations::get_migrations())
                 .build(),
         )
-        .invoke_handler(tauri::generate_handler![scan::scan_library, utils::clear_covers,
+        .invoke_handler(tauri::generate_handler![
+            scan::scan_library,
+            utils::clear_covers,
+            tracks::list_tracks,
             utils::get_db_path
         ])
         .run(tauri::generate_context!())

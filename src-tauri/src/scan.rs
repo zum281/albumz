@@ -5,8 +5,8 @@ use crate::utils;
 
 const IGNORED_ARTISTS: &[&str] = &["Various Artists"];
 const TRACK_COUNT_THRESHOLD: usize = 3;
-const ALLOWED_EXTENSIONS: &[&str] = &["mp3", "wav", "aac", "m4a"];
 
+pub const ALLOWED_EXTENSIONS: &[&str] = &["mp3", "wav", "aac", "m4a"];
 /// Lists artist directories under `music_path`, skipping non-dirs and `IGNORED_ARTISTS`.
 ///
 /// # Errors

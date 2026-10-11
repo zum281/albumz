@@ -14,3 +14,9 @@ export enum AlbumListenedToggle {
   PLAYED = "played",
   BACKLOG = "backlog",
 }
+
+export enum PlayerStatus {
+  IDLE = "idle",
+  PLAYING = "playing",
+  PAUSED = "paused",
+}

@@ -10,18 +10,12 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
-      {
-        "title": "Albumz",
-        "width": 1200,
-        "height": 800
-      }
-    ],
+    "windows": [{ "title": "Albumz", "width": 1200, "height": 800 }],
     "security": {
       "csp": null,
       "assetProtocol": {
         "enable": true,
-        "scope": ["$APPDATA/covers/**/*"]
+        "scope": ["$APPDATA/covers/**/*", "$HOME/Music/mp3/**/*"]
       }
     }
   },
