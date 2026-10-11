@@ -9,7 +9,8 @@ import { PlayerControls } from "./PlayerControls";
 import { PlayerNowPlaying } from "./PlayerNowPlaying";
 import { PlayerSeekBar } from "./PlayerSeekBar";
 import { PlayerTracklist } from "./PlayerTracklist";
-import { PlayerVisualizer } from "./PlayerVisualizer";
+// import { PlayerVisualizer } from "./PlayerVisualizer";
+import { BarsVisualizer } from "./bars/BarsVisualizer";
 
 export const PlayerActive: FC<PlayerActiveProps> = ({ album }) => {
   const { index, status } = usePlayer();
@@ -24,7 +25,8 @@ export const PlayerActive: FC<PlayerActiveProps> = ({ album }) => {
   return (
     <div className="grid min-h-0 flex-1 gap-5 px-7 pt-6 lg:grid-cols-3">
       <div className="flex min-w-0 flex-col gap-5 lg:col-span-2">
-        <PlayerVisualizer spinning={status === PlayerStatus.PLAYING} />
+        <BarsVisualizer />
+        {/* <PlayerVisualizer /> */}
         <PlayerNowPlaying
           album={album}
           track={currentTrack}
