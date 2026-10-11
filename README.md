@@ -1,5 +1,7 @@
 # Albumz
 
+![Albumz screenshot](albumz.png)
+
 I quit Spotify and wanted something to track/rate my music. This scans a (for now) hardcoded dir path, then lists albums, and lets you rate them and mark as listened.
 
 ## Quick start
