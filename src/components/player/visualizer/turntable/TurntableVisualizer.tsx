@@ -1,10 +1,11 @@
+import { TICK_COUNT } from "@/constants/turntable.visualizer";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useWaveform } from "@/hooks/useWaveform";
 import { dbToLevel, isHot, peakToDb } from "@/lib/audioLevel";
 import { PlayerStatus } from "@/types/enums";
 import type { FC } from "react";
 import { useCallback, useRef } from "react";
-import { TICK_COUNT, tickLine } from "./geometry";
+import { tickLine } from "./geometry";
 import { Turntable } from "./Turntable";
 
 export const TurntableVisualizer: FC = () => {

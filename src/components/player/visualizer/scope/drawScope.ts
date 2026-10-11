@@ -1,8 +1,9 @@
-const PAD = 1.25;
-const LINE_WIDTH = 0.125;
-const BASELINE_THICKNESS = 0.0625;
-
-export type ScopeColors = { trace: string; baseline: string };
+import {
+  BASELINE_THICKNESS,
+  LINE_WIDTH,
+  PAD,
+} from "@/constants/scope.visualizer";
+import type { ScopeColors } from "@/types/scope.visualizer";
 
 /** Index of the first rising zero crossing in the first half, so successive frames line up. */
 export const findTrigger = (samples: ArrayLike<number>) => {

@@ -36,6 +36,8 @@
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
   --color-mark-front: var(--mark-front);
+  --color-vinyl: var(--vinyl);
+  --color-vinyl-sheen: var(--vinyl-sheen);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -127,6 +129,10 @@
   --mark-mid: oklch(0.441 0.047 160.5); /* #3B5B4A */
   --mark-front: oklch(0.661 0.05 156.4); /* #7A9C86 */
   --mark-shelf: oklch(0.223 0.006 78.2); /* #1D1B18 */
+
+  /* Record surface; the same in every theme. */
+  --vinyl: oklch(0.165 0.007 135); /* #0D0F0C */
+  --vinyl-sheen: oklch(0.948 0.013 82.4); /* #F2EDE4 */
 }
 
 [data-theme="dark"] {

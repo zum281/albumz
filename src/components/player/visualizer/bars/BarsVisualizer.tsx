@@ -1,16 +1,20 @@
+import {
+  ATTACK,
+  BAR_COLOR_VARS,
+  MAX_COLS,
+  PEAK_GRAVITY,
+  RELEASE,
+  SILENCE,
+} from "@/constants/bars.visualizer";
 import { analyser, audioCtx } from "@/context/player/audio";
 import { usePlayer } from "@/hooks/usePlayer";
 import { useSpectrum } from "@/hooks/useSpectrum";
 import { PlayerStatus } from "@/types/enums";
 import type { FC } from "react";
 import { useCallback, useRef } from "react";
+import { prepareCanvas } from "../canvas";
 import { columnCount, drawBars } from "./drawBars";
-import { MAX_COLS, columnBinRanges } from "./geometry";
-
-const ATTACK = 0.55;
-const RELEASE = 0.14;
-/** Peak caps hang, then accelerate: fall speed grows by this much per second. */
-const PEAK_GRAVITY = 0.5;
+import { columnBinRanges } from "./geometry";
 
 export const BarsVisualizer: FC = () => {
   const { status } = usePlayer();
@@ -27,15 +31,10 @@ export const BarsVisualizer: FC = () => {
 
   const onFrame = useCallback((bins: Uint8Array, dt: number) => {
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) return false;
+    const prepared = canvas && prepareCanvas(canvas);
+    if (!prepared) return false;
+    const { ctx, w, h, rem, readColor } = prepared;
 
-    const dpr = window.devicePixelRatio || 1;
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    if (!w || !h) return false;
-
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     const cols = columnCount(w, rem);
     if (rangesRef.current?.cols !== cols) {
       rangesRef.current = {
@@ -70,25 +69,15 @@ export const BarsVisualizer: FC = () => {
         peakSpeed[c] += dt * PEAK_GRAVITY;
         peaks[c] = Math.max(0, peaks[c] - peakSpeed[c] * dt);
       }
-      if (levels[c] > 0.001 || peaks[c] > 0.001) animating = true;
+      if (levels[c] > SILENCE || peaks[c] > SILENCE) animating = true;
     }
 
-    const width = Math.round(w * dpr);
-    const height = Math.round(h * dpr);
-    if (canvas.width !== width || canvas.height !== height) {
-      canvas.width = width;
-      canvas.height = height;
-    }
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const style = getComputedStyle(canvas);
-    const read = (name: string) => style.getPropertyValue(name).trim();
     drawBars(ctx, w, h, rem, cols, levels, peaks, {
-      back: read("--mark-back"),
-      mid: read("--mark-mid"),
-      front: read("--mark-front"),
-      cap: read("--chart-4"),
-      baseline: read("--border"),
+      back: readColor(BAR_COLOR_VARS.back),
+      mid: readColor(BAR_COLOR_VARS.mid),
+      front: readColor(BAR_COLOR_VARS.front),
+      cap: readColor(BAR_COLOR_VARS.cap),
+      baseline: readColor(BAR_COLOR_VARS.baseline),
     });
 
     return animating;

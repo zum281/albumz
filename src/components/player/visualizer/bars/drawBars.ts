@@ -1,28 +1,25 @@
-import { MAX_COLS } from "./geometry";
-
-const PAD = 1.25;
-const TOP = 3.625;
-const BOTTOM_INSET = 1.375;
-const BASELINE_OFFSET = 0.3125;
-const BASELINE_THICKNESS = 0.0625;
-const COL_GAP = 0.1875;
-const DOT_WIDTH = 0.5;
-const SEG = 0.375;
-const SEG_GAP = 0.125;
-const CAP_HEIGHT = 0.125;
-const CAP_OFFSET = 0.625;
-
-export type BarColors = {
-  back: string;
-  mid: string;
-  front: string;
-  cap: string;
-  baseline: string;
-};
+import {
+  BACK_TIER_END,
+  BASELINE_OFFSET,
+  BASELINE_THICKNESS,
+  BOTTOM_INSET,
+  CAP_HEIGHT,
+  CAP_MIN_PEAK,
+  CAP_OFFSET,
+  COL_GAP,
+  DOT_WIDTH,
+  MAX_COLS,
+  MID_TIER_END,
+  PAD,
+  SEG,
+  SEG_GAP,
+  TOP,
+} from "@/constants/bars.visualizer";
+import type { BarColors } from "@/types/bars.visualizer";
 
 const tier = (position: number, colors: BarColors) => {
-  if (position < 0.45) return colors.back;
-  if (position < 0.75) return colors.mid;
+  if (position < BACK_TIER_END) return colors.back;
+  if (position < MID_TIER_END) return colors.mid;
   return colors.front;
 };
 
@@ -74,7 +71,7 @@ export const drawBars = (
       ctx.fillStyle = tier((s * segStep) / avail, colors);
       ctx.fillRect(x, bottom - (s + 1) * segStep + SEG_GAP * rem, dot, seg);
     }
-    if (peaks[i] > 0.02) {
+    if (peaks[i] > CAP_MIN_PEAK) {
       ctx.fillStyle = colors.cap;
       ctx.fillRect(
         x,

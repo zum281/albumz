@@ -1,8 +1,9 @@
-export const R = 100;
-export const TICK_COUNT = 96;
-export const TICK_INNER_RADIUS = R + 10;
-export const TICK_BASE_LENGTH = 3;
-export const TICK_MAX_EXTRA_LENGTH = R * 0.55;
+import {
+  TICK_BASE_LENGTH,
+  TICK_COUNT,
+  TICK_INNER_RADIUS,
+  TICK_MAX_EXTRA_LENGTH,
+} from "@/constants/turntable.visualizer";
 
 export const polar = (radius: number, angle: number) => ({
   x: Math.cos(angle) * radius,

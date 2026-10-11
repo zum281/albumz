@@ -1,35 +1,51 @@
+import {
+  GROOVE_RADII,
+  GROOVE_STROKE_WIDTH,
+  LABEL_LINES,
+  LABEL_RADIUS,
+  R,
+  RPM,
+  SHEEN_ARCS,
+  SHEEN_ARC_ROTATIONS,
+  SHEEN_STROKE_WIDTH,
+  SPINDLE_RADIUS,
+  TICK_COUNT,
+  TICK_STROKE_WIDTH,
+  VIEW_BOX,
+} from "@/constants/turntable.visualizer";
 import { usePlayer } from "@/hooks/usePlayer";
 import { PlayerStatus } from "@/types/enums";
 import { cn } from "cn";
 import type { FC, Ref } from "react";
-import { R, TICK_COUNT, arcPath, tickLine } from "./geometry";
-
-const GROOVE_RADII = Array.from(
-  { length: Math.floor((R * 0.97 - R * 0.42) / 3.2) + 1 },
-  (_, i) => R * 0.42 + i * 3.2,
-);
-const SHEEN_ARC_ROTATIONS = [0, Math.PI];
-const RPM = 33.333;
+import { arcPath, tickLine } from "./geometry";
 
 export const Turntable: FC<TurntableProps> = ({ className, ticksRef }) => {
   const { status } = usePlayer();
   const spinning = status === PlayerStatus.PLAYING;
   return (
     <svg
-      viewBox="-170 -170 340 340"
+      viewBox={VIEW_BOX}
       preserveAspectRatio="xMidYMid meet"
       aria-hidden
       className={className}
     >
-      <g ref={ticksRef} className="stroke-chart-3" strokeWidth={3.6}>
+      <g
+        ref={ticksRef}
+        className="stroke-chart-3"
+        strokeWidth={TICK_STROKE_WIDTH}
+      >
         {Array.from({ length: TICK_COUNT }, (_, i) => (
           <line key={i} {...tickLine(i, 0)} />
         ))}
       </g>
 
-      <circle r={R} className="fill-[#0D0F0C]" />
+      <circle r={R} className="fill-vinyl" />
 
-      <g className="stroke-[#F2EDE4]/6" fill="none" strokeWidth={0.9}>
+      <g
+        className="stroke-vinyl-sheen/6"
+        fill="none"
+        strokeWidth={GROOVE_STROKE_WIDTH}
+      >
         {GROOVE_RADII.map((radius) => (
           <circle key={radius} r={radius} />
         ))}
@@ -42,21 +58,27 @@ export const Turntable: FC<TurntableProps> = ({ className, ticksRef }) => {
         )}
         style={{ animationDuration: `${60 / RPM}s` }}
       >
-        <g className="stroke-[#F2EDE4]/16" fill="none" strokeWidth={1.8}>
+        <g
+          className="stroke-vinyl-sheen/16"
+          fill="none"
+          strokeWidth={SHEEN_STROKE_WIDTH}
+        >
           {SHEEN_ARC_ROTATIONS.map((o) => (
             <g key={o}>
-              <path d={arcPath(R * 0.68, o, o + 0.5)} />
-              <path d={arcPath(R * 0.84, o + 0.15, o + 0.42)} />
+              {SHEEN_ARCS.map(({ radius, from, to }) => (
+                <path key={radius} d={arcPath(radius, o + from, o + to)} />
+              ))}
             </g>
           ))}
         </g>
-        <circle r={R * 0.36} className="fill-chart-3/40" />
+        <circle r={LABEL_RADIUS} className="fill-chart-3/40" />
         <g className="fill-black/50">
-          <rect x={-R * 0.2} y={-R * 0.12} width={R * 0.4} height={R * 0.035} />
-          <rect x={-R * 0.13} y={R * 0.08} width={R * 0.26} height={R * 0.03} />
+          {LABEL_LINES.map((line) => (
+            <rect key={line.y} {...line} />
+          ))}
         </g>
       </g>
-      <circle r={3.5} className="fill-background" />
+      <circle r={SPINDLE_RADIUS} className="fill-background" />
     </svg>
   );
 };
