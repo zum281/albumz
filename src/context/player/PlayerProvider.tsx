@@ -1,12 +1,17 @@
 import { listTracksQueryOptions } from "@/commands/list_tracks";
+import {
+  albumsQueryOptions,
+  listenedAlbumsCountQueryOptions,
+  updateAlbumListen,
+} from "@/db/albums";
 import type { Album } from "@/types/album";
 import { PlayerStatus } from "@/types/enums";
 import type { Track } from "@/types/track";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC, PropsWithChildren } from "react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { audio } from "./audio";
 import { PlayerContext } from "./PlayerContext";
 import type { PlayerContextType } from "./PlayerContext.types";
@@ -20,6 +25,8 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
   const [index, setIndex] = useState<number>(0);
 
   const requestRef = useRef(0);
+  const { queryKey: albumsQueryKey } = albumsQueryOptions();
+  const { queryKey: listenedCountQueryKey } = listenedAlbumsCountQueryOptions();
 
   const playAlbum = useCallback(
     async (album: Album) => {
@@ -62,7 +69,7 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
     setStatus(PlayerStatus.PLAYING);
   };
 
-  const stop = () => {
+  const stop = useCallback(() => {
     requestRef.current++;
     audio.pause();
     audio.currentTime = 0;
@@ -70,7 +77,7 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
     setTracks(null);
     setIndex(0);
     setStatus(PlayerStatus.IDLE);
-  };
+  }, []);
 
   const goTo = useCallback(
     async (target: number) => {
@@ -86,6 +93,31 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
   const next = useCallback(() => goTo(index + 1), [goTo, index]);
   const previous = useCallback(() => goTo(index - 1), [goTo, index]);
 
+  const { mutate: markListened } = useMutation({
+    mutationFn: (id: Album["id"]) => updateAlbumListen(id, true),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: albumsQueryKey }),
+        queryClient.invalidateQueries({ queryKey: listenedCountQueryKey }),
+      ]);
+    },
+  });
+
+  useEffect(() => {
+    const onEnded = () => {
+      if (tracks && index < tracks.length - 1) {
+        void next();
+        return;
+      }
+      if (album) markListened(album.id);
+      stop();
+    };
+    audio.addEventListener("ended", onEnded);
+    return () => {
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [album, tracks, index, next, stop, markListened]);
+
   const value: PlayerContextType = useMemo(
     () => ({
       album,
@@ -99,7 +131,7 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
       index,
       status,
     }),
-    [album, tracks, status, index, playAlbum, next, previous],
+    [album, tracks, status, index, playAlbum, stop, next, previous],
   );
 
   return <PlayerContext value={value}>{children}</PlayerContext>;
