@@ -3,7 +3,8 @@ import { cn } from "@/lib/utils";
 import { loadVisualizer, saveVisualizer } from "@/visualizer";
 import { Maximize, X } from "lucide-react";
 import type { FC } from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { flushSync } from "react-dom";
 import { BarsVisualizer } from "./bars/BarsVisualizer";
 import { TurntableVisualizer } from "./turntable/TurntableVisualizer";
 import { VisualizerSwitcher } from "./VisualizerSwitcher";
@@ -12,21 +13,36 @@ export const PlayerVisualizerPanel: FC = () => {
   const [visualizer, setVisualizer] = useState(loadVisualizer);
   const [fullscreen, setFullscreen] = useState(false);
 
+  const toggleFullscreen = useCallback((next: boolean) => {
+    const update = () => {
+      // The transition snapshots the new state right after the callback returns, so the DOM must be updated synchronously.
+      // eslint-disable-next-line @eslint-react/dom-no-flush-sync
+      flushSync(() => {
+        setFullscreen(next);
+      });
+    };
+    if ("startViewTransition" in document) {
+      document.startViewTransition(update);
+    } else {
+      update();
+    }
+  }, []);
+
   useEffect(() => {
     if (!fullscreen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setFullscreen(false);
+      if (event.key === "Escape") toggleFullscreen(false);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [fullscreen]);
+  }, [fullscreen, toggleFullscreen]);
 
   return (
     <div
       className={cn(
-        "relative flex flex-col",
+        "relative flex flex-col [view-transition-name:visualizer-panel]",
         fullscreen
           ? "fixed inset-0 z-50 bg-background p-4"
           : "h-[clamp(15rem,44vh,27.5rem)]",
@@ -51,7 +67,7 @@ export const PlayerVisualizerPanel: FC = () => {
           size="icon"
           aria-label={fullscreen ? "Exit fullscreen" : "Enter fullscreen"}
           onClick={() => {
-            setFullscreen(!fullscreen);
+            toggleFullscreen(!fullscreen);
           }}
         >
           {fullscreen ? <X /> : <Maximize />}

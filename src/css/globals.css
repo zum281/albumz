@@ -230,4 +230,9 @@
   ::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
+
+  ::view-transition-group(visualizer-panel) {
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
 }
