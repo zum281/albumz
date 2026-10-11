@@ -1,6 +1,7 @@
 import { TableHead } from "@/components/ui/table";
 import type { Album } from "@/types/album";
 import type { Column, Header, useTable } from "@tanstack/react-table";
+import { cn } from "cn";
 import type { FC } from "react";
 import type { albumLibraryFeatures } from "./AlbumLibrary.config";
 import { SortingIcon } from "./helpers/SortingIcon";
@@ -31,26 +32,56 @@ export const AlbumLibraryHeader: FC<AlbumLibraryHeaderProps> = ({
     return "Clear sort";
   };
 
+  const ariaSort = () => {
+    if (!sorted) return undefined;
+    return sorted === "asc" ? "ascending" : "descending";
+  };
+
   return (
     <TableHead
       scope="col"
-      aria-sort={
-        sorted ? (sorted === "asc" ? "ascending" : "descending") : undefined
-      }
+      aria-sort={ariaSort()}
       style={{ width: header.getSize() }}
-      onClick={
-        isDefaultSortColumn
-          ? () => header.column.toggleSorting(sorted === "asc")
-          : header.column.getToggleSortingHandler()
-      }
-      className="cursor-pointer"
-      title={getHeaderTitle(header.column)}
+      className="relative"
     >
       {header.isPlaceholder ? null : (
-        <div className="flex gap-[1ch] items-center">
-          <table.FlexRender header={header} />
-          <SortingIcon headerCol={header.column} />
-        </div>
+        <>
+          <div
+            onClick={
+              isDefaultSortColumn
+                ? () => {
+                    header.column.toggleSorting(sorted === "asc");
+                  }
+                : header.column.getToggleSortingHandler()
+            }
+            title={getHeaderTitle(header.column)}
+            className="cursor-pointer"
+          >
+            <div
+              className={cn(
+                "flex gap-[1ch] items-center",
+                header.column.columnDef.meta?.align === "center" &&
+                  "justify-center",
+              )}
+            >
+              <table.FlexRender header={header} />
+              <SortingIcon headerCol={header.column} />
+            </div>
+          </div>
+          {header.column.getCanResize() && (
+            <div
+              onDoubleClick={() => {
+                header.column.resetSize();
+              }}
+              onMouseDown={header.getResizeHandler()}
+              onTouchStart={header.getResizeHandler()}
+              className={cn(
+                "absolute top-0 right-0 h-full w-1 cursor-col-resize touch-none select-none border-r border-border hover:bg-primary",
+                header.column.getIsResizing() && "bg-primary",
+              )}
+            />
+          )}
+        </>
       )}
     </TableHead>
   );

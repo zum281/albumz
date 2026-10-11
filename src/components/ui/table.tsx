@@ -82,7 +82,7 @@ export const TableHead: FC<ComponentProps<"th">> = ({
     <th
       data-slot="table-head"
       className={cn(
-        "border-b-3 border-primary bg-card px-2 py-3 text-left align-middle font-mono text-sm tracking-widest whitespace-nowrap text-muted-foreground uppercase first:pl-4 last:pr-4 dark:border-border amoled:border-border [&:has([role=checkbox])]:pr-0",
+        "border-b-3 border-primary bg-card px-3 py-3 text-left align-middle font-mono text-sm tracking-widest whitespace-nowrap text-muted-foreground uppercase first:pl-4 last:pr-4 dark:border-border amoled:border-border [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}

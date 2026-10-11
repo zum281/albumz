@@ -41,7 +41,7 @@ export const AlbumLibraryListenedCell: FC<AlbumLibraryCellProps> = ({
   return (
     <label
       className={cn(
-        "flex cursor-pointer items-center gap-2 font-mono text-xs tracking-widest uppercase",
+        "flex cursor-pointer items-center justify-center gap-2 font-mono text-xs tracking-widest uppercase",
         listened ? "text-chart-2" : "text-muted-foreground",
       )}
     >

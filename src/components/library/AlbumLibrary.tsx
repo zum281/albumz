@@ -21,6 +21,7 @@ export const AlbumLibrary: FC = () => {
   const table = useTable({
     key: "albums-table",
     columns: albumLibraryColumns,
+    columnResizeMode: "onChange",
     data: filteredAlbums,
     features: albumLibraryFeatures,
     autoResetPageIndex: false,
@@ -33,7 +34,11 @@ export const AlbumLibrary: FC = () => {
       aria-label="Album library"
       className="border border-border bg-background"
     >
-      <Table aria-label={`Album library, ${filteredAlbums.length} rows`}>
+      <Table
+        aria-label={`Album library, ${filteredAlbums.length} rows`}
+        className="table-fixed"
+        style={{ width: table.getTotalSize() }}
+      >
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

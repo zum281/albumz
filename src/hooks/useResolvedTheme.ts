@@ -7,7 +7,9 @@ const subscribe = (onChange: () => void) => {
     attributes: true,
     attributeFilter: ["data-theme"],
   });
-  return () => observer.disconnect();
+  return () => {
+    observer.disconnect();
+  };
 };
 
 const getSnapshot = (): ResolvedTheme => {

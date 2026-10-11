@@ -61,7 +61,7 @@ export const AlbumLibraryRatingCell: FC<AlbumLibraryRatingCellProps> = ({
       onPointerLeave={() => {
         setHovered(null);
       }}
-      className="flex items-center"
+      className="flex items-center justify-center"
     >
       {RATINGS.map((n) => (
         <Radio.Root

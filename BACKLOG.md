@@ -7,6 +7,4 @@
 
 - guard against interpolation sql
 
-- resize table columns
-
 - settings: pick player

@@ -21,7 +21,7 @@ import { AlbumLibraryCoverCell } from "./cells/AlbumLibraryCoverCell";
 import { AlbumLibraryListenedCell } from "./cells/AlbumLibraryListenedCell";
 import { AlbumLibraryRatingCell } from "./cells/AlbumLibraryRatingCell";
 
-type AlbumColumnMeta = { dataType?: "string" | "number" };
+type AlbumColumnMeta = { dataType?: "string" | "number"; align?: "center" };
 
 export const albumLibraryFeatures = tableFeatures({
   columnSizingFeature,
@@ -44,78 +44,106 @@ export const albumLibraryColumns: ColumnDef<
 >[] = [
   {
     accessorKey: "cover_path",
-    header: () => <span className="sr-only">Cover</span>,
-    size: 82,
-    cell: (props) => <AlbumLibraryCoverCell album={props.row.original} />,
+    enableResizing: false,
     enableSorting: false,
+    size: 82,
+
+    cell: (props) => <AlbumLibraryCoverCell album={props.row.original} />,
+    header: () => <span className="sr-only">Cover</span>,
   },
   {
     accessorKey: "artist",
     header: "Artist",
-    size: 220,
     maxSize: 500,
+    meta: { dataType: "string" },
+    minSize: 120,
+    size: 220,
+
     cell: (props) => (
       <span className="block truncate">{props.getValue<string>()}</span>
     ),
-    meta: { dataType: "string" },
   },
   {
     accessorKey: "album",
-    header: () => "Album",
-    size: 340,
     maxSize: 500,
+    meta: { dataType: "string" },
+    minSize: 150,
+    size: 340,
+
     cell: (props) => (
       <span className="block truncate">{props.getValue<string>()}</span>
     ),
-    meta: { dataType: "string" },
+    header: () => "Album",
   },
   {
     accessorKey: "year",
-    header: () => "Year",
+    maxSize: 160,
+    meta: { dataType: "number", align: "center" },
+    minSize: 100,
+    size: 100,
+
     cell: (props) => (
-      <span className="font-mono text-xs text-muted-foreground">
+      <span className="block text-center font-mono text-xs text-muted-foreground">
         {props.getValue<number | null>()}
       </span>
     ),
-    meta: { dataType: "number" },
+    header: () => "Year",
   },
   {
     accessorKey: "track_count",
-    header: () => "Trk",
+    maxSize: 140,
+    meta: { dataType: "number", align: "center" },
+    minSize: 90,
+    size: 90,
+
     cell: (props) => (
-      <span className="font-mono text-xs text-muted-foreground">
+      <span className="block text-center font-mono text-xs text-muted-foreground">
         {props.getValue<number>()}
       </span>
     ),
-    meta: { dataType: "number" },
+    header: () => "Trk",
   },
   {
     accessorKey: "duration_seconds",
-    header: () => "Duration",
+    maxSize: 220,
+    meta: { dataType: "number", align: "center" },
+    minSize: 140,
+    size: 140,
+
     cell: (props) => {
       const album = props.row.original;
       return (
-        <span className="font-mono text-xs text-muted-foreground">
+        <span className="block text-center font-mono text-xs text-muted-foreground">
           {secondsToMinutes(album.duration_seconds)}
         </span>
       );
     },
-    meta: { dataType: "number" },
+    header: () => "Duration",
   },
   {
     accessorKey: "media_type",
-    header: () => "Type",
+    maxSize: 180,
+    meta: { dataType: "string", align: "center" },
+    minSize: 100,
+    size: 110,
+
     cell: (props) => {
       const type = props.getValue<string>();
       return (
-        <span className="text-xs text-muted-foreground capitalize">{type}</span>
+        <span className="block text-center text-xs text-muted-foreground capitalize">
+          {type}
+        </span>
       );
     },
-    meta: { dataType: "string" },
+    header: () => "Type",
   },
   {
     accessorKey: "rating",
-    header: () => "Rating",
+    maxSize: 220,
+    meta: { dataType: "number", align: "center" },
+    minSize: 130,
+    size: 150,
+
     cell: (props) => {
       const album = props.row.original;
       return (
@@ -126,11 +154,15 @@ export const albumLibraryColumns: ColumnDef<
         />
       );
     },
-    meta: { dataType: "number" },
+    header: () => "Rating",
   },
   {
     accessorKey: "listened",
-    header: () => "Status",
+    maxSize: 200,
+    meta: { dataType: "string", align: "center" },
+    minSize: 120,
+    size: 130,
+
     cell: (props) => {
       const album = props.row.original;
       return (
@@ -141,11 +173,15 @@ export const albumLibraryColumns: ColumnDef<
         />
       );
     },
-    meta: { dataType: "string" },
+    header: () => "Status",
   },
   {
     id: "open",
-    header: () => <span className="block text-center">Play</span>,
+    enableResizing: false,
+    enableSorting: false,
+    meta: { align: "center" },
+    size: 80,
+
     cell: (props) => {
       const albumPath = props.row.original.path;
       if (!albumPath) return null;
@@ -162,6 +198,6 @@ export const albumLibraryColumns: ColumnDef<
         </Button>
       );
     },
-    enableSorting: false,
+    header: () => <span className="block text-center">Play</span>,
   },
 ];
