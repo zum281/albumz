@@ -21,6 +21,25 @@ export const getAlbums = async (): Promise<Album[]> => {
   return AlbumsSchema.parse(rows);
 };
 
+export const getShelfAlbumsQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "shelf"],
+    queryFn: getShelfAlbums,
+  });
+};
+
+export const getShelfAlbums = async (): Promise<Album[]> => {
+  const db = await getDb();
+  const query = sql`
+      SELECT *
+      FROM albums
+      WHERE ignored = 0 AND listened = 0
+      ORDER BY RANDOM()
+      LIMIT 5;
+    `;
+  const rows = await db.select(query);
+  return AlbumsSchema.parse(rows);
+};
 export const existingAlbumsIncludingIgnoredQueryOptions = () => {
   return queryOptions({
     queryKey: ["albums", "existing", "including-ignored"],

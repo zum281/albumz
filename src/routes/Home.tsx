@@ -5,6 +5,7 @@ import { AlbumLibrarySkeleton } from "@/components/library/AlbumLibrarySkeleton"
 import { AlbumLibraryFilters } from "@/components/library/filters/AlbumLibraryFilters";
 import { RouteHeader } from "@/components/route-header/RouteHeader";
 import { RouteHeaderHome } from "@/components/route-header/RouteHeaderHome";
+import { Shelf } from "@/components/shelf/Shelf";
 import { AlbumLibraryFiltersProvider } from "@/context/album-library-filters/AlbumLibraryFiltersProvider";
 import { AlbumsProvider } from "@/context/albums/AlbumsProvider";
 import type { FC } from "react";
@@ -22,6 +23,7 @@ export const Home: FC = () => {
         <AlbumsProvider>
           <AlbumLibraryFiltersProvider>
             <div className="flex flex-col gap-4 px-7 pt-6 pb-10">
+              <Shelf />
               <AlbumLibraryFilters />
               <AlbumLibrary />
             </div>
