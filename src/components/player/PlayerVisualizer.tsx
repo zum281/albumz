@@ -7,6 +7,7 @@ import type { FC } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import { BarsVisualizer } from "./bars/BarsVisualizer";
+import { ScopeVisualizer } from "./scope/ScopeVisualizer";
 import { TurntableVisualizer } from "./turntable/TurntableVisualizer";
 import { VisualizerSwitcher } from "./VisualizerSwitcher";
 
@@ -57,7 +58,9 @@ export const PlayerVisualizerPanel: FC = () => {
           : "h-[clamp(15rem,44vh,27.5rem)]",
       )}
     >
-      {visualizer === "bars" ? <BarsVisualizer /> : <TurntableVisualizer />}
+      {visualizer === "bars" && <BarsVisualizer />}
+      {visualizer === "turntable" && <TurntableVisualizer />}
+      {visualizer === "scope" && <ScopeVisualizer />}
       <div
         className={cn(
           "absolute z-10 flex gap-1",
