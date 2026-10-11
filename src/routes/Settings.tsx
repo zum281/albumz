@@ -2,6 +2,7 @@ import { RouteHeader } from "@/components/route-header/RouteHeader";
 import { DatabasePath } from "@/components/settings/database-path/DatabasePath";
 import { DeleteAllData } from "@/components/settings/DeleteAllData";
 import { ThemeSwitcher } from "@/components/settings/ThemeSwitcher";
+import { VisualizerDefault } from "@/components/settings/VisualizerDefault";
 import type { FC } from "react";
 export const Settings: FC = () => {
   return (
@@ -9,6 +10,7 @@ export const Settings: FC = () => {
       <RouteHeader title="Settings" />
       <div className="flex flex-col gap-4 px-7 pt-6 pb-10">
         <ThemeSwitcher />
+        <VisualizerDefault />
         <DatabasePath />
         <DeleteAllData />
       </div>

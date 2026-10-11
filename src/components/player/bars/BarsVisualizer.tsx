@@ -97,7 +97,7 @@ export const BarsVisualizer: FC = () => {
   useSpectrum(playing, onFrame);
 
   return (
-    <div className="relative h-[clamp(15rem,44vh,27.5rem)] overflow-hidden border border-border bg-card">
+    <div className="relative h-full overflow-hidden border border-border bg-card">
       <canvas
         ref={canvasRef}
         aria-hidden
