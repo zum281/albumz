@@ -24,6 +24,7 @@ export const AlbumLibraryPaginationPageSelect: FC<
     <Select
       items={pageSizeItems}
       value={pageSize}
+      modal={false}
       onValueChange={(value) => {
         if (value !== null) table.setPageSize(value);
       }}
@@ -34,7 +35,7 @@ export const AlbumLibraryPaginationPageSelect: FC<
       >
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent alignItemWithTrigger={false}>
         {pageSizeItems.map(({ value, label }) => (
           <SelectItem key={label} value={value} className="font-mono text-xs">
             {label}
