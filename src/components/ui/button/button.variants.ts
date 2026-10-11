@@ -21,6 +21,7 @@ export const buttonVariants = cva(
           "gap-2 px-3 py-2 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
         sm: "gap-1 rounded-[min(var(--radius-md),12px)] px-2 py-1 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 [&_svg:not([class*='size-'])]:size-3.5",
         icon: "p-2",
+        "icon-lg": "p-3 [&_svg:not([class*='size-'])]:size-5",
         "icon-xs":
           "p-1 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
         "icon-sm":

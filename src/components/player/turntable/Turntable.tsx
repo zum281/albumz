@@ -47,7 +47,7 @@ export const Turntable: FC<TurntableProps> = ({
 
       <g
         className={cn(
-          "origin-center animate-spin motion-reduce:animate-none",
+          "origin-top-left animate-spin motion-reduce:animate-none",
           !spinning && "[animation-play-state:paused]",
         )}
         style={{ animationDuration: `${60 / RPM}s` }}
