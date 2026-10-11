@@ -14,4 +14,5 @@ export type PlayerContextType = {
   stop: () => void;
   next: () => void;
   previous: () => void;
+  selectTrack: (index: number) => void;
 };

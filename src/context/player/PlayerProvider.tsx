@@ -128,10 +128,11 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
       stop,
       next,
       previous,
+      selectTrack: goTo,
       index,
       status,
     }),
-    [album, tracks, status, index, playAlbum, stop, next, previous],
+    [album, tracks, status, index, playAlbum, stop, next, previous, goTo],
   );
 
   return <PlayerContext value={value}>{children}</PlayerContext>;
