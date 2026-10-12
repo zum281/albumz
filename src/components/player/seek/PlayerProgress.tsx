@@ -8,8 +8,19 @@ export const PlayerProgress: FC<PlayerProgressProps> = ({ duration }) => {
   const elapsed = useAudioTime();
   const progressValue = duration > 0 ? (elapsed / duration) * 100 : 0;
 
-  const handleSeekPlusFive = () => (audio.currentTime += 5);
-  const handleSeekMinusFive = () => (audio.currentTime -= 5);
+  const seekBy = (seconds: number) => {
+    audio.currentTime = Math.min(
+      duration,
+      Math.max(0, audio.currentTime + seconds),
+    );
+  };
+
+  const handleSeekPlusFive = () => {
+    seekBy(5);
+  };
+  const handleSeekMinusFive = () => {
+    seekBy(-5);
+  };
 
   useHotkey("ArrowRight", handleSeekPlusFive);
   useHotkey("ArrowLeft", handleSeekMinusFive);

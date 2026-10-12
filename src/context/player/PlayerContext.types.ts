@@ -14,5 +14,9 @@ export type PlayerContextType = {
   stop: () => void;
   next: () => void;
   previous: () => void;
+  mute: () => void;
+  unmute: () => void;
+  volume: number;
+  changeVolume: (percent: number) => void;
   selectTrack: (index: number) => void;
 };

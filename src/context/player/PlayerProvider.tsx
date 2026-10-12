@@ -12,7 +12,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC, PropsWithChildren } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { audio } from "./audio";
+import { audio, gain } from "./audio";
 import { PlayerContext } from "./PlayerContext";
 import type { PlayerContextType } from "./PlayerContext.types";
 
@@ -23,8 +23,10 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
   const [tracks, setTracks] = useState<Track[] | null>(null);
   const [status, setStatus] = useState<PlayerStatus>(PlayerStatus.IDLE);
   const [index, setIndex] = useState<number>(0);
+  const [volume, setVolume] = useState(Math.round(gain.gain.value * 100));
 
   const requestRef = useRef(0);
+  const lastVolumeRef = useRef(volume || 100);
   const { queryKey: albumsQueryKey } = albumsQueryOptions();
   const { queryKey: listenedCountQueryKey } = listenedAlbumsCountQueryOptions();
 
@@ -93,6 +95,21 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
   const next = useCallback(() => goTo(index + 1), [goTo, index]);
   const previous = useCallback(() => goTo(index - 1), [goTo, index]);
 
+  const changeVolume = useCallback((percent: number) => {
+    const next = Math.min(100, Math.max(0, percent));
+    if (next > 0) lastVolumeRef.current = next;
+    setVolume(next);
+    gain.gain.value = next / 100;
+  }, []);
+
+  const mute = useCallback(() => {
+    changeVolume(0);
+  }, [changeVolume]);
+
+  const unmute = useCallback(() => {
+    changeVolume(lastVolumeRef.current);
+  }, [changeVolume]);
+
   const { mutate: markListened } = useMutation({
     mutationFn: (id: Album["id"]) => updateAlbumListen(id, true),
     onSuccess: async () => {
@@ -131,8 +148,26 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
       selectTrack: goTo,
       index,
       status,
+      mute,
+      unmute,
+      changeVolume,
+      volume,
     }),
-    [album, tracks, status, index, playAlbum, stop, next, previous, goTo],
+    [
+      album,
+      tracks,
+      status,
+      index,
+      playAlbum,
+      stop,
+      next,
+      previous,
+      mute,
+      unmute,
+      goTo,
+      volume,
+      changeVolume,
+    ],
   );
 
   return <PlayerContext value={value}>{children}</PlayerContext>;

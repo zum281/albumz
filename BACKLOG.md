@@ -1,7 +1,5 @@
 ## Todo
 
-- player: volume/mute (+ hotkeys)
-
 ## Backlog
 
 - cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;

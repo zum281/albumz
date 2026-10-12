@@ -7,5 +7,9 @@ export const analyser = audioCtx.createAnalyser();
 analyser.maxDecibels = -10;
 
 export const source = audioCtx.createMediaElementSource(audio);
+// After the analyser so the visualizer ignores volume.
+export const gain = audioCtx.createGain();
+
 source.connect(analyser);
-analyser.connect(audioCtx.destination);
+analyser.connect(gain);
+gain.connect(audioCtx.destination);
