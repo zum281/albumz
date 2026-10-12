@@ -5,6 +5,7 @@ import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { Play, RefreshCw } from "lucide-react";
 import type { FC } from "react";
+import { ViewTransition } from "react";
 
 export const RandomAlbumPick: FC = () => {
   const queryClient = useQueryClient();
@@ -39,15 +40,17 @@ export const RandomAlbumPick: FC = () => {
         </Button>
       </div>
       <div className="flex items-center gap-4">
-        <div className="size-20 flex-none border border-border bg-muted">
-          {randomAlbum.cover_path && (
-            <img
-              src={convertFileSrc(randomAlbum.cover_path)}
-              alt={`${randomAlbum.album} cover`}
-              className="size-full object-cover"
-            />
-          )}
-        </div>
+        <ViewTransition name="album-cover" share="auto" default="none">
+          <div className="size-20 flex-none border border-border bg-muted">
+            {randomAlbum.cover_path && (
+              <img
+                src={convertFileSrc(randomAlbum.cover_path)}
+                alt={`${randomAlbum.album} cover`}
+                className="size-full object-cover"
+              />
+            )}
+          </div>
+        </ViewTransition>
         <div className="min-w-0 flex-1">
           <p className="truncate font-display text-2xl leading-tight font-bold uppercase">
             {randomAlbum.album}

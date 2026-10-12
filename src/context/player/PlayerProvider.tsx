@@ -11,7 +11,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import type { FC, PropsWithChildren } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { audio, gain } from "./audio";
 import { PlayerContext } from "./PlayerContext";
 import type { PlayerContextType } from "./PlayerContext.types";
@@ -35,9 +42,11 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
       const request = ++requestRef.current;
       audio.pause();
       audio.currentTime = 0;
-      setAlbum(album);
-      setTracks(null);
-      setStatus(PlayerStatus.LOADING);
+      startTransition(() => {
+        setAlbum(album);
+        setTracks(null);
+        setStatus(PlayerStatus.LOADING);
+      });
       void navigate({ to: "/player" });
 
       try {
@@ -75,10 +84,12 @@ export const PlayerProvider: FC<PlayerProviderProps> = ({ children }) => {
     requestRef.current++;
     audio.pause();
     audio.currentTime = 0;
-    setAlbum(null);
-    setTracks(null);
-    setIndex(0);
-    setStatus(PlayerStatus.IDLE);
+    startTransition(() => {
+      setAlbum(null);
+      setTracks(null);
+      setIndex(0);
+      setStatus(PlayerStatus.IDLE);
+    });
   }, []);
 
   const goTo = useCallback(
