@@ -1,7 +1,7 @@
 import { Boundaries } from "@/components/Boundaries";
 import { ErrorLargeWithRetry } from "@/components/errors/ErrorLargeWithRetry";
 import { PlayerActive } from "@/components/player/PlayerActive";
-import { PlayerIdle } from "@/components/player/PlayerIdle";
+import { PlayerIdle } from "@/components/player/player-idle/PlayerIdle";
 import { RouteHeader } from "@/components/route-header/RouteHeader";
 import { RouteHeaderPlayer } from "@/components/route-header/RouteHeaderPlayer";
 import { usePlayer } from "@/hooks/usePlayer";
@@ -15,8 +15,8 @@ export const Player: FC = () => {
       <RouteHeader title="Player" rightElement={<RouteHeaderPlayer />} />
       <Boundaries getResetKey={() => "player"} error={ErrorLargeWithRetry}>
         {album && <PlayerActive album={album} />}
-        {!album && <PlayerIdle />}
       </Boundaries>
+      {!album && <PlayerIdle />}
     </main>
   );
 };
