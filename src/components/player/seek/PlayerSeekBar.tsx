@@ -1,14 +1,14 @@
+import { useAudioTime } from "@/hooks/useAudioTime";
 import { formatClock } from "@/utils/time";
 import type { FC } from "react";
-import { Progress } from "../ui/progress";
+import { PlayerProgress } from "./PlayerProgress";
 
-export const PlayerSeekBar: FC<PlayerSeekBarProps> = ({
-  elapsed,
-  duration,
-}) => {
+export const PlayerSeekBar: FC<PlayerSeekBarProps> = ({ duration }) => {
+  const elapsed = useAudioTime();
+
   return (
     <div className="flex flex-col gap-2">
-      <Progress value={duration > 0 ? (elapsed / duration) * 100 : 0} />
+      <PlayerProgress duration={duration} />
       <div className="flex justify-between font-mono text-xs text-muted-foreground">
         <span>{formatClock(elapsed)}</span>
         <span>{formatClock(duration)}</span>
@@ -17,4 +17,4 @@ export const PlayerSeekBar: FC<PlayerSeekBarProps> = ({
   );
 };
 
-type PlayerSeekBarProps = { elapsed: number; duration: number };
+type PlayerSeekBarProps = { duration: number };

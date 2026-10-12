@@ -1,5 +1,4 @@
 import { listTracksQueryOptions } from "@/commands/list_tracks";
-import { useAudioTime } from "@/hooks/useAudioTime";
 import { usePlayer } from "@/hooks/usePlayer";
 import type { Album } from "@/types/album";
 import { PlayerStatus } from "@/types/enums";
@@ -7,14 +6,13 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import type { FC } from "react";
 import { PlayerControls } from "./PlayerControls";
 import { PlayerNowPlaying } from "./PlayerNowPlaying";
-import { PlayerSeekBar } from "./PlayerSeekBar";
 import { PlayerTracklist } from "./PlayerTracklist";
+import { PlayerSeekBar } from "./seek/PlayerSeekBar";
 import { PlayerVisualizerPanel } from "./visualizer/PlayerVisualizer";
 
 export const PlayerActive: FC<PlayerActiveProps> = ({ album }) => {
   const { index, status } = usePlayer();
   const { data: tracks } = useSuspenseQuery(listTracksQueryOptions(album));
-  const elapsedTime = useAudioTime();
 
   const currentTrack = tracks[index];
 
@@ -31,10 +29,7 @@ export const PlayerActive: FC<PlayerActiveProps> = ({ album }) => {
           position={index + 1}
           total={tracks.length}
         />
-        <PlayerSeekBar
-          elapsed={elapsedTime}
-          duration={currentTrack.duration_seconds}
-        />
+        <PlayerSeekBar duration={currentTrack.duration_seconds} />
         <PlayerControls />
       </div>
       <PlayerTracklist
