@@ -3,15 +3,23 @@ import { useAudioTime } from "@/hooks/useAudioTime";
 import { Progress } from "@base-ui/react";
 import type { FC, MouseEvent } from "react";
 
+import { useHotkey } from "@tanstack/react-hotkeys";
 export const PlayerProgress: FC<PlayerProgressProps> = ({ duration }) => {
   const elapsed = useAudioTime();
   const progressValue = duration > 0 ? (elapsed / duration) * 100 : 0;
+
+  const handleSeekPlusFive = () => (audio.currentTime += 5);
+  const handleSeekMinusFive = () => (audio.currentTime -= 5);
+
+  useHotkey("ArrowRight", handleSeekPlusFive);
+  useHotkey("ArrowLeft", handleSeekMinusFive);
 
   const handleSeek = (e: MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const fraction = (e.clientX - rect.left) / rect.width;
     audio.currentTime = fraction * duration;
   };
+
   return (
     <Progress.Root
       value={progressValue}

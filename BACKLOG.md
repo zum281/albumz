@@ -9,7 +9,6 @@
 
 - library: move play button somewhere more visible
 
-- player: seeker (+ hotkeys)
 - player: wavebar instead of plain progress
 - player: volume/mute (+ hotkeys)
 - player: sleep
