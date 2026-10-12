@@ -4,7 +4,7 @@ import type { Album } from "@/types/album";
 import { PlayerStatus } from "@/types/enums";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import type { FC } from "react";
-import { PlayerControls } from "./PlayerControls";
+import { PlayerControls } from "./controls/PlayerControls";
 import { PlayerNowPlaying } from "./PlayerNowPlaying";
 import { PlayerTracklist } from "./PlayerTracklist";
 import { PlayerSeekBar } from "./seek/PlayerSeekBar";

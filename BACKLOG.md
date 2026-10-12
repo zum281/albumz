@@ -1,5 +1,7 @@
 ## Todo
 
+- player: volume/mute (+ hotkeys)
+
 ## Backlog
 
 - cover/metadata rescan: new command that rescans existing albums to look for updated covers/metadata;
@@ -10,6 +12,5 @@
 - library: move play button somewhere more visible
 
 - player: wavebar instead of plain progress
-- player: volume/mute (+ hotkeys)
 - player: sleep
 - put the list of hotkeys somewhere?
