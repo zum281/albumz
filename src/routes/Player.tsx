@@ -13,12 +13,10 @@ export const Player: FC = () => {
   return (
     <main className="flex min-w-0 flex-1 flex-col pb-7">
       <RouteHeader title="Player" rightElement={<RouteHeaderPlayer />} />
-      {!album && <PlayerIdle />}
-      {album && (
-        <Boundaries getResetKey={() => "player"} error={ErrorLargeWithRetry}>
-          <PlayerActive album={album} />
-        </Boundaries>
-      )}
+      <Boundaries getResetKey={() => "player"} error={ErrorLargeWithRetry}>
+        {album && <PlayerActive album={album} />}
+        {!album && <PlayerIdle />}
+      </Boundaries>
     </main>
   );
 };

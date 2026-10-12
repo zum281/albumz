@@ -44,6 +44,28 @@ export const getShelfAlbums = async (): Promise<Album[]> => {
   const rows = await db.select(query);
   return AlbumsSchema.parse(rows);
 };
+
+export const randomUnlistenedAlbumQueryOptions = () => {
+  return queryOptions({
+    queryKey: ["albums", "random-unlistened"],
+    queryFn: getRandomUnlistenedAlbum,
+    staleTime: Infinity,
+  });
+};
+
+export const getRandomUnlistenedAlbum = async (): Promise<Album | null> => {
+  const db = await getDb();
+  const query = sql`
+      SELECT *
+      FROM albums
+      WHERE ignored = 0 AND listened = 0 AND path IS NOT NULL
+      ORDER BY RANDOM()
+      LIMIT 1;
+    `;
+  const rows = await db.select(query);
+  return AlbumsSchema.parse(rows)[0] ?? null;
+};
+
 export const existingAlbumsIncludingIgnoredQueryOptions = () => {
   return queryOptions({
     queryKey: ["albums", "existing", "including-ignored"],
