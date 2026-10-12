@@ -12,3 +12,4 @@
 - player: wavebar instead of plain progress
 - player: sleep
 - put the list of hotkeys somewhere?
+- player: make seeker draggable (probably need to use a slider instead of progress, it's probably the smart thing to do)
